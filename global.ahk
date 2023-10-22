@@ -103,6 +103,7 @@ GroupAdd("noc_hjkl", win_idea)
 ; o==========o==========o==========o==========o==========o c-w , c-s-w
 ; ^+w:: WinClose("A"), tip("WinClose A", 1000, 0.5, 0.5)    ;关闭 to obsidian
 GroupAdd("noc_w", win_vscode)  ; 不在谷歌,vscode
+GroupAdd("noc_w", win_chrome)  ; 不在谷歌,vscode
 GroupAdd("noc_w", win_explorer)
 GroupAdd("noc_w", win_desktop) ; 桌面
 GroupAdd("noc_w", win_taskbar) ; 任务栏
