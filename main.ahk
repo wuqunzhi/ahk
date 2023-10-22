@@ -6,11 +6,8 @@
 * Copyright (c) 3022 by wuqunzhi 794817076@qq.com, All Rights Reserved.
 */
 #SingleInstance Force
-; ! 目前用的窗口判断逻辑
 ; https://wyagd001.github.io/v2/docs/
 
-; todo ahk放到github(写详细功能) 远程拉取
-; todo 输入法 vscode 整理成一个md
 init() {
     global ingame := 0
 
@@ -31,14 +28,13 @@ init() {
     global win_qqmusic := "^(?!桌面歌词).*$ ahk_exe QQMusic.exe ahk_class TXGuiFoundation"
     global win_qqmusicLyric := "桌面歌词 ahk_exe QQMusic.exe ahk_class TXGuiFoundation"
     global win_clash := "Clash for Windows ahk_exe Clash for Windows.exe" ; clash for windows
+    global dk2 := A_Desktop . "\桌面2\"
 
     SetTitleMatchMode("RegEx")    ;! case sensitive
     CoordMode("ToolTip", "Screen") ;v2开始 croodMode 默认全是client
     SetMouseDelay(-1)
     SetCapsLockState "AlwaysOff"
     SetNumLockState "AlwaysOn"
-    ; Run("*runAs chrome.ahk")
-    global dk2 := A_Desktop . "\桌面2\"
     tipLB(A_ScriptName " running. AHK " A_AhkVersion)
     ; SetTimer watchIfAchange, 200    ;每200ms检测是否活动窗口变化
 }
