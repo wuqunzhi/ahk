@@ -71,9 +71,13 @@ CapsLock & c:: writeAndShowCBH()
 #w:: send("{blink}^!w")     ; toggle whchat
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
-#y:: try {                  ; toggle wyy
-    WinActive(win_cloudmusic) ? WinClose() : WinShow(win_cloudmusic), WinActivate()
-    ;在任务栏中activate不了
+#y:: togglewyy()
+togglewyy() {
+    try {                  ; toggle wyy
+        WinActive(win_cloudmusic) ? WinClose() : (WinShow(win_cloudmusic), WinActivate(win_cloudmusic))
+        ;在任务栏中activate不了
+    } catch as e {
+    }
 }
 
 ; o==========o==========o==========o==========o==========o c-hjkl
