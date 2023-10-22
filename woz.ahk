@@ -43,7 +43,7 @@ setup() {
 
 
     addCommand("taskmgr", "run", "taskmgr", "open taskmgr")
-    addCommand("make", "runAs", "make.ahk", "runAs make.ahk")
+    addCommand("main", "runAs", "main.ahk", "runAs main.ahk")
     addCommand("woz", "runAs", "woz.ahk", "runAs woz.ahk")
     addCommand("test", "runAs", "test.ahk", "runAs test.ahk")
 
