@@ -21,7 +21,8 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
 
 ocr() {
     A_Clipboard := ""
-    Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
+    ; Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
+    Run "tools/textshotw.exe eng+chi_sim"
     ClipWait(5)
     tipRB(A_Clipboard)
 
