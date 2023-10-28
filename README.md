@@ -51,8 +51,8 @@ woz.ahk
 - 全匹配也会执行
 
 ## zvim
-> 见zvim.ahk
-> 启发至[win-vind](https://github.com/pit-ray/win-vind)，用vim的键位习惯来操作windows鼠标、窗口等。
+> 见zvim.ahk - 启发至[win-vind](https://github.com/pit-ray/win-vind)
+- 用vim的键位习惯来操作windows鼠标、窗口等。
 
 
 
