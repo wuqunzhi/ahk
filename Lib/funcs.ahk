@@ -28,6 +28,9 @@ ocr() {
 
 }
 
+changeBrightness(v) {
+    run("python tools/sbc.py " . v, , "Hide")
+}
 RunWaitOne(command) {
     shell := ComObject("WScript.Shell")
     ; 通过 cmd.exe 执行单条命令
@@ -63,14 +66,6 @@ inputfoucs() {
     return caretgetpos(&x, &y)
 }
 
-; 设置高对比度
-highconstract() {
-    ; send("{blink}{lshift down}{lalt down}{printscreen}{lshift up}{lalt up}")
-    ; send("{blink}<!<+{printscreen}")
-    ; send("{blink}!+{printscreen}")
-    ; 2c 054
-    ; send("{blink}<!<+{printscreen}")
-}
 
 ; 切换触摸板
 toggleTouchpad() {
@@ -86,7 +81,7 @@ toggleTouchpad() {
     ;     click("457, 251"), sleep(200)
     ;     ; winclose("a")
     ;     winclose("ahk_exe applicationframehost.exe")
-    ; } 
+    ; }
 }
 
 toggleqqmusic() {
@@ -101,7 +96,6 @@ toggleqqmusic() {
     ; return
 
 }
-
 
 
 togglegame() {
@@ -189,14 +183,18 @@ isTextSelected() {
 
 ; run or open clipb
 autorun(str := A_Clipboard) {
-    if RegExMatch(str, "^(C:|D:|E:)")
-        run str
-    ; 以http:\\,https:\\,或空开头,接任意个abc123. ,再接.com等
-    else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
-        or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
-        run "chrome.exe " str
-    else
-        run "https://www.google.com/search?q=" . str
+    try {
+        if RegExMatch(str, "^(C:|D:|E:|F:)")
+            run str
+        else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
+            or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
+            run "chrome.exe " str
+        else
+            run "https://www.google.com/search?q=" . str
+    }
+    catch as e {
+        log(e)
+    }
 }
 
 ;todo no use

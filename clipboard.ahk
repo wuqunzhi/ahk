@@ -1,6 +1,6 @@
 #HotIf
 ; clipboard history
-global clipboardHistory := ["======= test ========"]
+global clipboardHistory := []
 global maxHistoryCount := 99
 
 ; 自定义函数，用于将剪贴板内容添加到历史记录中
@@ -10,7 +10,7 @@ AddToClipboardHistory() {
     clipboardHistory.Push(A_Clipboard)
 }
 
-writeAndShowCBH(filePath := "C:\Users\79481\ClipboardHistory.txt", append := '`n') {
+writeAndShowCBH(filePath := A_userPath() . "\ClipboardHistory.txt", append := '`n') {
     ; f := FileOpen(filePath, "w" )
     f := FileOpen(filePath, "w", "utf-8")
     for index, value in clipboardHistory
@@ -31,12 +31,12 @@ ClipChanged(clip_type) {
     }
 }
 
-getClipboardHistory(last) {
+getClipboardHistory(last, append := "`n") {
     res := ""
     len := clipboardHistory.Length
     last := Min(len, last)
     loop last {
-        res .= clipboardHistory[len - (last - A_Index)] . '`n'
+        res .= clipboardHistory[len - (last - A_Index)] . append
     }
     tipRM(res)
     A_Clipboard := res

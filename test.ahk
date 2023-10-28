@@ -13,10 +13,27 @@ SetTitleMatchMode("regex")
 ; CoordMode("ToolTip", "Screen")
 SetMouseDelay(-1)
 #HotIf
-
+; 6:: send("^!{Home}")
+6:: toggleRemote()
+7:: Send("^!{home}{win}")
 ; 5:: tip(inputfoucs())
-^7:: translate()
+global win_remote:="ahk_exe mstsc.exe ahk_class TscShellContainerClass"
+; ^!home::toggleRemote()
+    ; ^!home up::tip("123")
+^!home up:: WinMinimize(win_remote)
+!home up:: WinActivate(win_remote)
+; ^!home up::send("!{Tab}")
 
+toggleRemote(){
+    ; if(WinActive(win_remote))
+        send("!{Tab}")
+    ; else if(WinExist(win_remote)){
+        ; WinActivate()
+    ; }
+}
+test() {
+
+}
 
 
 ; ==========o==========o==========o==========o==========o other

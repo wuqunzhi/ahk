@@ -1,6 +1,7 @@
 ﻿#SingleInstance Force
 #NoTrayIcon
 #Include Lib\funcs.ahk
+#Include private.ahk
 #HotIf
 setup()
 global lastcmd := ""
@@ -20,49 +21,46 @@ setup() {
     addCommand(id, func := id, funcArg := "", hint := id) {
         cmds.Set(id, [func, funcArg, hint])
     }
+    dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
+    userpath := A_userPath() ; C:\Users\79481
     addCommand("nop")
     addCommand("-v", "-v", , A_AhkVersion)
     addCommand("timer")
     addCommand("game", "game", , "switch in game")
-    addCommand("showintxt")
+    addCommand("showintxt", , , "将剪贴板内容用vscode打开") ;
     addCommand("bluetooth")
     addCommand("ls", , , "list all ahk")
-    addCommand("clear", "recycleEmpty", "", "FileRecycle Empty")
+    addCommand("clear", "recycleEmpty", "", "清空回收站")
     addCommand("restartexplorer")
     addCommand("ps", , , "processManager")
-    addCommand("touchpad")
+    addCommand("touchpad") ;切换触摸板
     addCommand("remote", "run", "mstsc", "远程桌面连接")
     addCommand("mstsc", "run", "mstsc", "远程桌面连接")
-    addCommand("highconstract")
     addCommand("colorhook") ; *useful
     addCommand("record")
     addCommand("quit")
+    addCommand("taskmgr", "run", "taskmgr", "open taskmgr")
     addCommand("reload")
     addCommand("ahkmanager")
-    addCommand("ck", "click", "", "focus center")
 
 
-    addCommand("taskmgr", "run", "taskmgr", "open taskmgr")
     addCommand("main", "runAs", "main.ahk", "runAs main.ahk")
     addCommand("woz", "runAs", "woz.ahk", "runAs woz.ahk")
     addCommand("test", "runAs", "test.ahk", "runAs test.ahk")
 
-    ; -------------------- 打开软件 建一个文件夹放到env放快捷方式
     addCommand("vscode", "run", "code.exe", "run vscode")
-    addCommand("cpp", "run", "code.exe D:\VSCodeDeemo\c_cpp", "run vscode cpp")
+    addCommand("cpp", "run", "code.exe D:\projects\cpp", "run vscode cpp")
     addCommand("dy", "run", "code.exe E:\垃圾桶\dy.txt", "code dy.txt")
 
     addCommand("notepad", "run", "notepad.exe", "run notepad")
     addCommand("edge", "runAs", "edge", "runAs edge")
-    addCommand("wt", "runAs", "wt", "runAs WindowsTerminal")
+    addCommand("wt", "runAs", "wt", "runAs wt.exe")
     addCommand("chrome", "runAs", "chrome.exe", "runAs chrome")
+    addCommand("clash", "runAs", dk2 "Clash", "runAs clash")
     addCommand("google", "runAs", "chrome.exe", "runAs google")
 
-    dk2 := A_Desktop . "\桌面2\" ;LocalAppData := EnvGet("LocalAppData")
     addCommand("myPDF", "run", dk2 "myPDF.exe", "run myPDF.exe")
     addCommand("myMat", "run", dk2 "myMat", "run myMat")
-    addCommand("winvind", "HrunAs", "win-vind", "run win-vind")
-    addCommand("clash", "runAs", dk2 "Clash", "runAs clash")
 
     addCommand("wx", "run", dk2 "wechat", "run wechat")
     addCommand("qq", "run", dk2 "qq", "run QQ")
@@ -96,24 +94,20 @@ setup() {
     addCommand("cont", "run", "control", "control")
 
     ; -------------------- 系统文件目录
-    cccpaths := ["C:\Users\79481\AppData\Local\temp",
-        "C:\Users\79481\AppData\Roaming\pyinstaller",
-        "C:\Windows\servicing\LCU"
-    ]
-    addCommand("ccc", "runs", strJoin(cccpaths, '|'), "打开c盘可以删的文件夹")
-    addCommand("~", "run", "C:\Users\79481\", "C:\Users\79481")
+    addCommand("nas", "nas", "", "nas") ;
+    addCommand("~", "run", userpath, userpath)
     addCommand("program", "run", "C:\Program Files\", "C:\Program Files")
     addCommand("pro86", "run", "C:\Program Files (x86)\", "C:\Program Files (x86)")
-    addCommand("document", "run", "C:\Users\79481\Documents\", "C:\Users\79481\Documents")
+    addCommand("document", "run", A_MyDocuments, A_MyDocuments)
+    ; addCommand("document", "run", userpath . "\Documents\", "C:\Users\79481\Documents")
     addCommand("system", "run", "C:\Windows\System\", "C:\Windows\System")
     addCommand("sys32", "run", "C:\Windows\System32\", "C:\Windows\System32")
-    addCommand("dk2", "run", "C:\Users\79481\Desktop\桌面2", "桌面2")
-    addCommand("appdata", "run", "C:\Users\79481\AppData\", "~\AppData")
-    addCommand("roam", "run", "C:\Users\79481\AppData\Roaming\", "%AppData%")
+    addCommand("dk2", "run", dk2, "桌面2")
+    addCommand("appdata", "run", userpath "\AppData\", "~\AppData")
+    addCommand("roam", "run", A_AppData, "%AppData%")
     addCommand("host", "run", "C:\Windows\System32\drivers\etc", "host")
     addCommand("startm", "run", A_StartMenu, "Start Menu")
     addCommand("startup", "run", A_Startup, "shell:startup")
-    addCommand("cbh", "run", "~/ClipboardHistory.txt", "~/ClipboardHistory.txt")
 
     ; -------------------- 软件目录
     addCommand("wsl", "run", "\\wsl$\Ubuntu-20.04", "wsl")
@@ -124,9 +118,9 @@ setup() {
     ; -- vim/nvim目录
     addCommand("vim", "run", "D:\vim\vim90\", "D:\vim\vim90\")
     addCommand("vimrc\", "run", "C:\Users\79481\vimfiles\", "C:\Users\79481\vimfiles\")
-    addCommand("vimfiles", "run", "C:/Users/79481/vimfiles/", "~/vimfiles/")
-    addCommand("nvim", "runs", "C:/Users/79481/AppData/Local/nvim/" . "|"
-        . "C:/Users/79481/AppData/Local/nvim-data", "nvim/") ;"C:/Users/79481/.config/nvim/
+    addCommand("vimfiles", "run", "C:\Users\79481\vimfiles\", "~\vimfiles\")
+    addCommand("nvim", "runs", "C:\Users\79481\AppData\Local\nvim\" . "|"
+        . "C:\Users\79481\AppData\Local\nvim-data", "nvim\") ;"C:\Users\79481\.config\nvim\
 
     ; -------------------- 网站
     addCommand("v2", "run", "https://wyagd001.github.io/v2/docs", "ahkv2")
@@ -142,50 +136,46 @@ setup() {
 }
 
 deal(cmd, arg) {
-    keep := 0
-    switch cmd {
-        case "-v": tipRB(A_ScriptName "version AHK " A_AhkVersion)
-        case "restartexplorer": restartExplorer()
-        case "game": togglegame()
-        case "ps": processManager()
-        case "showintxt": showIntxt(A_Clipboard)
-        case "recycleEmpty":
-            if (MsgBox("是否清空回收站?", "", 1) = "ok")
-                FileRecycleEmpty(), tipLB("FileRecycleEmpty")
-        case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
-            ; case "colorhook": ahk("t", "colorhook.ahk", ".\utils\colorhook.ahk")
-        case "colorhook": colorg.toggleshow() ;!!!!!
-        case "touchpad": toggleTouchpad()
-        case "bluetooth": Run("control.exe bthprops.cpl")
-        case "highconstarct": highConstract()
-            ; case "timer": timeh.toggleshow()
-            ; case "sett": timeh.isshow() and timeh.setdeadline()
-        case "click":
-            if (arg = "") {
-                click(A_ScreenWidth // 2 ", " A_ScreenHeight // 2)
-            } else
-                click(arg)
-        case "runAs": run("*runAs " arg), tipLB("*runAs " arg)
-        case "HrunAs": run("*runAs " arg, , "Hide"), tipLB("*HrunAs " arg)
-        case "run": run(arg), tipLB("run " arg)
-        case "Hrun": run(arg, , "Hide"), tipLB("Hrun " arg)
-        case "runs":
-            for s in StrSplit(arg, "|", ' ')
-                run(s)
-            tipLB("runs: `n" StrReplace(arg, "|", "`n"))
-        case "env":
-            run("sysdm.cpl"), WinWaitActive("系统属性")
-            send("{ctrl Down}{Tab 2}{ctrl Up}!n")
-        case "ahkmanager": ahkManager()
-        case "ls": tipRB(ahk("ls"), 5000)
-            ; case "reload": Reload
-        case "reload": run("*runAs woz.ahk") ;管理员
-        case "quit":
-            if (MsgBox("quit?", , 1) = "ok")
-                ExitApp
-        default: return 0
+    try {
+        keep := 0
+        switch cmd {
+            case "run": run(arg), tipLB("run " arg)
+            case "runAs": run("*runAs " arg), tipLB("*runAs " arg)
+            case "Hrun": run(arg, , "Hide"), tipLB("Hrun " arg)
+            case "HrunAs": run("*runAs " arg, , "Hide"), tipLB("*HrunAs " arg)
+            case "runs":
+                for s in StrSplit(arg, "|", ' ')
+                    run(s)
+                tipLB("runs: `n" StrReplace(arg, "|", "`n"))
+
+            case "-v": tipRB(A_ScriptName " version AHK " A_AhkVersion)
+            case "restartexplorer": restartExplorer()
+            case "ps": processManager()
+            case "showintxt": showIntxt(A_Clipboard)
+            case "recycleEmpty":
+                if (MsgBox("是否清空回收站?", "", 1) = "ok")
+                    FileRecycleEmpty(), tipLB("FileRecycleEmpty")
+            case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
+            case "colorhook": colorg.toggleshow() ;!!!!!
+            case "touchpad": toggleTouchpad()
+            case "bluetooth": Run("control.exe bthprops.cpl")
+                ; case "timer": timeh.toggleshow()
+                ; case "sett": timeh.isshow() and timeh.setdeadline()
+            case "env":
+                run("sysdm.cpl"), WinWaitActive("系统属性")
+                send("{ctrl Down}{Tab 2}{ctrl Up}!n")
+            case "ahkmanager": ahkManager()
+            case "ls": tipRB(ahk("ls"), 5000)
+            case "reload": run("*runAs woz.ahk") ;管理员
+            case "quit": MsgBox("quit?", , 1) = "ok" ? ExitApp : nop()
+            default: return 0
+            case "nas": private.nas()
+        }
+        return keep ;if keep == 1 ,dont exit
     }
-    return keep ;if keep == 1 ,dont exit
+    catch as e {
+        log(e)
+    }
 }
 
 updateOSD() {
@@ -226,12 +216,13 @@ updateOSD() {
     if (matchCommands.Count = 1) { ;唯一匹配
         global lastcmd := uniqueMatch
         hideGui()
-        ; ih := InputHook("T0.5")
-        ; ih.Start()    ;唯一匹配即执行 所以拦截用户溢出的多余输入1秒
+        ih := InputHook("T1")
+        ih.Start()    ;唯一匹配即执行 所以拦截用户溢出的多余输入1秒
         ; ih.Wait() ;会阻塞
         if (deal(matchCommands[uniqueMatch][1], matchCommands[uniqueMatch][2]))
             showGui()
     }
+
 }
 
 toggleGui() {

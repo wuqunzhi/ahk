@@ -1,12 +1,13 @@
-; 鼠标在任务栏时滑轮调节音量
-; win + 滑轮调节当前窗口透明度
-; shift + NumLock + 滑轮调节鼠标移动速度
+; 1. 鼠标在任务栏时滑轮调节音量,亮度(在最右边时)
+; 2. win + 滑轮调节当前窗口透明度
+; 3. shift + NumLock + 滑轮调节鼠标移动速度
 
 ; ==========o==========o==========o==========o==========o==========o 滑轮
-; 鼠标在任务栏时滑轮调节音量
+; 鼠标在任务栏时滑轮调节音量,亮度(在最右边时)
 #HotIf MouseIsOver(win_taskbar)
-WheelUp:: send "{Volume_Up}"
-WheelDown:: Send "{Volume_Down}"
+WheelUp:: mx() < 1758 ? send("{Volume_Up}") : (changeBrightness("+10"), Sleep(50))
+WheelDown:: mx() < 1758 ? send("{Volume_Down}") : (changeBrightness("-10"), Sleep(50))
+
 MouseIsOver(WinTitle) {
     MouseGetPos(, , &Winid)
     return WinExist(WinTitle " ahk_id " Winid)

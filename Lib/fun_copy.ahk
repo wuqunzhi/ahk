@@ -9,10 +9,10 @@ plaincopy() {
 }
 
 ; append to clipborad use "^c"
-appendCopy(sep := "`n") {
+appendCopy(sep := "`n",usekey:="^c") {
     tmp := A_Clipboard . sep
     A_Clipboard := ""
-    send("^c")
+    send(usekey)
     ClipWait()
     tmp .= A_Clipboard
     tip(tmp)

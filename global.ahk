@@ -32,15 +32,14 @@ CapsLock & right:: moveR(1)
 CapsLock & m::AppsKey    ;shift f10
 CapsLock & n::LButton
 CapsLock & Ralt::RButton
-CapsLock & w:: Click("WU")    ;wheeldown
-CapsLock & s:: Click("WD")    ;wheelup
+CapsLock & w:: wheelU()
+CapsLock & s:: wheelD()
 CapsLock & d::Delete
 CapsLock & b::BackSpace
 CapsLock & h::left
 CapsLock & l::right
 CapsLock & j::down
 CapsLock & k::up
-CapsLock & f::^!0
 CapsLock & v:: zvim("e_n")
 CapsLock & i:: zvim("i")
 CapsLock & g:: zvim() = "g_n" ? zvim('i') : zvim("g_n")
@@ -48,12 +47,12 @@ CapsLock & o::Enter
 CapsLock & p:: autorun(A_Clipboard)
 CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
-CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v")
-CapsLock & r:: transRaw()
-CapsLock & y:: copyandshow(debugInfo('w1'))
+CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
+CapsLock & r:: transRaw() ;!todo?
+CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
-
+CapsLock & f::^!0 ;有道词典
 
 #p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 #+p:: allwinAct(allwin(), 'offtop')
@@ -80,8 +79,9 @@ togglewyy() {
     }
 }
 
+
+
 ; o==========o==========o==========o==========o==========o c-hjkl
-; *(别处的<^l会覆盖这里的^l)
 <^u:: send("{Blink}{bs}")
 <^b::^u ;!!!c-u c-d翻页
 GroupAdd("noc_hjkl", win_vscode)
@@ -106,22 +106,28 @@ GroupAdd("noc_hjkl", win_idea)
 
 ; o==========o==========o==========o==========o==========o c-w , c-s-w
 ; ^+w:: WinClose("A"), tip("WinClose A", 1000, 0.5, 0.5)    ;关闭 to obsidian
-GroupAdd("noc_w", win_vscode)  ; 不在谷歌,vscode
-GroupAdd("noc_w", win_chrome)  ; 不在谷歌,vscode
-GroupAdd("noc_w", win_explorer)
-GroupAdd("noc_w", win_desktop) ; 桌面
-GroupAdd("noc_w", win_taskbar) ; 任务栏
-GroupAdd("noc_w", win_wt)      ; windows ternimal
-GroupAdd("noc_w", win_vim)     ; vim
-GroupAdd("noc_w", win_idea)    ; idea
+GroupAdd("noc_w", win_vscode)   ; 不在谷歌,vscode
+GroupAdd("noc_w", win_chrome)   ; 不在谷歌,vscode
+GroupAdd("noc_w", win_explorer) ; 资源管理器
+GroupAdd("noc_w", win_desktop)  ; 桌面
+GroupAdd("noc_w", win_taskbar)  ; 任务栏
+GroupAdd("noc_w", win_wt)       ; windows ternimal
+GroupAdd("noc_w", win_vim)      ; vim
+GroupAdd("noc_w", win_idea)     ; idea
 #HotIf !WinActive("ahk_group noc_w")
 ^+w:: pid := WinGetPID("A"), tipMM("taskkill " ProcessClose(pid))    ;强制关闭
 ; WinKill("A"),
 ^w:: WinClose("A"), tipLM("WinClose A")    ;关闭
 #HotIf
 
+; o==========o==========o==========o==========o==========o a-`
+GroupAdd("noa_quote", win_vscode)  ; 不在谷歌,vscode
+#HotIf !WinActive("ahk_group noa_quote")
+<!`::run("cmd",A_Desktop)
+#HotIf 
+
 ; o==========o==========o==========o==========o==========o 调试相关
-CapsLock & Numpad1:: runOrActivate("D:\AutoHotKey\WindowSpy.ahk", "Window Spy", "c")
+CapsLock & Numpad1:: runOrActivate("Window Spy", "c","D:\AutoHotkey_2.0.10\WindowSpy.ahk")
 CapsLock & Numpad2::
 {
     ; Cap f2 ;打开脚本主窗口
@@ -145,7 +151,7 @@ CapsLock & LButton:: tip(debugInfo('w'), 10000, 1, 1, 12)
 :*?:,``::，
 :*?:\``::、
 
-; :?*x:]t:: SendInput Format("{}:{}:{}", A_Hour, A_Min, A_Sec) ;在vscodevim中有bug不知道为什么
+; :?*x:]t:: SendInput Format("{}:{}:{}", A_Hour, A_Min, A_Sec) ;在vscodeVim中有bug,估计是input太快的原因
 ; :?*x:]d:: SendInput Format("{}-{}-{}", A_YYYY, A_MM, A_DD)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
 :?*cx:]t:: sendInputVimFix(Format("{}:{}:{}", A_Hour, A_Min, A_Sec))

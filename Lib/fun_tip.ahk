@@ -55,9 +55,9 @@ tip(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's
 tipLB(str := unset, time := 3000) {
     tip(str?, time, 0, 1, 11)
 }
-; tip middle middle
+; tip middle middle 16
 tipMM(str := unset, time := 1000) {
-    tip(str?, time, 0.45, 0.5)
+    tip(str?, time, 0.45, 0.5, 16)
 }
 ; tip middle bottom 12
 tipMB(str := unset, time := 3000) {
@@ -70,11 +70,20 @@ tipRB(str := unset, time := 3000) {
 ; tip left middle
 tipLM(str, time := 500) {
     ;不指定which,否则频繁执行会消掉原先tip
-    tip(str, time, 0, 0.5) 
+    tip(str, time, 0, 0.5)
 }
 ; tip right middle 15
 tipRM(str, time := 3000) {
     tip(str, time, 1, 0.5, 15)
+}
+
+log(e) {
+    tipMM(type(e) " in " e.What ", which was called at line " e.Line, 3000)
+}
+log1(e) {
+    s := Format("{1}: {2}.`n`nFile:`t{3}`nLine:`t{4}`nWhat:`t{5}`nStack:`n{6}"
+        , type(e), e.Message, e.File, e.Line, e.What, e.Stack)
+    MsgBox(s)
 }
 
 tipp(str := unset, time := 5000, x := unset, y := unset, which_ := unset) {

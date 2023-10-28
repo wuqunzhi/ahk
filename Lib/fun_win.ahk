@@ -133,7 +133,7 @@ processManager() {
         "wyy", "cloudmusic.exe",
         "clash", "clash.exe"
     )
-    str := ""
+    str := "杀死进程"
     for k, v in namemap {
         str .= k . "`t`t" . v . "`n"
     }
