@@ -7,7 +7,8 @@ woz.ahk
 ## 全局设置
 > global.ahk
 - 锁定`CapsLock`状态,需要按住右`Alt`键+`Capslock`切换大小写状态
-- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换NumLock状态 
+- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换NumLock状态   
+
 `CapsLock` + ...  
 `win` + ...  
 `ctrl` + `j`/`k`/`l`/`w` ...  
