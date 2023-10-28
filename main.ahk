@@ -53,7 +53,6 @@ init() {
     global win_clash := "Clash for Windows ahk_exe Clash for Windows.exe"                  ; clash for windows
     global win_remote := "ahk_exe mstsc.exe ahk_class TscShellContainerClass"
     global dk2 := A_Desktop . "\桌面2\"
-
     SetTitleMatchMode("RegEx")    ;! case sensitive
     CoordMode("ToolTip", "Screen") ;v2开始 croodMode 默认全是client
     SetMouseDelay(-1)
