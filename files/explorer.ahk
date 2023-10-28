@@ -3,8 +3,12 @@
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
 :*x?b0zc:  c:: run("explore c:")
-<^n:: run("explorer.exe")
+`;:: send("{enter}")
 
+#HotIf WinActive(win_explorer) 
+<^n:: run("explorer.exe")
+<^o::!left
+<^i::!right
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
     try Run("cmd", WinGetTitle("A"))

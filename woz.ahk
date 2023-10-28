@@ -3,6 +3,7 @@
 #Include Lib\funcs.ahk
 #Include private.ahk
 #HotIf
+SetTitleMatchMode("RegEx")    
 setup()
 global lastcmd := ""
 MyGui := Gui()

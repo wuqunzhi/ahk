@@ -3,10 +3,10 @@
 ; 3. shift + NumLock + 滑轮调节鼠标移动速度
 
 ; ==========o==========o==========o==========o==========o==========o 滑轮
-; 鼠标在任务栏时滑轮调节音量,亮度(在最右边时)
+; 鼠标在任务栏时滑轮调节音量,亮度(在最左边时)
 #HotIf MouseIsOver(win_taskbar)
-WheelUp:: mx() < 1758 ? send("{Volume_Up}") : (changeBrightness("+10"), Sleep(50))
-WheelDown:: mx() < 1758 ? send("{Volume_Down}") : (changeBrightness("-10"), Sleep(50))
+WheelUp:: mx() > 50 ? send("{Volume_Up}") : (changeBrightness("+10"), Sleep(50))
+WheelDown:: mx() > 50 ? send("{Volume_Down}") : (changeBrightness("-10"), Sleep(50))
 
 MouseIsOver(WinTitle) {
     MouseGetPos(, , &Winid)

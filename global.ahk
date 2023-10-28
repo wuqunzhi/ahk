@@ -1,6 +1,5 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
-#Include 'Lib\funcs.ahk'
 ~esc:: removeAllTip()
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
@@ -53,6 +52,7 @@ CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
+CapsLock & 1::private.nas() ;有道词典
 
 #p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 #+p:: allwinAct(allwin(), 'offtop')
@@ -108,7 +108,7 @@ GroupAdd("noc_hjkl", win_idea)
 ; ^+w:: WinClose("A"), tip("WinClose A", 1000, 0.5, 0.5)    ;关闭 to obsidian
 GroupAdd("noc_w", win_vscode)   ; 不在谷歌,vscode
 GroupAdd("noc_w", win_chrome)   ; 不在谷歌,vscode
-GroupAdd("noc_w", win_explorer) ; 资源管理器
+; GroupAdd("noc_w", win_explorer) ; 资源管理器
 GroupAdd("noc_w", win_desktop)  ; 桌面
 GroupAdd("noc_w", win_taskbar)  ; 任务栏
 GroupAdd("noc_w", win_wt)       ; windows ternimal
