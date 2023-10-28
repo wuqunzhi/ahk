@@ -1,23 +1,26 @@
 ## autohotkey安装
+> https://www.autohotkey.com/download/
 
 ## 运行
-main.ahk
-woz.ahk
+- main.ahk
+- woz.ahk
 
 ## 全局设置
 > global.ahk
 - 锁定`CapsLock`状态,需要按住右`Alt`键+`Capslock`切换大小写状态
-- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换NumLock状态   
-
-`CapsLock` + ...  
-`win` + ...  
-`ctrl` + `j`/`k`/`l`/`w` ...  
-...  
-...  
+- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换`NumLock`状态   
+- 将`CapsLock`映射为`esc` (松开时触发)
+- 定义一系列快捷键
+  - `CapsLock` + ...  
+  - `win` + ...  
+  - `ctrl` + `j`/`k`/`l`/`w` ...  
+  - ...   
+- ...
 
 
 ## 特定设置
 > 见files/*.ahk
+- 定义了在特定窗口生效的一系列快捷键
 
 ## 输入法相关
 > 见ime.ahk
@@ -43,15 +46,14 @@ woz.ahk
 - 热字串`CH2` `CH3` ... `CH9` 将前i个剪贴板历史合并复制到剪贴板
 
 ## woz
-> 见woz.ahk
-仿wox的快捷启动器
+> 见woz.ahk - 启发自[wox](http://www.wox.one)的快捷启动器
 - 快捷键 ctrl space
 - 不需要回车确定,唯一匹配命令则执行
 - 输入tab执行上一条历史命令
 - 全匹配也会执行
 
 ## zvim
-> 见zvim.ahk - 启发至[win-vind](https://github.com/pit-ray/win-vind)
+> 见zvim.ahk - 启发自[win-vind](https://github.com/pit-ray/win-vind)
 - 用vim的键位习惯来操作windows鼠标、窗口等。
 
 
