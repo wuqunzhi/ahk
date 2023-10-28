@@ -54,8 +54,8 @@ CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
 CapsLock & 1::private.nas() ;有道词典
 
-#p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
-#+p:: allwinAct(allwin(), 'offtop')
+>!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
+>!>+p:: allwinAct(allwin(), 'offtop')
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
