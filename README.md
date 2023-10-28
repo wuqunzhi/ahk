@@ -8,6 +8,11 @@ woz.ahk
 > global.ahk
 - 锁定`CapsLock`状态,需要按住右`Alt`键+`Capslock`切换大小写状态
 - 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换NumLock状态 
+`CapsLock` + ...
+`win` + ...
+`ctrl` + `j`/`k`/`l`/`w` ...
+...
+...
 
 
 ## 特定设置
@@ -37,6 +42,7 @@ woz.ahk
 - 热字串`CH2` `CH3` ... `CH9` 将前i个剪贴板历史合并复制到剪贴板
 
 ## woz
+> 见woz.ahk
 仿wox的快捷启动器
 - 快捷键 ctrl space
 - 不需要回车确定,唯一匹配命令则执行
@@ -44,7 +50,8 @@ woz.ahk
 - 全匹配也会执行
 
 ## zvim
-> 启发至[win-vind](https://github.com/pit-ray/win-vind),用vim的键位习惯来操作windows鼠标、窗口等。
+> 见zvim.ahk
+> 启发至[win-vind](https://github.com/pit-ray/win-vind)，用vim的键位习惯来操作windows鼠标、窗口等。
 
 
 
