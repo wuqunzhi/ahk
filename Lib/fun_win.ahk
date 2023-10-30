@@ -49,6 +49,12 @@ runOrActivate(WinTitle := "A", ifActive := "r", cmd := "", useCmdToActicate := 0
 }
 
 
+LoopRelatedWindows() {
+    ahk_exe := WinGetProcessName("A")
+    ahk_class := WinGetClass("A")
+    WinActivateBottom("ahk_exe " ahk_exe " ahk_class " ahk_class)
+}
+
 winGetAlwaysOnTop(wintitle) {
     ; https://www.autohotkey.com/board/topic/31878-get-alwaysontop-state/
     return WinGetExStyle(wintitle) & 0x8 ? 1 : 0
@@ -144,6 +150,15 @@ processManager() {
 
 ; 杀死进程
 taskkill(PIDOrName) {
+    static fullname := Map(
+        "qm", "QQMusic.exe",
+        "wyy", "cloudmusic.exe",
+        "wx", "WeChat.exe",
+        "clash", "Clash for Windows.exe",
+        "yd", "YoudaoDict.exe",
+    )
+    if (fullname.Has(PIDOrName))
+        PIDOrName := fullname[PIDOrName]
     str := ProcessClose(PIDOrName) ? "" : " failed"
     tipLB(Format("taskkill {} {}", PIDOrName, str))
 }
@@ -163,13 +178,15 @@ taskkill(PIDOrName) {
  * l Listines
  * ls return ahk str
  * ls* return all wins str
- * @param {string} name foo.ahk
+ * @param {string} name foo.ahk / foo
  * @param {string} path   ..\bar\foo.ahk
  */
-ahk(act, name := "", path := "") {
+ahk(act, name := "", path := name) {
     showtip(str) {
         tipLB(str)
     }
+    if ( not endwith(name, ".ahk"))
+        name .= ".ahk"
     ; PostMessage, 0x111, 65303,,, MyScript.ahk - AutoHotkey ; 重启 Reload
     ; PostMessage, 0x111, 65304,,, MyScript.ahk - AutoHotkey ; 编辑 Edit
     ; PostMessage, 0x111, 65305,,, MyScript.ahk - AutoHotkey ; 挂起 Suspend
@@ -180,7 +197,6 @@ ahk(act, name := "", path := "") {
     ; PostMessage, 0x111, 65408,,, MyScript.ahk - AutoHotkey ; ListLines
     save := A_DetectHiddenWindows
     DetectHiddenWindows True
-    path := (path = "") ? name : path
     title := name " - AutoHotkey"
     res := ""
 
@@ -222,8 +238,10 @@ ahk(act, name := "", path := "") {
             PostMessage(0x111, 65306, , , title)
             showtip("Pause " name)
         case "q": ;Quit
-            PostMessage(0x111, 65307, , , title)
-            showtip("Quit " name)
+            while WinExist(title) {
+                PostMessage(0x111, 65307, , , title)
+                showtip("Quit " name)
+            }
         case "k": ;KeyHistory
             PostMessage(0x111, 65406, , , title)
             showtip("KeyHistory " name)

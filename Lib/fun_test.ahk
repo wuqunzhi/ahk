@@ -1,3 +1,49 @@
+SystemSleep() {
+   DllCall("PowrProf\SetSuspendState")
+}
+/**
+ * 移动活动窗口位置
+ */
+MakeWindowDraggable() {
+   hwnd := WinExist("A")
+   if (WinGetMinMax("A"))
+      WinRestore("A")
+
+   PostMessage("0x0112", "0xF010", 0)
+   Sleep 50
+   SendInput("{Right}")
+}
+
+IsDesktop() {
+   return WinActive("Program Manager ahk_class Progman") || WinActive("ahk_class WorkerW")
+}
+
+/**
+ * 没有活动窗口或是桌面返回True 反之返回false
+ */
+NotActiveWin() {
+   return IsDesktop() || not WinExist("A")
+}
+
+
+/**
+ * 移动鼠标到活动窗口中心
+ */
+MouseToActiveWindowCenter() {
+   WinGetPos(&X, &Y, &W, &H, "A")
+   MouseMove(x + w / 2, y + h / 2)
+}
+Send("{text}我爱尼娅! ")
+Send("{text}➤")
+Send("{text}🐶")
+; 如果是文件夹直接打开
+/* 
+if (InStr(FileExist(programPath), "D")) {
+   Run(programPath)
+   return
+} 
+*/
+
 /*
 https://www.autoahk.com/archives/36778
 ;;下面是三个例子， 分别是普通的， 带文件夹参数的， 和带标准输入的。

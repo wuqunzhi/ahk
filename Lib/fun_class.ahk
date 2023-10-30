@@ -1,3 +1,26 @@
+class Brightness {
+    ; https://github.com/tigerlily-dev/Monitor-Configuration-Class
+    ; https://github.com/xianyukang/MyKeymap/blob/main/bin/MyKeymap.ahk
+    static GetBrightness() {
+        ; 使用wmi获取亮度
+        brightness := ""
+        For property in ComObjGet("winmgmts:\\.\root\WMI").ExecQuery("SELECT * FROM WmiMonitorBrightness")
+            brightness := property.CurrentBrightness
+        return brightness
+    }
+    static SetBrightness(brightness, timeout := 1) {
+        ; 使用wmi设置亮度
+        For property in ComObjGet("winmgmts:\\.\root\WMI").ExecQuery("SELECT * FROM WmiMonitorBrightnessMethods")
+            property.WmiSetBrightness(timeout, brightness)
+    }
+    static changeBrightness(d) {
+        curB := this.GetBrightness()
+        newB := min(max(curB + d, 0), 100)
+        this.SetBrightness(newB)
+        tip("" newB, , 900, 500)
+    }
+}
+
 class VirtualDesktop {
     ; https://www.autoahk.com/archives/44162
     static Current => ((ComCall(6, this.IVirtualDesktopManagerInternal, "ptr*", &currentDesktop := 0)), this(currentDesktop))
@@ -60,13 +83,13 @@ class VirtualDesktop {
     __Delete() => ObjRelease(this.Ptr)
 }
 
-; ---------------------------------------hook
+; --------------------------------------- GUI
 
-class colorhook {
+class colorGUI {
     showpage := 1
     g := creathookGui()
     info := this.g.AddText("c00ffff", strdot(strdot(" ", 100) . '`n', 20))  ;w:100 h:20
-    timer := this.UpdateColor.Bind(this) 
+    timer := this.UpdateColor.Bind(this)
     toggleshow(str := "toggle") {
         switch str {
             case "toggle":
@@ -85,25 +108,25 @@ class colorhook {
     }
     UpdateColor() {
         switch this.showpage {
-            case 1: this.info.Value := debuginfo('m c') . '(Insert键复制)'
-            case 2: this.info.Value := debuginfo('all') . '(Insert键复制)'
-            case 3: this.info.Value := debuginfo('w1') . '(Insert键复制)'
+            case 1: this.info.Value := debuginfo('m c') . '➤ Insert键复制'
+            case 2: this.info.Value := debuginfo('all') . '➤ Insert键复制'
+            case 3: this.info.Value := debuginfo('w1') . '➤ Insert键复制'
         }
     }
-    nextColor(){
-        static idx:=1
-        colorList:=["c00ffff","cred"]
-        idx:=nextn(idx,colorList.Length)
+    nextColor() {
+        static idx := 1
+        colorList := ["c00ffff", "cred"]
+        idx := nextn(idx, colorList.Length)
         this.info.opt(colorList[idx])
     }
     nextPage() {
-         this.showpage := nextn(this.showpage, 3)
+        this.showpage := nextn(this.showpage, 3)
     }
 
 
 }
 
-class timerhook {
+class timerGUI {
     ; g := creathookgui(20, "c8000FF", "Bookman Old Style")
     color1 := "c00BFFF"
     color2 := "cred"

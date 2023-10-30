@@ -5,8 +5,8 @@
 ; ==========o==========o==========o==========o==========o==========o 滑轮
 ; 鼠标在任务栏时滑轮调节音量,亮度(在最左边时)
 #HotIf MouseIsOver(win_taskbar)
-WheelUp:: mx() > 50 ? send("{Volume_Up}") : (changeBrightness("+10"), Sleep(50))
-WheelDown:: mx() > 50 ? send("{Volume_Down}") : (changeBrightness("-10"), Sleep(50))
+WheelUp:: mx() < 1850 ? send("{Volume_Up}") : (Brightness.changeBrightness("+10"))
+WheelDown:: mx() < 1850 ? send("{Volume_Down}") : (Brightness.changeBrightness("-10"))
 
 MouseIsOver(WinTitle) {
     MouseGetPos(, , &Winid)

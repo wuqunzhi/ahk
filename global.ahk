@@ -1,12 +1,12 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
 ~esc:: removeAllTip()
+CapsLock Up:: send("{esc}") ;, tipLM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
-CapsLock Up:: send("{esc}") ;, tipLM("esc")
+<!CapsLock:: LoopRelatedWindows()
 #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
-CapsLock:: VirtualDesktop.showCycleRight()
 #HotIf
 ; o==========o==========o==========o==========o VirtualDesktop
 #CapsLock:: VirtualDesktop.showCycleRight()
@@ -21,7 +21,6 @@ CapsLock:: VirtualDesktop.showCycleRight()
 ; Ralt:: send("RButton")    ;shift f10
 ; Ralt::RButton    ;shift f10
 ; #HotIf
-
 CapsLock & f1:: ocr()
 CapsLock & end:: togglegame()
 CapsLock & down:: moveD(1)
@@ -52,7 +51,7 @@ CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
-CapsLock & 1::private.nas() ;有道词典
+CapsLock & 1:: private.nas() 
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 >!>+p:: allwinAct(allwin(), 'offtop')
@@ -71,6 +70,7 @@ CapsLock & 1::private.nas() ;有道词典
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: togglewyy()
+
 togglewyy() {
     try {                  ; toggle wyy
         WinActive(win_cloudmusic) ? WinClose() : (WinShow(win_cloudmusic), WinActivate(win_cloudmusic))
@@ -78,7 +78,9 @@ togglewyy() {
     } catch as e {
     }
 }
-
+; logi option
++!PgDn:: VirtualDesktop.showCycleRight()
++!PgUp:: VirtualDesktop.showCycleLeft()
 
 
 ; o==========o==========o==========o==========o==========o c-hjkl
@@ -87,6 +89,7 @@ togglewyy() {
 GroupAdd("noc_hjkl", win_vscode)
 GroupAdd("noc_hjkl", win_obsidian)
 GroupAdd("noc_hjkl", win_idea)
+GroupAdd("noc_hjkl", win_woz)
 #HotIf !WinActive("ahk_group noc_hjkl")
 <^j:: send("{blink}{down}")
 <^k:: send("{blink}{up}")
@@ -106,8 +109,9 @@ GroupAdd("noc_hjkl", win_idea)
 
 ; o==========o==========o==========o==========o==========o c-w , c-s-w
 ; ^+w:: WinClose("A"), tip("WinClose A", 1000, 0.5, 0.5)    ;关闭 to obsidian
-GroupAdd("noc_w", win_vscode)   ; 不在谷歌,vscode
-GroupAdd("noc_w", win_chrome)   ; 不在谷歌,vscode
+GroupAdd("noc_w", win_vscode)
+GroupAdd("noc_w", win_chrome)
+GroupAdd("noc_w", win_edge)
 ; GroupAdd("noc_w", win_explorer) ; 资源管理器
 GroupAdd("noc_w", win_desktop)  ; 桌面
 GroupAdd("noc_w", win_taskbar)  ; 任务栏
@@ -123,11 +127,11 @@ GroupAdd("noc_w", win_idea)     ; idea
 ; o==========o==========o==========o==========o==========o a-`
 GroupAdd("noa_quote", win_vscode)  ; 不在谷歌,vscode
 #HotIf !WinActive("ahk_group noa_quote")
-<!`::run("cmd",A_Desktop)
-#HotIf 
+<!`:: run("cmd", A_Desktop)
+#HotIf
 
 ; o==========o==========o==========o==========o==========o 调试相关
-CapsLock & Numpad1:: runOrActivate("Window Spy", "c","D:\AutoHotkey_2.0.10\WindowSpy.ahk")
+CapsLock & Numpad1:: runOrActivate("Window Spy", "c", "D:\AutoHotkey_2.0.10\WindowSpy.ahk")
 CapsLock & Numpad2::
 {
     ; Cap f2 ;打开脚本主窗口
@@ -139,7 +143,7 @@ CapsLock & Numpad2::
 CapsLock & Numpad3:: listWins(, showEach := true)
 CapsLock & Numpad4:: ahkManager()
 CapsLock & Numpad5:: copyandshow(debugInfo('w1'))
-CapsLock & q:: run("https://wyagd001.github.io/v2/docs/commands/" A_Clipboard ".htm")
+CapsLock & q:: run("https://wyagd001.github.io/v2/docs/lib/" A_Clipboard ".htm")
 CapsLock & LButton:: tip(debugInfo('w'), 10000, 1, 1, 12)
 #HotIf
 

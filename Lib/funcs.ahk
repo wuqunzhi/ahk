@@ -4,9 +4,18 @@
 #Include fun_copy.ahk
 #Include fun_click.ahk
 #Include fun_ime.ahk
-#Include fun_ime.ahk
 #Include fun_class.ahk
 
+SystemLockScreen() {
+    DllCall("LockWorkStation")
+    ; https://wyagd001.github.io/v2/docs/lib/Shutdown.htm
+    ; Shutdown()
+    ; 0 = 注销
+    ; 1 = 关机
+    ; 2 = 重启
+    ; 4 = 强制
+    ; 8 = 关闭电源
+}
 
 creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
     g := gui()
@@ -308,18 +317,18 @@ switchChromeAddress(mode := "ts gb") {
 
 /**
  * @param mode
- * support mode := "a,m,c" or "a m c" ...
- * a: A_***CoordMode
- * i: ime id,mode
- * m: mouse pos
- * c: color on mousePos
- * w: wintitle,exe,class,id,pid
- * w1: wintitle,exe,class
- * wcpos: WinGetClientPos
- * wpos: WinGetPos
- * all: == "a i m c w wcpos wpos"
- * @returns {string} 
- * 显示鼠标位置,窗口位置,输入法消息
+ * support mode := "a,m,c" or "a m c" ...  
+ * a: A_***CoordMode  
+ * i: ime id,mode  
+ * m: mouse pos  
+ * c: color on mousePos  
+ * w: wintitle,exe,class,id,pid,path  
+ * w1: wintitle,exe,class  
+ * wcpos: WinGetClientPos  
+ * wpos: WinGetPos  
+ * all: == "a i m c w wcpos wpos"  
+ * @returns {string}   
+ * 显示鼠标位置,窗口位置,输入法消息  
  */
 debugInfo(mode) {
     if (InStr(mode, ',') or InStr(mode, ' ')) {
@@ -369,11 +378,12 @@ debugInfo(mode) {
                 color := PixelGetColor(mxs, mys)
                 res := Format("co: {}", color)
 
-            case 'w': ; wintitle,ahk_exe,ahk_class,ahk_id,ahk_pid
+            case 'w': ; wintitle,ahk_exe,ahk_class,ahk_id,ahk_pid,ahk_processPath
                 ahk_id := WinGetID("A")
                 title := ahk_id ? WinGetTitle("ahk_id" ahk_id) : ""
                 ahk_pid := ahk_id ? WinGetPID("ahk_id" ahk_id) : ""
                 ahk_exe := ahk_id ? WinGetProcessName("ahk_id" ahk_id) : ""
+                ahk_path := ahk_id ? WinGetProcessPath("ahk_id" ahk_id) : ""
                 ahk_class := ahk_id ? WinGetClass("ahk_id" ahk_id) : ""
                 res := Format("
                     (
@@ -382,7 +392,8 @@ debugInfo(mode) {
                         ahk_class {}
                         ahk_id {}
                         ahk_pid {}
-                    )", title, ahk_exe, ahk_class, ahk_id, ahk_pid)
+                        process_path {}
+                    )", title, ahk_exe, ahk_class, ahk_id, ahk_pid, ahk_path)
 
             case 'w1': ; wintitle,ahk_exe,ahk_class
                 ahk_id := WinGetID("A")
@@ -403,3 +414,4 @@ debugInfo(mode) {
     DetectHiddenWindows(save)
     return res
 }
+#HotIf

@@ -33,8 +33,8 @@ init()
 
 init() {
     global ingame := 0
-
-    global win_chrome := "ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"                 ; chrome
+    global win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
+    global win_chrome := "^.+.*$ ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"          ; chrome
     global win_edge := "ahk_exe msedge.exe ahk_class Chrome_WidgetWin_1"                   ; edge
     global win_vscode := "ahk_exe Code.exe ahk_class Chrome_WidgetWin_1"                   ; vscode
     global win_obsidian := "ahk_exe Obsidian.exe ahk_class Chrome_WidgetWin_1"             ; obsidian

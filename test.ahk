@@ -11,31 +11,15 @@
 #Include "Lib\funcs.ahk"
 SetTitleMatchMode("regex")
 ; CoordMode("ToolTip", "Screen")
+
+; SetMouseDelay 0                                           ; SendInput 可能会降级为 SendEvent, 此时会有 10ms 的默认 delay
+; SetWinDelay 0                                             ; 默认会在 activate, maximize, move 等窗口操作后睡眠 100ms
+; ProcessSetPriority "High"
 SetMouseDelay(-1)
 #HotIf
-; 6:: send("^!{Home}")
-6:: toggleRemote()
-7:: Send("^!{home}{win}")
-; 5:: tip(inputfoucs())
-global win_remote:="ahk_exe mstsc.exe ahk_class TscShellContainerClass"
-; ^!home::toggleRemote()
-    ; ^!home up::tip("123")
-^!home up:: WinMinimize(win_remote)
-!home up:: WinActivate(win_remote)
-; ^!home up::send("!{Tab}")
 
-toggleRemote(){
-    ; if(WinActive(win_remote))
-        send("!{Tab}")
-    ; else if(WinExist(win_remote)){
-        ; WinActivate()
-    ; }
-}
-test() {
-
-}
-
-
+6:: Brightness.changeBrightness(5)
+7:: Send("{text}🐶! ")
 ; ==========o==========o==========o==========o==========o other
 /*
 ImageSearch PixelSearch

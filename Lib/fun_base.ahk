@@ -1,18 +1,25 @@
-strJoin(strs, sep:=", ") {
+strJoin(strs, sep := ", ") {
     res := ""
     for str in strs
         res .= (str . sep)
     return substr(res, 1, -strlen(sep))
 }
+endwith(abcd, cd) {
+    idx := InStr(abcd, cd, true)
+    return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
+}
+startwith(abcd, ab) {
+    return InStr(abcd, ab, true) == 1
+}
 
-A_userPath(){
+A_userPath() {
     return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
 }
 
 ; return str*=num
 strdot(str, num) {
     res := ""
-    loop (num) 
+    loop (num)
         res .= str
     return res
 }
