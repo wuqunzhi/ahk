@@ -35,7 +35,7 @@ setup() {
     addCommand("clear", "recycleEmpty", "", "清空回收站")
     addCommand("restartexplorer")
     addCommand("ps", , , "processManager")
-    addCommand("touchpad") ;切换触摸板
+    addCommand("touchpad")  ;切换触摸板
     addCommand("remote", "run", "mstsc", "远程桌面连接")
     addCommand("mstsc", "run", "mstsc", "远程桌面连接")
     addCommand("colorhook") ; *useful
