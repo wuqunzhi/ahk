@@ -4,6 +4,8 @@
 #HotIf WinActive(win_chrome)
 <!h:: send("^+{Tab}")
 <!l:: send("^{Tab}")
+<!<+h::A
+<!<+l::D
 <^+h:: send("^t"), setCHyingForce(), sleep(200), send("chrome://history/{enter}")
 <!s:: send("!d* ")
 ^o::!left

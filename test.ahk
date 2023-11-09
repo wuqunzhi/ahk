@@ -18,8 +18,22 @@ SetTitleMatchMode("regex")
 SetMouseDelay(-1)
 #HotIf
 
-6:: Brightness.changeBrightness(5)
-7:: Send("{text}🐶! ")
+; WinActivateBottom(".*")
+
+6:: test()
+; 6:: MsgBox(getfiles(A_Desktop . "\桌面2\*"))
+7:: WinSetStyle("^0x800000", "A")
+test() {
+    dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
+    for filename in getfiles(dk2 "*") {
+        MsgBox(filename)
+    }
+}
+
+
+; 7:: Send("{text}🐶! ")
+
+
 ; ==========o==========o==========o==========o==========o other
 /*
 ImageSearch PixelSearch

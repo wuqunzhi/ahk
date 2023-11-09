@@ -80,14 +80,14 @@ tipRM(str, time := 3000) {
 log(e) {
     tipMM(type(e) " in " e.What ", which was called at line " e.Line, 3000)
 }
-log1(e) {
+logM(e) {
     s := Format("{1}: {2}.`n`nFile:`t{3}`nLine:`t{4}`nWhat:`t{5}`nStack:`n{6}"
         , type(e), e.Message, e.File, e.Line, e.What, e.Stack)
     MsgBox(s)
 }
 
 tipp(str := unset, time := 5000, x := unset, y := unset, which_ := unset) {
-    ; todo
+    ; todo no use
     ; owner := "a"
     ; owner := "a" ? wingetid("a") : owner
     ; tipgui.opt("+owner" owner "alwaysontop +toolwindow")

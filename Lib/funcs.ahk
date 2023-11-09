@@ -189,20 +189,55 @@ isTextSelected() {
     return (res = "" ? 0 : 1)
 }
 
+getEnvPath(env) {
+    switch env {
+        case '%SystemRoot%':
+        default:
+
+    }
+
+}
 
 ; run or open clipb
 autorun(str := A_Clipboard) {
+    str := trim(str)
     try {
         if RegExMatch(str, "^(C:|D:|E:|F:)")
-            run str
+            run "explorer " str
+        else if startwith(str, "localhost:")
+            run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
             or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
             run "chrome.exe " str
+        ; %AppData%\code
+        else if RegExMatch(str, "%(\w+)%(\\[^%]+)*", &matchs) and EnvGet(matchs[1]) {
+            str := EnvGet(matchs[1]) . SubStr(str, StrLen(matchs[1]) + 3)
+            run "explorer " str
+        }
         else
             run "https://www.google.com/search?q=" . str
     }
     catch as e {
         log(e)
+    }
+}
+
+; 获取dir下所有文件 目前需要加通配符例如
+; C:\Users\79481\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\\*
+getfiles(dir, mode := "") {
+    ; dir := A_Desktop . "\桌面2\*"
+    ; https://wyagd001.github.io/v2/docs/lib/LoopFiles.htm
+    res := []
+    loop files dir, mode {
+        res.Push(A_LoopFileName)
+    }
+    return res
+}
+
+focus_wx() {
+    win_wechat := "ahk_exe WeChat.exe ahk_class WeChatMainWndForPC"
+    if WinWaitActive(win_wechat, , 1) {
+        sbclick("300 360 0")
     }
 }
 

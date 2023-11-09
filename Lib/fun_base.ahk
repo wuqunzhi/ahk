@@ -4,12 +4,14 @@ strJoin(strs, sep := ", ") {
         res .= (str . sep)
     return substr(res, 1, -strlen(sep))
 }
-endwith(abcd, cd) {
-    idx := InStr(abcd, cd, true)
+
+endwith(abcd, cd, caseSitive := false) {
+    idx := InStr(abcd, cd, caseSitive)
     return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
 }
-startwith(abcd, ab) {
-    return InStr(abcd, ab, true) == 1
+
+startwith(abcd, ab, caseSitive := false) {
+    return InStr(abcd, ab, caseSitive) == 1
 }
 
 A_userPath() {
@@ -23,6 +25,7 @@ strdot(str, num) {
         res .= str
     return res
 }
+
 ; 取str的指定行
 strlines(str, lines*) {
     strlines := StrSplit(str, "`n")

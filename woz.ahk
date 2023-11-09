@@ -28,14 +28,19 @@ class WozManager {
     }
 
     addcmds() {
-        addcmd(id, func := id, args := "", hint := id, flag := "") {
-            this.cmds.Set(id, [func, args, hint, flag])
+        addcmd(id, func := id, args := "", hint := id, flag := "", pattern := "") {
+            this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
-        dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
         userpath := A_userPath() ; C:\Users\79481
+        dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
+        for filename in getfiles(dk2 "*") {
+            if (endwith(filename, ".lnk"))
+                filename := SubStr(filename, 1, StrLen(filename) - 4)
+            addcmd(filename, "run", dk2 . filename, "run " filename)
+        }
 
-        addcmd("^k (.*)`t$", "kill", "fromid", "kill (.*)", "reg")
-        addcmd("^q (.*)`t$", "ahkq", "fromid", "quit (.*).ahk", "reg")
+        addcmd("^k (.*)`t$", "kill", "fromid", "kill (.*)", "reg", "^k .*$")
+        addcmd("^q (.*)`t$", "ahkq", "fromid", "quit (.*).ahk", "reg", "^q .*$")
 
         addcmd("k qm", "kill", "qm", "kill qm", "full")
         addcmd("k wyy", "kill", "wyy", "kill cloudmusic", "full")
@@ -43,13 +48,17 @@ class WozManager {
         addcmd("k clash", "kill", "clash", "kill clash", "full")
         addcmd("k yd", "kill", "yd", "kill youdao", "full")
 
+        ; ahk
         addcmd("q main", "ahkq", "main", "quit main.ahk", "full")
+        addcmd("q test", "ahkq", "test", "quit test.ahk", "full")
+        addcmd("main", "runAs", "main.ahk", "runAs main.ahk")
+        addcmd("woz", "runAs", "woz.ahk", "runAs woz.ahk")
+        addcmd("test", "runAs", "test.ahk", "runAs test.ahk")
 
         addcmd("nop")
         addcmd("-v", , , A_AhkVersion)
         addcmd("timer")
 
-        ; addcmd("^k .* $", "kill", "fromid", "kill something", "reg")
         addcmd("game", , , "switch in game")
         addcmd("showintxt", , , "将剪贴板内容用vscode打开") ;
         addcmd("bluetooth", , , "打开蓝牙设置")
@@ -60,54 +69,18 @@ class WozManager {
         addcmd("touchpad", , , "切换触摸板")
         addcmd("remote", "run", "mstsc", "远程桌面连接")
         addcmd("mstsc", "run", "mstsc", "远程桌面连接")
-        addcmd("colorhook") 
+        addcmd("colorhook")
         addcmd("record")
         addcmd("quit")
         addcmd("taskmgr", "run", "taskmgr", "open taskmgr")
         addcmd("reload")
         addcmd("ahkmanager")
 
-        addcmd("main", "runAs", "main.ahk", "runAs main.ahk")
-        addcmd("woz", "runAs", "woz.ahk", "runAs woz.ahk")
-        addcmd("test", "runAs", "test.ahk", "runAs test.ahk")
 
-        addcmd("code", "run", "code", "run vscode")
-        addcmd("cpp", "run", "code D:\projects\cpp", "run vscode cpp")
+        addcmd("cpp", "run", "code D:\vscodeDeemos\cpp", "run vscode cpp")
         addcmd("dy", "run", "code E:\垃圾桶\dy.txt", "code dy.txt")
 
-        addcmd("notepad", "run", "notepad.exe", "run notepad")
-        addcmd("edge", "runAs", "edge", "runAs edge")
-        addcmd("wt", "runAs", "wt", "runAs wt.exe")
-        addcmd("chrome", "runAs", "chrome.exe", "runAs chrome")
-        addcmd("clash", "runAs", dk2 "Clash", "runAs clash")
-        addcmd("google", "runAs", "chrome.exe", "runAs google")
-
-        addcmd("myPDF", "run", dk2 "myPDF.exe", "run myPDF.exe")
-        addcmd("myMat", "run", dk2 "myMat", "run myMat")
-
-        addcmd("wx", "run", dk2 "wechat", "run wechat")
-        addcmd("qq", "run", dk2 "qq", "run QQ")
-        addcmd("yd", "run", dk2 "yd", "run youdao")
-        addcmd("qm", "run", dk2 "qm", "run QQMusic")
-        addcmd("kugou", "run", dk2 "kugou", "run kugou")
-        addcmd("wyy", "run", dk2 "wyy", "run cloudmusic")
-        addcmd("bdwp", "run", dk2 "bdwp", "run baiduwanpan")
-
-        addcmd("wicleanup", "run", dk2 "WICleanupUI", "run WICleanupUI")
-        addcmd("idm", "runAs", dk2 "IDM", "runAs idm")
-        addcmd("bandicam", "runAs", dk2 "bandicam", "runAs bandicam")
-        addcmd("geek", "runAs", dk2 "geek", "runAs geek")
-        addcmd("teamviewer", "run", dk2 "teamviewer", "run teamviewer")
-        addcmd("steam", "runAs", dk2 "steam", "runAs steam")
-        addcmd("ccleaner", "runAs", dk2 "ccleaner", "runAs ccleaner")
-        addcmd("Snipaste", "runAs", dk2 "Snipaste", "runAs Snipaste")
-        addcmd("spacesniffer", "runAs", dk2 "spacesniffer", "runAs spacesniffer")
-        addcmd("DefenderC", "runAs", dk2 "DefenderControl", "runAs DefenderControl")
-        addcmd("photoshop", "runAs", dk2 "ps", "runAs photoshop")
-        addcmd("ncm", "runAs", dk2 "ncm", "runAs ncm")
-        addcmd("everything", "runAs", dk2 "everything", "runAs everything")
-        addcmd("Final2x", "run", dk2 "Final2x", "run Final2x")
-        addcmd("snapdrop", "run", dk2 "snapdrop", "run snapdrop")
+        
 
         ; -------------------- 系统配置
         addcmd("env", "env", "", "环境变量")
@@ -133,17 +106,16 @@ class WozManager {
         addcmd("startup", "run", A_Startup, "shell:startup")
 
         ; -------------------- 软件目录
+        addcmd("vsdeemo", "run", "D:\VSCodeDeemo\", "D:\VSCodeDeemo\")
+        addcmd("vsprojects", "run", "D:\vscodeProjects", "D:\vscodeProjects")
+        addcmd("vssetting", "run", userpath "\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
+
         addcmd("wsl", "run", "\\wsl$\Ubuntu-20.04", "wsl")
-        addcmd("vscdeemo", "run", "D:\VSCodeDeemo\", "D:\VSCodeDeemo\")
-        addcmd("vscsetting", "run", "C:\Users\79481\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
-        addcmd("vscsetting", "run", "C:\Users\79481\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
         addcmd("scoop", "run", "D:\Scoop", "scoop")
+
         ; -- vim/nvim目录
         addcmd("vim", "run", "D:\vim\vim90\", "D:\vim\vim90\")
-        addcmd("vimrc\", "run", "C:\Users\79481\vimfiles\", "C:\Users\79481\vimfiles\")
-        addcmd("vimfiles", "run", "C:\Users\79481\vimfiles\", "~\vimfiles\")
-        addcmd("nvim", "runs", "C:\Users\79481\AppData\Local\nvim\" . "|"
-            . "C:\Users\79481\AppData\Local\nvim-data", "nvim\") ;"C:\Users\79481\.config\nvim\
+        addcmd("vimrc", "run", userpath "\vimfiles\", userpath "\vimfiles\")
 
         ; -------------------- 网站
         addcmd("v2", "run", "https://wyagd001.github.io/v2/docs", "ahkv2")
@@ -186,16 +158,17 @@ class WozManager {
                 }
 
                 flag := v[4]
+                pattern := v[5]
                 if (match(k, text, v[4])) {
                     matchCommands.Set(k, v), uniqueMatch := k
                     hints .= Format("{:-30}`t# {}`n", k, v[3])
                 } else {
                     ; 不匹配也可能需要补充hint
                     if (flag == "reg") {
-                        if (RegExMatch(SubStr(k, 1, StrLen(k) - 2), text))
+                        if (RegExMatch(text, pattern))
                             hints .= Format("{:-30}`t# {}`n", k, v[3])
                     }
-                    else if (flag == "full") {
+                    else if (flag == "full" or flag == "^$") {
                         if (startwith(k, text))
                             hints .= Format("{:-30}`t# {}`n", "^" k "$", v[3])
                     }
@@ -284,7 +257,6 @@ class WozManager {
                 case "touchpad": toggleTouchpad()
                 case "bluetooth": Run("control.exe bthprops.cpl")
                     ; case "timer": timeh.toggleshow()
-                    ; case "sett": timeh.isshow() and timeh.setdeadline()
                 case "env":
                     run("sysdm.cpl"), WinWaitActive("系统属性")
                     send("{ctrl Down}{Tab 2}{ctrl Up}!n")
@@ -336,7 +308,6 @@ class WozManager {
         this.updateOSD()
     }
 }
-
 
 
 ; ==========o==========o==========o==========o==========o hooks

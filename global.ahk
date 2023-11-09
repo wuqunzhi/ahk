@@ -5,6 +5,12 @@ CapsLock Up:: send("{esc}") ;, tipLM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
 <!CapsLock:: LoopRelatedWindows()
+
+NumLock & k::#k
+NumLock & j::#j
+NumLock & i::#i
+NumLock & p::#p
+
 #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
 #HotIf
@@ -51,33 +57,38 @@ CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
-CapsLock & 1:: private.nas() 
+CapsLock & 1:: private.nas()
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
->!>+p:: allwinAct(allwin(), 'offtop')
+>!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
-#j:: runOrActivate(win_chrome, 'b', "chrome.exe")
-#k:: runOrActivate(win_vscode, 'b', "code.exe")
->!j:: runOrActivate(win_chrome, 'b', "chrome.exe")
->!k:: runOrActivate(win_vscode, 'b', "code.exe")
-#e:: runOrActivate(win_explorer, 'b', "explorer.exe")
+#j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
+#k:: runOrActivate(win_vscode, 'b', 'a', "code.exe")
+; #k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
+#o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeDeemos\Note")
+#e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
+>!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
+>!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #+e:: run("explorer.exe")
-#o:: runOrActivate(win_obsidian, 'b', "C:/Users/79481/AppData/Local/Obsidian/Obsidian.exe")
-#t:: runOrActivate(win_wt, 'b', "wt.exe")
-#w:: send("{blink}^!w")     ; toggle whchat
+#t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
+#w:: send("{blink}^!w"), SetTimer(focus_wx, -10)
+
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
-#y:: togglewyy()
+#y:: runOrActivate(win_cloudmusic, 'c', 'sa', dk2 "/wyy")
 
-togglewyy() {
-    try {                  ; toggle wyy
-        WinActive(win_cloudmusic) ? WinClose() : (WinShow(win_cloudmusic), WinActivate(win_cloudmusic))
-        ;在任务栏中activate不了
-    } catch as e {
-    }
-}
+GroupAdd("games", "ahk_class Engine")
+#HotIf WinExist("ahk_group games")
+#g:: runOrActivate("ahk_group games", 'at', 'a')
+#HotIf WinExist(win_steam)
+#s:: runOrActivate(win_steam, 'at', 'a')
+#HotIf
+
+#1:: winSetCaption(-1)
+
+
 ; logi option
 +!PgDn:: VirtualDesktop.showCycleRight()
 +!PgUp:: VirtualDesktop.showCycleLeft()
@@ -118,7 +129,7 @@ GroupAdd("noc_w", win_taskbar)  ; 任务栏
 GroupAdd("noc_w", win_wt)       ; windows ternimal
 GroupAdd("noc_w", win_vim)      ; vim
 GroupAdd("noc_w", win_idea)     ; idea
-#HotIf !WinActive("ahk_group noc_w")
+#HotIf !WinActive("ahk_group noc_w") and not ingame
 ^+w:: pid := WinGetPID("A"), tipMM("taskkill " ProcessClose(pid))    ;强制关闭
 ; WinKill("A"),
 ^w:: WinClose("A"), tipLM("WinClose A")    ;关闭
@@ -131,7 +142,7 @@ GroupAdd("noa_quote", win_vscode)  ; 不在谷歌,vscode
 #HotIf
 
 ; o==========o==========o==========o==========o==========o 调试相关
-CapsLock & Numpad1:: runOrActivate("Window Spy", "c", "D:\AutoHotkey_2.0.10\WindowSpy.ahk")
+CapsLock & Numpad1:: runOrActivate("Window Spy", "c", 'a', "D:\AutoHotkey_2.0.10\WindowSpy.ahk")
 CapsLock & Numpad2::
 {
     ; Cap f2 ;打开脚本主窗口

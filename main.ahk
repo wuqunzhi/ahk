@@ -20,11 +20,13 @@ init()
 #Include "files\edge.ahk"
 #Include "files\explorer.ahk"
 #Include "files\desktop.ahk"
+#Include "files\wechat.ahk"
 #Include "files\taskbar.ahk"
 #Include "files\cmd.ahk"
 #Include "files\obsidian.ahk"
 #Include "files\ideal.ahk"
 #Include "files\clash.ahk"
+#Include "files\game.ahk"
 #Include "files\wyy.ahk"
 #Include "files\qqmusic.ahk"
 #Include "global.ahk" ;放最后
@@ -33,10 +35,13 @@ init()
 
 init() {
     global ingame := 0
+    global win_steam := "Steam ahk_exe steamwebhelper.exe ahk_class SDL_app"
     global win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
     global win_chrome := "^.+.*$ ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"          ; chrome
     global win_edge := "ahk_exe msedge.exe ahk_class Chrome_WidgetWin_1"                   ; edge
     global win_vscode := "ahk_exe Code.exe ahk_class Chrome_WidgetWin_1"                   ; vscode
+    global win_vscodeNote := "^.* - Note - Visual Studio Code.*$ " win_vscode              ; vscodeNote
+    global win_wechat := "ahk_exe WeChat.exe ahk_class WeChatMainWndForPC"                 ; weChat
     global win_obsidian := "ahk_exe Obsidian.exe ahk_class Chrome_WidgetWin_1"             ; obsidian
     global win_cmd := "ahk_exe cmd.exe ahk_class ConsoleWindowClass"                       ; cmd
     global win_wt := "ahk_exe WindowsTerminal.exe ahk_class CASCADIA_HOSTING_WINDOW_CLASS" ; Windows Ternimal

@@ -1,64 +1,109 @@
-/**
- * 存在则激活,否则运行
- * @param {string} WinTitle
- * @param {string} ifActive what to do if WinActive(WinTitle)
- *   m: WinMinimize
- *   c: WinClose
- *   h: WinHide
- *   b: WinActivateBottom
- * @param {string} cmd if no exit, run cmd
- * @param {bool} useCmdToActicate 
- */
-runOrActivate(WinTitle := "A", ifActive := "r", cmd := "", useCmdToActicate := 0) {
-    ; 1) WinActive
-    if (WinActive(WinTitle)) {
-        if (ifActive = "m")
-            WinMinimize()
-        else if (ifActive = "c")
-            WinClose()
-        else if (ifActive = "h")
-            WinHide()
-        else if (ifActive = "b")
-            WinActivateBottom(WinTitle) ;cant omit WinTitle
-        ;r do nothing (retain)
-        return
+AltTab() {
+    idList := WinGetList()
+    for id in idList {
+        if (WinActive("ahk_id " id))
+            continue
+        If (WinGetTitle("ahk_id " id) == "")
+            continue
+        If (!IsWindow(id))
+            continue
+        WinActivate("ahk_id " id)
+        break
     }
-
-    if (useCmdToActicate) {
-        ; for some in traybar
-        RunWait cmd
-        tipLB("run " cmd)
-        WinActivate(WinTitle) ;!!!
-        ; RunWait cmd
-        return
-    }
-
-    ; 2) WinExist
-    save := A_DetectHiddenWindows
-    DetectHiddenWindows true
-    if (WinExist(WinTitle)) {
-        ; WinShow()    ;最小化的好像activate不了
-        WinActivate()
-        DetectHiddenWindows save
-        return
-    }
-
-    ;3) no exit (may in tray)
-    DetectHiddenWindows save
-    run(cmd)
 }
 
+;-----------------------------------------------------------------
+; Check whether the target window is activation target
+; https://www.autohotkey.com/boards/viewtopic.php?style=17&t=101808
+;-----------------------------------------------------------------
+IsWindow(hWnd) {
+    Stype := WinGetStyle("ahk_id " hwnd)
+    if ((Stype & 0x08000000) || !(Stype & 0x10000000)) {
+        return false
+    }
+    EXStype := WinGetExStyle("ahk_id " hwnd)
+    if (EXStype & 0x00000080) {
+        return false
+    }
+    return true
+}
 
+runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
+    winTitle := unset
+    excludeTitle := unset
+    Type(winTE) == "String" ? winTitle := winTE : (winTitle := winTE[1], excludeTitle := winTE[2])
+
+    save := A_DetectHiddenWindows
+    DetectHiddenWindows true
+    try {
+        if (WinActive(winTitle, , excludeTitle?)) {
+            switch ifactive {
+                case "m": WinMinimize()
+                case "c": WinClose()
+                case "h": WinHide()
+                case "b": WinActivateBottom(winTitle, , excludeTitle?)
+                case "at": AltTab()
+                default: ; r: do nothing (remain)
+            }
+            return
+        }
+        if (WinExist(winTitle, , excludeTitle?)) {
+            switch ifexist {
+                case "a": WinActivate()
+                case "sa": WinShow(), WinActivate()
+            }
+            return
+        }
+        if (!WinExist(winTitle, , excludeTitle?)) {
+            if(!ifnoexist) 
+                return
+            func := type(ifnoexist) == "String" ? "rw" : ifnoexist[1]
+            args := type(ifnoexist) == "String" ? ifnoexist : ifnoexist[2]
+            switch func {
+                case "rw":
+                    RunWait(args)
+                    tipLB("run " args)
+                    if (WinWait(winTitle, , 5, excludeTitle?))
+                        WinActivate()
+                default:
+            }
+            return
+        }
+    } catch error as e {
+        Log(e)
+        DetectHiddenWindows save
+    }
+    DetectHiddenWindows save
+}
+
+; 添加/移除标题栏
+winSetCaption(n) {
+    switch n {
+        case 1: WinSetStyle("+0xC00000", "A")
+        case 0: WinSetStyle("-0xC00000", "A")
+        case -1: WinSetStyle("^0xC00000", "A")
+    }
+    ; 7:: WinSetStyle("^0x800000", "A")
+; 0x40000
+}
+
+; 判断是否在托盘中(最小化到任务栏)
+winInTray(processName) {
+    ; todo
+    return ProcessExist(processName)
+}
+
+; 在同程序的各窗口切换
 LoopRelatedWindows() {
     ahk_exe := WinGetProcessName("A")
     ahk_class := WinGetClass("A")
     WinActivateBottom("ahk_exe " ahk_exe " ahk_class " ahk_class)
 }
 
+; 返回窗口是否置顶
 winGetAlwaysOnTop(wintitle) {
     ; https://www.autohotkey.com/board/topic/31878-get-alwaysontop-state/
-    return WinGetExStyle(wintitle) & 0x8 ? 1 : 0
-    ;264
+    return WinGetExStyle(wintitle) & 0x8 ;264
 }
 
 ;return WinExist and !WinActive
@@ -157,9 +202,8 @@ taskkill(PIDOrName) {
         "clash", "Clash for Windows.exe",
         "yd", "YoudaoDict.exe",
     )
-    if (fullname.Has(PIDOrName))
-        PIDOrName := fullname[PIDOrName]
-    str := ProcessClose(PIDOrName) ? "" : " failed"
+    PIDOrName := fullname.Get(PIDOrName, PIDOrName)
+    str := ProcessClose(PIDOrName) ? "" : "failed"
     tipLB(Format("taskkill {} {}", PIDOrName, str))
 }
 
@@ -305,31 +349,14 @@ listWins(wintitle := unset, exclude := "Program Manager", showEach := 0) {
     Return winlist
 }
 
-; 返回所有窗口idlist
-allwin(showhide := 0, excludeEmptyTitle := 0, excludeProgramManager := 1) {
-    res := []
-    save := A_DetectHiddenWindows
-    if showhide
-        DetectHiddenWindows(true)
-    if (excludeProgramManager)
-        idlist := WinGetList(, , "Program Manager")
-    else
-        idlist := WinGetList()
-    for id in idlist {
-        if (!excludeEmptyTitle or WinGetTitle("ahk_id " id))
-            res.Push(id)
-    }
-    if showhide
-        DetectHiddenWindows(save)
-    return res
-}
-
 ; 对所有idlist执行act
-allwinAct(idlist, act) {
+winsAct(idlist, act) {
     switch act {
         case 'offtop':
             for id in idlist {
                 WinSetAlwaysOnTop(0, "ahk_id " id)
+                WinActivate(("ahk_id " id))
+                MsgBox(WinGetTitle("ahk_id " id))
             }
         default:
 
