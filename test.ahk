@@ -23,12 +23,22 @@ SetMouseDelay(-1)
 6:: test()
 ; 6:: MsgBox(getfiles(A_Desktop . "\桌面2\*"))
 7:: WinSetStyle("^0x800000", "A")
+expr := "3+3"
+script := ActiveScript("JScript")
+8:: test()
+a:=""
 test() {
-    dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
-    for filename in getfiles(dk2 "*") {
-        MsgBox(filename)
+    if(a){
+        tip("3")
     }
+    else tip("asd")
+    ; MsgBox(gui.g.Submit())
+    ; tip(type(gui.g.Submit().Prototype))
+    ; for k,v in gui.g.Submit(){
+    ; MsgBox(k . "  " . v )
+    ; }
 }
+
 
 
 ; 7:: Send("{text}🐶! ")

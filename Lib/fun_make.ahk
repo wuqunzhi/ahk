@@ -5,6 +5,9 @@
 #Include fun_click.ahk
 #Include fun_ime.ahk
 #Include fun_class.ahk
+#Include steal\JsRT.ahk
+#Include steal\ActiveScript.ahk
+#Include steal\Monitor.ahk
 
 SystemLockScreen() {
     DllCall("LockWorkStation")
@@ -15,6 +18,28 @@ SystemLockScreen() {
     ; 2 = 重启
     ; 4 = 强制
     ; 8 = 关闭电源
+}
+
+eval(str) {
+    script := ActiveScript("JScript")
+    try {
+        return script.Eval(str)
+    } catch Error as e {
+        return ""
+    }
+}
+
+creatGui() {
+    g := Gui()
+    g.BackColor := "333333" ; EEAA99可以是任何 RGB 颜色(下面会变成透明的).
+    WinSetTransColor(g.BackColor " 255", g)
+    g.SetFont("cBlack s20 bold q5")
+    g.Opt("+AlwaysOnTop -Caption +ToolWindow") ; +ToolWindow 避免显示任务栏按钮和 alt-tab 菜单项.
+    edit1 := g.Add("Edit", "vedit1 WantTab t4 ym") ; ym 选项开始一个新的控件列.
+    ; edit1.OnEvent("LoseFocus", hide)
+    ; g[edit1]
+    ; vedit1这样命名才可以被g.submit().edit1检索
+    return g
 }
 
 creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
@@ -355,6 +380,9 @@ switchChromeAddress(mode := "ts gb") {
  * support mode := "a,m,c" or "a m c" ...  
  * a: A_***CoordMode  
  * i: ime id,mode  
+ * ms: mouse pos relative to screen  
+ * mw: mouse pos relative to window  
+ * mc: mouse pos relative to client  
  * m: mouse pos  
  * c: color on mousePos  
  * w: wintitle,exe,class,id,pid,path  
@@ -365,10 +393,12 @@ switchChromeAddress(mode := "ts gb") {
  * @returns {string}   
  * 显示鼠标位置,窗口位置,输入法消息  
  */
-debugInfo(mode) {
+debugInfo(mode, sep := '`n') {
     if (InStr(mode, ',') or InStr(mode, ' ')) {
         loop parse mode, ", " {
-            res .= debugInfo(A_LoopField) . '`n'
+            if (A_LoopField == " " or A_LoopField == ",")
+                continue
+            res .= debugInfo(A_LoopField) . sep
         }
         return res
     }
@@ -392,6 +422,32 @@ debugInfo(mode) {
                 imeId := getImeId()
                 imeMode := getImeMode()
                 res := Format("imeId,mode: {}, {}", imeId, imeMode)
+
+            case 'ms': ; 相对screen的鼠标位置
+                CoordMode "mouse", "Screen"
+                MouseGetPos(&mxs, &mys)
+                CoordMode "mouse", "Client"
+                res := Format("
+                (
+                    ms: {} {}
+                )", mxs, mys)
+
+            case 'mc': ; 相对screen的鼠标位置
+                CoordMode "mouse", "Client"
+                MouseGetPos(&mxc, &myc)
+                res := Format("
+                (
+                    mc: {} {}
+                )", mxc, myc)
+
+            case 'mw': ; 相对screen的鼠标位置
+                CoordMode "mouse", "Window"
+                MouseGetPos(&mxw, &myw)
+                CoordMode "mouse", "Client"
+                res := Format("
+                (
+                    mc: {} {}
+                )", mxw, myw)
 
             case 'm': ; 相对screen,client,window的鼠标位置
                 CoordMode "mouse", "Screen"

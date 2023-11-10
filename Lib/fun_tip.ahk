@@ -57,7 +57,7 @@ tipLB(str := unset, time := 3000) {
 }
 ; tip middle middle 16
 tipMM(str := unset, time := 1000) {
-    tip(str?, time, 0.45, 0.5, 16)
+    tip(str?, time, 0.45, 0.5, 19)
 }
 ; tip middle bottom 12
 tipMB(str := unset, time := 3000) {

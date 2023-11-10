@@ -9,7 +9,7 @@
 ; https://wyagd001.github.io/v2/docs/
 
 init()
-#Include "Lib/funcs.ahk"
+#Include "Lib/fun_make.ahk"
 #Include private.ahk
 #Include "zvim.ahk"               ; vim键位操作鼠标 hjkl移动鼠标窗口等
 #Include "clipboard.ahk"          ; 记录剪贴板历史

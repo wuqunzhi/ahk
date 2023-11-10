@@ -1,3 +1,13 @@
+; 自带的StrSplit会带空字符: StrSplit("a  b",' ') => ["a","","b"]
+StrSplitFix(str, Delimiters) {
+    res := []
+    loop parse str, Delimiters {
+        if (A_LoopField == "")
+            continue
+        res.Push(A_LoopField)
+    }
+    return res
+}
 strJoin(strs, sep := ", ") {
     res := ""
     for str in strs
@@ -12,6 +22,20 @@ endwith(abcd, cd, caseSitive := false) {
 
 startwith(abcd, ab, caseSitive := false) {
     return InStr(abcd, ab, caseSitive) == 1
+}
+
+endwiths(abcd, strlist, caseSitive := false) {
+    for str in strlist
+        if (endwith(abcd, str, caseSitive))
+            return true
+    return false
+}
+
+startwiths(abcd, strlist, caseSitive := false) {
+    for str in strlist
+        if (startwith(abcd, str, caseSitive))
+            return true
+    return false
 }
 
 A_userPath() {

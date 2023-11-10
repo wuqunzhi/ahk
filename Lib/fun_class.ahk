@@ -221,3 +221,5 @@ class timerGUI {
         return WinExist("ahk_exe AutoHotkey64.exe ahk_id " this.g.Hwnd)
     }
 }
+
+

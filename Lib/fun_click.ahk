@@ -1,27 +1,28 @@
-moveL(n){
-    ; sbclick("0 " distance " 0 rel")
-    MouseMove(-n,0,,"R")
+moveL(n) {
+    ; sbclick("0 " n " 0 rel")
+    ; click("0," n ",0,Rel")
+    MouseMove(-n, 0, , "R")
 }
-moveR(n){
-    MouseMove(n,0,,"R")
+moveR(n) {
+    MouseMove(n, 0, , "R")
 }
-moveU(n){
-    MouseMove(0,-n,,"R")
+moveU(n) {
+    MouseMove(0, -n, , "R")
 }
-moveD(n){
-    MouseMove(0,n,,"R")
+moveD(n) {
+    MouseMove(0, n, , "R")
 }
-wheelD(count:=1){
+wheelD(count := 1) {
     ; sbclick("WD " count)
     send("{blink}{click WD " count "}")
 }
-wheelU(count:=1){
+wheelU(count := 1) {
     send("{blink}{click WU " count "}")
 }
-wheelL(count:=1){
+wheelL(count := 1) {
     send("{blink}{click WL " count "}")
 }
-wheelR(count:=1){
+wheelR(count := 1) {
     send("{blink}{click WR " count "}")
 }
 
@@ -55,6 +56,20 @@ sbclick(str) {
 ;click relative to screen
 clickRelToScreen(str) {
     coordmode("mouse", "Screen")
+    click(str)
+    CoordMode("Mouse", "Client")
+}
+
+;click relative to window
+clickRelToWindow(str) {
+    coordmode("mouse", "Window")
+    click(str)
+    CoordMode("Mouse", "Client")
+}
+
+;click relative to Client
+clickRelToClient(str) {
+    coordmode("mouse", "Client")
     click(str)
     CoordMode("Mouse", "Client")
 }

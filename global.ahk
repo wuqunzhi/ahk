@@ -44,9 +44,9 @@ CapsLock & h::left
 CapsLock & l::right
 CapsLock & j::down
 CapsLock & k::up
-CapsLock & v:: zvim("e_n")
-CapsLock & i:: zvim("i")
-CapsLock & g:: zvim() = "g_n" ? zvim('i') : zvim("g_n")
+CapsLock & v:: zvim.go("e_n")
+CapsLock & i:: zvim.go("i")
+CapsLock & g:: (zvim.mode == "g_n") ? zvim.go('i') : zvim.go("g_n")
 CapsLock & o::Enter
 CapsLock & p:: autorun(A_Clipboard)
 CapsLock & e:: autorun(A_Clipboard)

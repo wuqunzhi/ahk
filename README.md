@@ -1,5 +1,5 @@
-## autohotkey安装
-> https://www.autohotkey.com/download/
+## 安装
+- [autohotkey](https://www.autohotkey.com/download/)
 
 ## 运行
 - main.ahk
@@ -25,11 +25,11 @@
 ## 输入法相关
 > 见ime.ahk
 - 左`shift` 强制切换为英文输入法
-- 500ms内双击左`shift` 强制切换为中文输入法
 - 右`shift` 强制切换为中文输入法
-- 右`shift` + 右`alt` 强制切换为美式键盘
-- `CapsLock` + `NumLock` 全部窗口设置英文
+- 500ms内双击左`shift` 强制切换为中文输入法
 - 中文时输入`jkjk`或按`CapsLock`切换为英文
+- 右`shift` + 右`alt` 强制切换为美式键盘
+- `CapsLock` + `NumLock` 全部窗口设置英文输入法
 
 ## 鼠标滚轮
 > 见wheel.ahk
@@ -47,14 +47,79 @@
 
 ## woz
 > 见woz.ahk - 启发自[wox](http://www.wox.one)的快捷启动器
-- 快捷键 ctrl space
+- 快捷键 `ctrl` + `space`
+- 极快的响应速度(毫秒级)
 - 不需要回车确定,唯一匹配命令则执行
-- 输入tab执行上一条历史命令
+- 按 `tab` 执行上一条历史命令
 - 全匹配也会执行
+- 添加正则匹配支持
+- 添加表达式计算支持
 
 ## zvim
 > 见zvim.ahk - 启发自[win-vind](https://github.com/pit-ray/win-vind)
 - 用vim的键位习惯来操作windows鼠标、窗口等。
+```c
++------------+       t        +------------+        
+| GUI_Normal | <------------> | GUI_Window |        
++------------+                +------------+        
+          ^ \                  /                    
+           \ \ i,Cap-i        / i,Cap-i             
+      Cap-g \ \              /                      
+             \ v            v                       
+               +------------+                       
+               | GUI_Insert |(default)              
+               +------------+                       
+             / ^            ^                       
+      Cap-v / /              \ Cap-i                
+           / / Cap-i          \                     
+          v /                  \                    
++-------------+    i,a,o,C     +-------------+      
+| Edit_Normal | -------------> | Edit_Insert |      
++-------------+ <------------- +-------------+      
+          ^ \       jk,esc       ^                  
+           \ \ v                /                   
+    d,y,p,v \ \                / c                  
+             \ v              /                     
+               +-------------+                      
+               | Edit_Visual |                      
+               +-------------+                      
+```
 
+- 任何模式下 `Cap-i` 回到 `Insert` 模式
 
+- GUI_Insert mode:
+  - 默认模式,不更改任何快捷键
 
+- GUI_Normal mode:
+  - `hjkl`, `a-hjkl`, `s-hjkl` 不同速率上下左右移动鼠标
+  - `n` `q` 鼠标左键, `m` `e` 鼠标右键, `v` 按住左键, `o` 回车
+  - `w`, `s`, `<s-w>`, `<s-s>` 滚动滑轮 
+  - `:` 命令行模式(设置参数)
+  - `t` 进入 GUI_Window 模式
+
+- GUI_Window mode:
+  - `hjkl`, `<s-hjkl>` 调节当前窗口位置
+  - `wasd`, `<s-wasd>`, `<a-wasd>` 调节当前窗口大小
+  - `m`, `n`, `r`, `c` 最大化,最小化,恢复,居中当前窗口
+  - `ws`, `<s-ws>` 滚动滑轮 
+  - `:` 命令行模式(设置参数)
+  - `t` 进入 GUI_Normal 模式
+
+- Edit_Normal mode: (模拟vim Normal模式)
+  - (通过将按键映射为 `方向键` `home` `end` `ctrl-c,x,v,z,方向键,home,end` 等实现)
+  - `hjkl` `wb` `HL` `0$` `gg` `G` `^u` `^d` 移动
+  - `x` `D` `C` `u` `p` 操作
+  - `y` `d` `c` 等待操作数(oppend模式)
+  - `i` `a` `o` `C` 进入insert模式
+  - `v` 进入visual模式
+
+- Edit_Insert mode: (模拟vim Insert模式)
+  - `jk`, `esc` 进入normal模式
+
+- Edit_Visual mode: (模拟vim Visual模式)
+  - `hjkl` `wb` `HL` `0$` `gg` `G` 移动
+  - `c` `d` `y` `p` `v` 操作, 操作完成后切换到相应模式
+
+- Edit_Oppend mode: (模拟vim OperatorPending模式)
+  - 支持 `yw` `yy` `yj` `yk` `yH` `yL` `dw` `dd` `dj` `dk` `dH` `dL` `cw` `cc` `cj` `ck` `cH` `cL` 操作
+  - `esc` 进入Normal模式

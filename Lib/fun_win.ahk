@@ -28,6 +28,7 @@ IsWindow(hWnd) {
     return true
 }
 
+; auto switch
 runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
     winTitle := unset
     excludeTitle := unset
@@ -55,7 +56,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             return
         }
         if (!WinExist(winTitle, , excludeTitle?)) {
-            if(!ifnoexist) 
+            if (!ifnoexist)
                 return
             func := type(ifnoexist) == "String" ? "rw" : ifnoexist[1]
             args := type(ifnoexist) == "String" ? ifnoexist : ifnoexist[2]
@@ -84,7 +85,7 @@ winSetCaption(n) {
         case -1: WinSetStyle("^0xC00000", "A")
     }
     ; 7:: WinSetStyle("^0x800000", "A")
-; 0x40000
+    ; 0x40000
 }
 
 ; 判断是否在托盘中(最小化到任务栏)
@@ -125,6 +126,7 @@ winReset(w := unset, h := unset) {
     ; WinMove((A_ScreenWidth - w) / 2, (A_ScreenHeight - h) / 2, , , "A"); wincenter
 }
 
+; 切换最大化
 WinToggleMaximize() {
     WinGetMinMax("A") = 1 ? WinRestore("A") : WinMaximize("A")
 }
@@ -138,10 +140,93 @@ winCenter() {
     }
 }
 
-winMoved(dx := 0, dy := 0, dw := 0, dh := 0) {
+/**
+ * @param {number} dx x位置改变量  
+ * @param {number} dy y位置改变量  
+ * @param {number} dw 宽改变量  
+ * @param {number} dh 高改变量  
+ */
+winMovedif(dx := 0, dy := 0, dw := 0, dh := 0) {
     WinGetPos(&x, &y, &w, &h, "A")
     WinMove(x + dx, y + dy, w + dw, h + dh, "A")
 }
+
+; -------------------- 窗口移动
+; 当前窗口往下移动
+winMoveD(d) {
+    winMovedif(, d)
+}
+; 当前窗口往上移动
+winMoveU(d) {
+    winMovedif(, -d)
+}
+; 当前窗口往左移动
+winMoveL(d) {
+    winMovedif(-d)
+}
+; 当前窗口往右移动
+winMoveR(d) {
+    winMovedif(d)
+}
+; 当前窗口移动最下方
+winMoveDMost() {
+    WinMove(, A_ScreenHeight - winh(), , , "A")
+}
+; 当前窗口移动最上方
+winMoveUMost() {
+    WinMove(, 0, , , "A")
+}
+; 当前窗口移动最左方
+winMoveLMost() {
+    WinMove(0, , , , "A")
+}
+; 当前窗口移动最右方
+winMoveRMost() {
+    WinMove(A_ScreenWidth - winw(), , , , "A")
+}
+
+; -------------------- 窗口resize
+; 窗口下方调整大小
+winResizeD(d) {
+    winMovedif(, , , d)
+}
+; 窗口上方调整大小
+winResizeU(d) {
+    winMovedif(, -d, , d)
+}
+; 窗口左方调整大小
+winResizeH(d) {
+    winMovedif(-d, , d)
+}
+; 窗口右方调整大小
+winResizeL(d) {
+    winMovedif(, , d)
+}
+; 窗口上方调整最大
+winResizeUMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, 0, , y + h, "A")
+
+}
+; 窗口下方调整最大
+winResizeDMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, , , A_ScreenHeight - y, "A")
+
+}
+; 窗口左方调整最大
+winResizeHMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(0, , x + w, , "A")
+
+}
+; 窗口右方调整最大
+winResizeLMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, , A_ScreenWidth - x, , "A")
+
+}
+
 
 ahkManager() {
     static historycmd := ""
@@ -312,23 +397,24 @@ ahk(act, name := "", path := name) {
  */
 
 listWins(wintitle := unset, exclude := "Program Manager", showEach := 0) {
-    winlist := [] ;{ "id" : ,"title:" , "ahkclass" : , "pid" : , "exe":,}
-    save := A_DetectHiddenWindows
-    DetectHiddenWindows true
-    idList := WinGetList(wintitle?, , exclude)
-    saveId := WinGetID("A")
-    Loop idList.Length {
-        id := idList[A_Index]
-        title := WinGetTitle("ahk_id" id)
-        ; if (title = "")
-        ;     continue
-        ahkclass := WinGetClass("ahk_id" id)
-        pid := WinGetPID("ahk_id" id)
-        exe := WinGetProcessName("ahk_id" id)
-        winlist.push(Map("hwnd", id, "wintitle", title, "class", ahkclass, "pid", pid, "exe", exe))
-        if (showEach) {
-            msg := Format(
-                "
+    try {
+        winlist := [] ;{ "id" : ,"title:" , "ahkclass" : , "pid" : , "exe":,}
+        save := A_DetectHiddenWindows
+        DetectHiddenWindows true
+        idList := WinGetList(wintitle?, , exclude)
+        saveId := WinGetID("A")
+        Loop idList.Length {
+            id := idList[A_Index]
+            title := WinGetTitle("ahk_id" id)
+            ; if (title = "")
+            ;     continue
+            ahkclass := WinGetClass("ahk_id" id)
+            pid := WinGetPID("ahk_id" id)
+            exe := WinGetProcessName("ahk_id" id)
+            winlist.push(Map("hwnd", id, "wintitle", title, "class", ahkclass, "pid", pid, "exe", exe))
+            if (showEach) {
+                msg := Format(
+                    "
         (
             list all windows:
             {} of {}:
@@ -339,14 +425,17 @@ listWins(wintitle := unset, exclude := "Program Manager", showEach := 0) {
             exe: {}
             continue?
         )", A_Index, idList.Length, id, title, ahkclass, pid, exe)
-            WinActivate("ahk_id" id)
-            if MsgBox(msg, , 4) = "No"
-                break
+                WinActivate("ahk_id" id)
+                if MsgBox(msg, , 4) = "No"
+                    break
+            }
         }
+        WinActivate("ahk_id" . saveId)
+        DetectHiddenWindows save
+        Return winlist
+    } catch Error as e {
+        log(e)
     }
-    WinActivate("ahk_id" . saveId)
-    DetectHiddenWindows save
-    Return winlist
 }
 
 ; 对所有idlist执行act

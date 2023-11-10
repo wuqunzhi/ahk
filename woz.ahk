@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 #NoTrayIcon
-#Include Lib\funcs.ahk
+#Include Lib\fun_make.ahk
 #Include private.ahk
 #HotIf
 
@@ -15,14 +15,15 @@ woz := WozManager()
 win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
 #HotIf WinActive(win_woz)
 enter::tab
+NumpadEnter::tab
 <^l::tab
 #HotIf
 
 class WozManager {
     lastcmd := ""
+    timer := this.updateOSD.Bind(this)
     g := this.creatGui()
     cmds := Map()
-    timer := this.updateOSD.Bind(this)
     __New() {
         this.addcmds()
     }
@@ -34,6 +35,8 @@ class WozManager {
         userpath := A_userPath() ; C:\Users\79481
         dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
         for filename in getfiles(dk2 "*") {
+            if (endwiths(filename, [".jpg", ".png", ".jpeg"]))
+                continue
             if (endwith(filename, ".lnk"))
                 filename := SubStr(filename, 1, StrLen(filename) - 4)
             addcmd(filename, "run", dk2 . filename, "run " filename)
@@ -41,12 +44,14 @@ class WozManager {
 
         addcmd("^k (.*)`t$", "kill", "fromid", "kill (.*)", "reg", "^k .*$")
         addcmd("^q (.*)`t$", "ahkq", "fromid", "quit (.*).ahk", "reg", "^q .*$")
+        addcmd("^go (.*)`t$", "mousemove", "fromid", "mouse move (.*)", "reg", "^go .*$")
 
         addcmd("k qm", "kill", "qm", "kill qm", "full")
         addcmd("k wyy", "kill", "wyy", "kill cloudmusic", "full")
         addcmd("k wx", "kill", "wx", "kill WeChat.exe", "full")
         addcmd("k clash", "kill", "clash", "kill clash", "full")
         addcmd("k yd", "kill", "yd", "kill youdao", "full")
+
 
         ; ahk
         addcmd("q main", "ahkq", "main", "quit main.ahk", "full")
@@ -80,7 +85,6 @@ class WozManager {
         addcmd("cpp", "run", "code D:\vscodeDeemos\cpp", "run vscode cpp")
         addcmd("dy", "run", "code E:\垃圾桶\dy.txt", "code dy.txt")
 
-        
 
         ; -------------------- 系统配置
         addcmd("env", "env", "", "环境变量")
@@ -143,12 +147,13 @@ class WozManager {
             input := this.lastcmd
         if (input == "")
             return
-        if (input != text) {
-            ;有变化才更新
+        if (input != text) { ;有变化才更新
             text := input
             matchCommands.Clear()
             hints := "", uniqueMatch := ""
-
+            calres := eval(text)
+            if (calres)
+                hints .= Format("{:-30}`t `n", calres)
             for k, v in this.cmds {
                 if (k == text) { ;全匹配
                     hints := Format("{:-30}`t# {}`n", k, v[3])
@@ -184,6 +189,8 @@ class WozManager {
                     switch flag {
                         case "full":
                             return k == text
+                        case "^$":
+                            return k == text
                         case "^":
                             return startwith(k, text)
                         case "$":
@@ -191,7 +198,7 @@ class WozManager {
                         case "reg":
                             return RegExMatch(text, k)
                         default:
-                            return InStr(k, text, true)
+                            return InStr(k, text)
                     }
                 }
             }
@@ -215,7 +222,7 @@ class WozManager {
             hint := v[3]
             flag := v[4]
             this.lastcmd := k
-            if (flag == "reg") {
+            if (flag == "reg") { ; 解析正则真正命令参数
                 RegExMatch(text, k, &matchs)
                 args := matchs[1]
                 this.lastcmd := input
@@ -245,6 +252,7 @@ class WozManager {
                         run(s)
                     tipLB("runs: `n" StrReplace(args, "|", "`n"))
 
+                case "mousemove": click(args . " 0")
                 case "-v": tipRB(A_ScriptName " version AHK " A_AhkVersion)
                 case "restartexplorer": restartExplorer()
                 case "ps": processManager()
@@ -284,6 +292,7 @@ class WozManager {
         g.SetFont("cBlack s20 bold q5")
         g.Opt("+AlwaysOnTop -Caption +ToolWindow") ; +ToolWindow 避免显示任务栏按钮和 alt-tab 菜单项.
         edit1 := g.Add("Edit", "WantTab t4 ym") ; ym 选项开始一个新的控件列.
+        ; edit1.OnEvent("Change", this.timer)
         return g
     }
 
