@@ -10,7 +10,7 @@ AddToClipboardHistory() {
     clipboardHistory.Push(A_Clipboard)
 }
 
-writeAndShowCBH(filePath := A_userPath() . "\ClipboardHistory.txt", append := '`n') {
+writeAndShowCBH(filePath := get_A_userPath() . "\ClipboardHistory.txt", append := '`n') {
     ; f := FileOpen(filePath, "w" )
     f := FileOpen(filePath, "w", "utf-8")
     for index, value in clipboardHistory

@@ -1,6 +1,8 @@
 #Requires AutoHotkey v2.0
+#Warn Unreachable, off
 #SingleInstance Force
 #NoTrayIcon
+#Include config.ahk ;放前面
 #Include Lib\fun_make.ahk
 #Include private.ahk
 #HotIf
@@ -32,8 +34,9 @@ class WozManager {
         addcmd(id, func := id, args := "", hint := id, flag := "", pattern := "") {
             this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
-        userpath := A_userPath() ; C:\Users\79481
-        dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
+        userpath := get_A_userPath() ; C:\Users\79481
+        ; dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
+        dk2 := "E:\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
         for filename in getfiles(dk2 "*") {
             if (endwiths(filename, [".jpg", ".png", ".jpeg"]))
                 continue
@@ -64,11 +67,11 @@ class WozManager {
         addcmd("-v", , , A_AhkVersion)
         addcmd("timer")
 
-        addcmd("game", , , "switch in game")
         addcmd("showintxt", , , "将剪贴板内容用vscode打开") ;
         addcmd("bluetooth", , , "打开蓝牙设置")
         addcmd("ls", , , "list all ahk")
-        addcmd("clear", "recycleEmpty", , "清空回收站")
+        addcmd("fclr", "recycleEmpty", , "清空回收站")
+        addcmd("wclr", "winclear", , "win clear")
         addcmd("restartexplorer", , , "重启资源管理器")
         addcmd("ps", , , "processManager")
         addcmd("touchpad", , , "切换触摸板")
@@ -76,9 +79,9 @@ class WozManager {
         addcmd("mstsc", "run", "mstsc", "远程桌面连接")
         addcmd("colorhook")
         addcmd("record")
-        addcmd("quit")
         addcmd("taskmgr", "run", "taskmgr", "open taskmgr")
         addcmd("reload")
+        addcmd("quit")
         addcmd("ahkmanager")
 
 
@@ -106,7 +109,7 @@ class WozManager {
         addcmd("appdata", "run", userpath "\AppData\", "~\AppData")
         addcmd("roam", "run", A_AppData, "%AppData%")
         addcmd("host", "run", "C:\Windows\System32\drivers\etc", "host")
-        addcmd("startm", "run", A_StartMenu, "Start Menu")
+        addcmd("startmenu", "run", A_StartMenu, "Start Menu")
         addcmd("startup", "run", A_Startup, "shell:startup")
 
         ; -------------------- 软件目录
@@ -122,6 +125,7 @@ class WozManager {
         addcmd("vimrc", "run", userpath "\vimfiles\", userpath "\vimfiles\")
 
         ; -------------------- 网站
+        addcmd("httpCode", "run", "https://tool.oschina.net/commons?type=5", "http statusCode")
         addcmd("v2", "run", "https://wyagd001.github.io/v2/docs", "ahkv2")
         addcmd("win32api", "run", "https://learn.microsoft.com/zh-cn/windows/win32/api", "win32api")
         addcmd("winkjj", "runs", "https://support.microsoft.com/zh-cn/windows/windows-的键盘快捷方式8F-dcc61a57-8ff0-cffe-9796-cb9706c75eec#WindowsVersion=Windows_10" . "|"
@@ -260,6 +264,7 @@ class WozManager {
                 case "recycleEmpty":
                     if (MsgBox("是否清空回收站?", "", 1) = "ok")
                         FileRecycleEmpty(), tipLB("FileRecycleEmpty")
+                case "winclear": winclear()
                 case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
                 case "colorhook": colorg.toggleshow() ;!!!!!
                 case "touchpad": toggleTouchpad()

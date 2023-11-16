@@ -8,37 +8,41 @@
 ; #NoTrayIcon ;用了这行没法SingleInstance,难退出
 
 #SingleInstance Force
-#Include "Lib\funcs.ahk"
+#Include "config.ahk"
+#Include "Lib\fun_make.ahk"
 SetTitleMatchMode("regex")
 ; CoordMode("ToolTip", "Screen")
+SetMouseDelay(-1)
 
 ; SetMouseDelay 0                                           ; SendInput 可能会降级为 SendEvent, 此时会有 10ms 的默认 delay
 ; SetWinDelay 0                                             ; 默认会在 activate, maximize, move 等窗口操作后睡眠 100ms
 ; ProcessSetPriority "High"
-SetMouseDelay(-1)
-#HotIf
 
-; WinActivateBottom(".*")
+#SuspendExempt true
+f7:: Suspend
+#SuspendExempt false
 
 6:: test()
-; 6:: MsgBox(getfiles(A_Desktop . "\桌面2\*"))
-7:: WinSetStyle("^0x800000", "A")
-expr := "3+3"
-script := ActiveScript("JScript")
-8:: test()
-a:=""
 test() {
-    if(a){
-        tip("3")
-    }
-    else tip("asd")
-    ; MsgBox(gui.g.Submit())
-    ; tip(type(gui.g.Submit().Prototype))
-    ; for k,v in gui.g.Submit(){
-    ; MsgBox(k . "  " . v )
-    ; }
 }
 
+#HotIf 0
+Left::^!,
+Right::^!.
+down::Volume_Down
+Up::Volume_Up
+Space::^!Space
+#HotIf
+
+#HotIf 0
+XButton1::^!,
+XButton2::^!.
+WheelDown::Volume_Down
+WheelUp::Volume_Up
+MButton::^!Space
+LButton:: return
+RButton:: return
+#HotIf
 
 
 ; 7:: Send("{text}🐶! ")

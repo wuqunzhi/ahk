@@ -1,4 +1,9 @@
 ; ==========o==========o==========o==========o==========o==========o global
+tmp() {
+    ; run("http://127.0.0.1:8080")
+    runOrActivate(".*10.192.11.100.* ahk_exe explorer.exe ahk_class CabinetWClass",'m','a',"explorer \\10.192.11.100\GPProjectShare")
+}
+CapsLock & 1:: tmp()
 #HotIf
 ~esc:: removeAllTip()
 CapsLock Up:: send("{esc}") ;, tipLM("esc")
@@ -6,14 +11,11 @@ CapsLock Up:: send("{esc}") ;, tipLM("esc")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
 <!CapsLock:: LoopRelatedWindows()
 
-NumLock & k::#k
-NumLock & j::#j
-NumLock & i::#i
-NumLock & p::#p
 
 #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
 #HotIf
+
 ; o==========o==========o==========o==========o VirtualDesktop
 #CapsLock:: VirtualDesktop.showCycleRight()
 #^n:: VirtualDesktop.Create().Show()
@@ -48,16 +50,21 @@ CapsLock & v:: zvim.go("e_n")
 CapsLock & i:: zvim.go("i")
 CapsLock & g:: (zvim.mode == "g_n") ? zvim.go('i') : zvim.go("g_n")
 CapsLock & o::Enter
-CapsLock & p:: autorun(A_Clipboard)
 CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
-CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
-CapsLock & r:: transRaw() ;!todo?
 CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
-CapsLock & 1:: private.nas()
+
+CapsLock & r:: transRaw() ;!todo?
+CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
+CapsLock & 0:: private.nas()
+CapsLock & alt:: return
+CapsLock & p:: maymark()
+CapsLock & 9:: markWindow.go(9)
+; CapsLock & 0:: markWindow.go(10)
+
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 >!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
@@ -65,12 +72,13 @@ CapsLock & 1:: private.nas()
 #n:: WinMinimize("A")
 #c:: winCenter()
 #j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
-#k:: runOrActivate(win_vscode, 'b', 'a', "code.exe")
+#k:: runOrActivate(win_vscode, 'b', 'a', "code")
+>!k:: runOrActivate(win_vscode, 'b', 'a', "code")
+; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 ; #k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeDeemos\Note")
 #e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 >!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
->!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #+e:: run("explorer.exe")
 #t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
 #w:: send("{blink}^!w"), SetTimer(focus_wx, -10)

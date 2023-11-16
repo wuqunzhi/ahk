@@ -3,7 +3,7 @@
 ~y:: {
     stupid := A_TimeSincePriorHotkey = "" ? 501 : A_TimeSincePriorHotkey    ;V2的bug
     if (A_PriorKey = "y" and stupid < 500)
-        tip("45364") ;, tip("中")    ; , setCusor(1)
+        copyandshow(WinGetTitle("A"))
 }
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
@@ -14,11 +14,12 @@
 <^n:: run("explorer.exe")
 <^o::!left
 <^i::!right
+<!o::!Up
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
     try Run("cmd", WinGetTitle("A"))
     catch as e
-        run("cmd", A_userPath())
+        run("cmd", get_A_userPath())
 }
 
 #HotIf

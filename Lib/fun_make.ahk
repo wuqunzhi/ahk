@@ -9,6 +9,26 @@
 #Include steal\ActiveScript.ahk
 #Include steal\Monitor.ahk
 
+; 关闭一些窗口,减少任务栏占用
+winclear() {
+    GroupAdd("winclear", win_cloudmusic)
+    GroupAdd("winclear", win_qqmusic)
+    GroupAdd("winclear", win_wechat)
+    GroupAdd("winclear", win_explorer)
+    GroupAdd("winclear", win_taskManager)
+    GroupAdd("winclear", win_youdao)
+    WinClose("ahk_group winclear")
+}
+
+police() {
+    return
+    if (WinExist("Windows 安全中心警报 ahk_exe rundll32.exe ahk_class #32770")) {
+        WinActivate()
+        WinWaitActive()
+        Send("{blink}{enter}")
+    }
+}
+
 SystemLockScreen() {
     DllCall("LockWorkStation")
     ; https://wyagd001.github.io/v2/docs/lib/Shutdown.htm
@@ -106,7 +126,7 @@ toggleTouchpad() {
     static touchpad := 1
     touchpad := !touchpad
     run(a_windir "\system32\systemsettingsadminflows.exe enabletouchpad " touchpad)
-    tipLM("touchpad " touchpad)
+    tipMM("touchpad " touchpad)
     ; send("#i")
     ; if (winwaitactive("ahk_exe applicationframehost.exe", , 5)) {
     ;     sleep(500)
@@ -150,7 +170,7 @@ togglekey(key := "LButton") {
 
 
 showIntxt(str) {
-    path := A_userPath() . "\showintxt.txt"
+    path := get_A_userPath() . "\showintxt.txt"
     f := FileOpen(path, 'a')
     f.Write(str)
     f.Close()
@@ -281,13 +301,15 @@ cmdClipReturn(command) {
     return cmdInfo
 }
 
-
 ; transform clipb string to markdown table
-; use default sep <space><space> or \t
-transtable(str, sep := " |\t") {
+; use default sep <space><space>
+transtable(str) {
     ; tabstr := RegExReplace(str, "m)^|$|  |\t", "|")
-    tabstr := RegExReplace(str, "m)" sep, "|")
-    return "|--|--|`n|:-|:-|`n" tabstr
+    res := RegExReplace(str, " {2,}", "|")
+    res := RegExReplace(res, "m)^(?!\|)", "|")
+    res := RegExReplace(res, "m)(?<!\|)$", "|")
+    res := RegExReplace(res, "m)^\|$", "")
+    return "|--|--|`n|:-:|:-:|`n" res
 }
 
 transRaw(str := A_Clipboard, mode := 1) {

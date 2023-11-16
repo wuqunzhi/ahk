@@ -38,6 +38,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
     DetectHiddenWindows true
     try {
         if (WinActive(winTitle, , excludeTitle?)) {
+            ; tip("a")
             switch ifactive {
                 case "m": WinMinimize()
                 case "c": WinClose()
@@ -49,6 +50,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             return
         }
         if (WinExist(winTitle, , excludeTitle?)) {
+            ; tip("e")
             switch ifexist {
                 case "a": WinActivate()
                 case "sa": WinShow(), WinActivate()
@@ -56,13 +58,15 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             return
         }
         if (!WinExist(winTitle, , excludeTitle?)) {
+            ; tip("!e")
             if (!ifnoexist)
                 return
-            func := type(ifnoexist) == "String" ? "rw" : ifnoexist[1]
+            func := type(ifnoexist) == "String" ? "run" : ifnoexist[1]
             args := type(ifnoexist) == "String" ? ifnoexist : ifnoexist[2]
             switch func {
-                case "rw":
-                    RunWait(args)
+                case "run":
+                    ; RunWait(args) 阻塞
+                    run(args)
                     tipLB("run " args)
                     if (WinWait(winTitle, , 5, excludeTitle?))
                         WinActivate()
@@ -75,6 +79,51 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
         DetectHiddenWindows save
     }
     DetectHiddenWindows save
+}
+
+class markWindow {
+    static winid := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    static winTitle := ["", "", "", "", "", "", "", "", "", ""]
+    static mark(idx) {
+        try {
+            this.winid[idx] := WinGetID("A")
+            title := WinGetTitle("A")
+            ahkclass := WinGetClass("A")
+            ahkexe := WinGetProcessName("A")
+            this.winTitle[idx] := Format("{} ahk_class {} ahk_exe {}", title, ahkclass, ahkexe)
+            tipRB(Format("mark {}: {}", idx, this.winTitle[idx]))
+
+        } catch Error as e {
+            logM(e)
+        }
+    }
+    static go(idx) {
+        try {
+            WinActivate("ahk_id " this.winid[idx])
+        } catch Error as e {
+            logM(e)
+        }
+    }
+
+}
+
+
+countdown(seconds) {
+    loop seconds {
+        tipMM(seconds + 1 - A_Index, 950)
+        Sleep(1000)
+    }
+}
+
+maymark() {
+    ih := InputHook("T3 L1")
+    ; SetTimer countdown.Bind(3), -20
+    ih.Start()
+    ih.Wait()
+    res := ih.Input
+    if (IsInteger(res) && Integer(res) <= 10 && Integer(res) > 0) {
+        markWindow.mark(Integer(res))
+    }
 }
 
 ; 添加/移除标题栏
@@ -453,14 +502,6 @@ winsAct(idlist, act) {
 }
 
 ; ============================================================
-ypos() {
-    MouseGetPos(&x, &y)
-    return y
-}
-xpos() {
-    MouseGetPos(&x, &y)
-    return x
-}
 winy() {
     WinGetPos(&x, &y, &w, &h, "A")
     return y
@@ -468,14 +509,6 @@ winy() {
 winx() {
     WinGetPos(&x, &y, &w, &h, "A")
     return x
-}
-winch() {
-    WinGetClientPos(&x, &y, &w, &h, "A")
-    return h
-}
-wincw() {
-    WinGetClientPos(&x, &y, &w, &h, "A")
-    return w
 }
 winw() {
     WinGetPos(&x, &y, &w, &h, "A")
@@ -485,53 +518,11 @@ winh() {
     WinGetPos(&x, &y, &w, &h, "A")
     return h
 }
-mx() {
-    CoordMode("Mouse", "Screen")
-    MouseGetPos(&x)
-    CoordMode("Mouse", "Client")
-    return x
+winch() {
+    WinGetClientPos(&x, &y, &w, &h, "A")
+    return h
 }
-my() {
-    CoordMode("Mouse", "Screen")
-    MouseGetPos(, &y)
-    CoordMode("Mouse", "Client")
-    return y
-}
-mwx() {
-    CoordMode("Mouse", "Window")
-    MouseGetPos(&x)
-    CoordMode("Mouse", "Client")
-    return x
-}
-mwy() {
-    CoordMode("Mouse", "Window")
-    MouseGetPos(, &y)
-    CoordMode("Mouse", "Client")
-    return y
-}
-mcx() {
-    MouseGetPos(&x)
-    return x
-}
-mcy() {
-    MouseGetPos(, &y)
-    return y
-}
-mouses() {
-    CoordMode("Mouse", "Screen")
-    MouseGetPos(&x, &y)
-    CoordMode("Mouse", "Client")
-    return [x, y]
-}
-mousew() {
-    CoordMode("Mouse", "Window")
-    MouseGetPos(&x, &y)
-    CoordMode("Mouse", "Client")
-    return [x, y]
-}
-mousec() {
-    CoordMode("Mouse", "Client")
-    MouseGetPos(&x, &y)
-    CoordMode("Mouse", "Client")
-    return [x, y]
+wincw() {
+    WinGetClientPos(&x, &y, &w, &h, "A")
+    return w
 }

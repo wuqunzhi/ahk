@@ -17,6 +17,9 @@ tip(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's
         ToolTip(str?, x?, y?, which?)
         return
     }
+    if(IsInteger(str)){
+        str:=String(str)
+    }
     winx := 0, winy := 0, winw := A_ScreenWidth, winh := A_ScreenHeight
 
     switch rel {

@@ -38,7 +38,7 @@ startwiths(abcd, strlist, caseSitive := false) {
     return false
 }
 
-A_userPath() {
+get_A_userPath() {
     return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
 }
 
