@@ -8,6 +8,7 @@
 ; #NoTrayIcon ;用了这行没法SingleInstance,难退出
 
 #SingleInstance Force
+#Warn Unreachable, off
 #Include "config.ahk"
 #Include "Lib\fun_make.ahk"
 SetTitleMatchMode("regex")
@@ -23,7 +24,8 @@ f7:: Suspend
 #SuspendExempt false
 
 6:: test()
-test() {
+test(){
+
 }
 
 #HotIf 0

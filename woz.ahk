@@ -35,9 +35,7 @@ class WozManager {
             this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
         userpath := get_A_userPath() ; C:\Users\79481
-        ; dk2 := A_Desktop . "\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
-        dk2 := "E:\桌面2\" ;用来存放快捷方式,自行将目录放入环境变量path里
-        for filename in getfiles(dk2 "*") {
+        for filename in getfiles(dk2 "\*") {
             if (endwiths(filename, [".jpg", ".png", ".jpeg"]))
                 continue
             if (endwith(filename, ".lnk"))
@@ -92,6 +90,7 @@ class WozManager {
         ; -------------------- 系统配置
         addcmd("env", "env", "", "环境变量")
         addcmd("regedit", "run", "regedit", "regedit")
+        addcmd("gpedit", "run", "gpedit.msc", "gpedit.msc")
         addcmd("dxdiag", "run", "dxdiag", "dxdiag")
         addcmd("services.msc", "run", "services.msc", "services.msc")
         addcmd("cont", "run", "control", "control")

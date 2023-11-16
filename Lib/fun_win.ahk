@@ -12,6 +12,13 @@ AltTab() {
     }
 }
 
+lockComputer() {
+    ; !not work
+    RegWrite(0, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableLockWorkstation")
+    DllCall("LockWorkStation")
+    RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableLockWorkstation")
+}
+
 ;-----------------------------------------------------------------
 ; Check whether the target window is activation target
 ; https://www.autohotkey.com/boards/viewtopic.php?style=17&t=101808
@@ -82,11 +89,11 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
 }
 
 class markWindow {
-    static winid := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    static winids := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     static winTitle := ["", "", "", "", "", "", "", "", "", ""]
     static mark(idx) {
         try {
-            this.winid[idx] := WinGetID("A")
+            this.winids[idx] := WinGetID("A")
             title := WinGetTitle("A")
             ahkclass := WinGetClass("A")
             ahkexe := WinGetProcessName("A")
@@ -98,10 +105,32 @@ class markWindow {
         }
     }
     static go(idx) {
+        if (this.winids[idx] == 0) {
+            markWindow.mark(idx)
+            return
+        }
         try {
-            WinActivate("ahk_id " this.winid[idx])
+            WinActivate("ahk_id " this.winids[idx])
         } catch Error as e {
             logM(e)
+        }
+    }
+    static toggle(idx) {
+        if (this.winids[idx] == 0) {
+            markWindow.mark(idx)
+            return
+        }
+        winid := this.winids[idx]
+        WinActive("ahk_id " winid) ? AltTab() : WinActivate("ahk_id " winid)
+    }
+    static maymark() {
+        ih := InputHook("T3 L1")
+        ; SetTimer countdown.Bind(3), -20
+        ih.Start()
+        ih.Wait()
+        res := ih.Input
+        if (IsInteger(res) && Integer(res) <= 10 && Integer(res) > 0) {
+            markWindow.mark(Integer(res))
         }
     }
 
@@ -115,16 +144,6 @@ countdown(seconds) {
     }
 }
 
-maymark() {
-    ih := InputHook("T3 L1")
-    ; SetTimer countdown.Bind(3), -20
-    ih.Start()
-    ih.Wait()
-    res := ih.Input
-    if (IsInteger(res) && Integer(res) <= 10 && Integer(res) > 0) {
-        markWindow.mark(Integer(res))
-    }
-}
 
 ; 添加/移除标题栏
 winSetCaption(n) {

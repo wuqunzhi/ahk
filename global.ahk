@@ -1,7 +1,7 @@
 ; ==========o==========o==========o==========o==========o==========o global
 tmp() {
     ; run("http://127.0.0.1:8080")
-    runOrActivate(".*10.192.11.100.* ahk_exe explorer.exe ahk_class CabinetWClass",'m','a',"explorer \\10.192.11.100\GPProjectShare")
+    runOrActivate(".*10.192.11.100.* ahk_exe explorer.exe ahk_class CabinetWClass", 'm', 'a', "explorer \\10.192.11.100\GPProjectShare")
 }
 CapsLock & 1:: tmp()
 #HotIf
@@ -56,14 +56,17 @@ CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
-
 CapsLock & r:: transRaw() ;!todo?
 CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
+
+
 CapsLock & 0:: private.nas()
+#h:: markWindow.toggle(1)
+#+h:: markWindow.mark(1)
 CapsLock & alt:: return
-CapsLock & p:: maymark()
-CapsLock & 9:: markWindow.go(9)
-; CapsLock & 0:: markWindow.go(10)
+CapsLock & p:: return
+CapsLock & 9:: return
+CapsLock & ":: return
 
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
