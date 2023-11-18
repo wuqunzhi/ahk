@@ -8,6 +8,7 @@
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
 :*x?b0zc:  c:: run("explore c:")
+:*x?b0zc:  ~:: run("explore " A_userpath)
 `;:: send("{enter}")
 
 #HotIf WinActive(win_explorer)

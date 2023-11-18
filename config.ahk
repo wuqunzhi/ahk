@@ -23,3 +23,4 @@ global win_qqmusicLyric := "桌面歌词 ahk_exe QQMusic.exe ahk_class TXGuiFoun
 global win_clash := "Clash for Windows ahk_exe Clash for Windows.exe"                  ; clash for windows
 global win_remote := "ahk_exe mstsc.exe ahk_class TscShellContainerClass"              ; 远程控制
 global dk2 := "E:\桌面2"
+global A_userpath := get_A_userPath()

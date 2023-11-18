@@ -34,13 +34,12 @@ class WozManager {
         addcmd(id, func := id, args := "", hint := id, flag := "", pattern := "") {
             this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
-        userpath := get_A_userPath() ; C:\Users\79481
         for filename in getfiles(dk2 "\*") {
             if (endwiths(filename, [".jpg", ".png", ".jpeg"]))
                 continue
             if (endwith(filename, ".lnk"))
                 filename := SubStr(filename, 1, StrLen(filename) - 4)
-            addcmd(filename, "run", dk2 . filename, "run " filename)
+            addcmd(filename, "run", dk2 "\" filename, "run " filename)
         }
 
         addcmd("^k (.*)`t$", "kill", "fromid", "kill (.*)", "reg", "^k .*$")
@@ -57,6 +56,7 @@ class WozManager {
         ; ahk
         addcmd("q main", "ahkq", "main", "quit main.ahk", "full")
         addcmd("q test", "ahkq", "test", "quit test.ahk", "full")
+        addcmd("q woz", "ahkq", "woz", "quit woz.ahk", "full")
         addcmd("main", "runAs", "main.ahk", "runAs main.ahk")
         addcmd("woz", "runAs", "woz.ahk", "runAs woz.ahk")
         addcmd("test", "runAs", "test.ahk", "runAs test.ahk")
@@ -91,13 +91,14 @@ class WozManager {
         addcmd("env", "env", "", "环境变量")
         addcmd("regedit", "run", "regedit", "regedit")
         addcmd("gpedit", "run", "gpedit.msc", "gpedit.msc")
-        addcmd("dxdiag", "run", "dxdiag", "dxdiag")
+        addcmd("msconfig", "run", "msconfig", "msconfig")
         addcmd("services.msc", "run", "services.msc", "services.msc")
+        addcmd("dxdiag", "run", "dxdiag", "dxdiag")
         addcmd("cont", "run", "control", "control")
 
         ; -------------------- 系统文件目录
         addcmd("nas", "nas", "", "nas") ;
-        addcmd("~", "run", userpath, userpath)
+        addcmd("~", "run", A_userpath, A_userpath)
         addcmd("program", "run", "C:\Program Files\", "C:\Program Files")
         addcmd("pro86", "run", "C:\Program Files (x86)\", "C:\Program Files (x86)")
         addcmd("document", "run", A_MyDocuments, A_MyDocuments)
@@ -105,7 +106,7 @@ class WozManager {
         addcmd("system", "run", "C:\Windows\System\", "C:\Windows\System")
         addcmd("sys32", "run", "C:\Windows\System32\", "C:\Windows\System32")
         addcmd("dk2", "run", dk2, "桌面2")
-        addcmd("appdata", "run", userpath "\AppData\", "~\AppData")
+        addcmd("appdata", "run", A_userpath "\AppData\", "~\AppData")
         addcmd("roam", "run", A_AppData, "%AppData%")
         addcmd("host", "run", "C:\Windows\System32\drivers\etc", "host")
         addcmd("startmenu", "run", A_StartMenu, "Start Menu")
@@ -114,14 +115,14 @@ class WozManager {
         ; -------------------- 软件目录
         addcmd("vsdeemo", "run", "D:\VSCodeDeemo\", "D:\VSCodeDeemo\")
         addcmd("vsprojects", "run", "D:\vscodeProjects", "D:\vscodeProjects")
-        addcmd("vssetting", "run", userpath "\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
+        addcmd("vssetting", "run", A_userpath "\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
 
         addcmd("wsl", "run", "\\wsl$\Ubuntu-20.04", "wsl")
         addcmd("scoop", "run", "D:\Scoop", "scoop")
 
         ; -- vim/nvim目录
         addcmd("vim", "run", "D:\vim\vim90\", "D:\vim\vim90\")
-        addcmd("vimrc", "run", userpath "\vimfiles\", userpath "\vimfiles\")
+        addcmd("vimrc", "run", A_userpath "\vimfiles\", A_userpath "\vimfiles\")
 
         ; -------------------- 网站
         addcmd("httpCode", "run", "https://tool.oschina.net/commons?type=5", "http statusCode")
@@ -154,9 +155,15 @@ class WozManager {
             text := input
             matchCommands.Clear()
             hints := "", uniqueMatch := ""
-            calres := eval(text)
-            if (calres)
+            expr := startwith(text, "=") ? SubStr(text, 2) : text
+            calres := eval(expr)
+            if (calres) {
                 hints .= Format("{:-30}`t `n", calres)
+                if (startwith(text, "=")) {
+                    this.showHints(hints)
+                    return
+                }
+            }
             for k, v in this.cmds {
                 if (k == text) { ;全匹配
                     hints := Format("{:-30}`t# {}`n", k, v[3])
@@ -167,7 +174,7 @@ class WozManager {
 
                 flag := v[4]
                 pattern := v[5]
-                if (match(k, text, v[4])) {
+                if (match(k, text, flag)) {
                     matchCommands.Set(k, v), uniqueMatch := k
                     hints .= Format("{:-30}`t# {}`n", k, v[3])
                 } else {
@@ -275,7 +282,8 @@ class WozManager {
                 case "ahkmanager": ahkManager()
                 case "ls": tipRB(ahk("ls"), 5000)
                 case "reload": run("*runAs woz.ahk") ;管理员
-                case "quit": MsgBox("quit?", , 1) = "ok" ? ExitApp : nop()
+                    ; case "quit": (MsgBox("quit?", , 1) == "OK") ? Exit : tip("asd")
+                case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : tip("asd")
                 case "nas": private.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": taskkill(args)

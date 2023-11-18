@@ -12,6 +12,8 @@
  */
 tip(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
     ; !!! assert A_CoordModeToolTip == "Screen" !!!
+    ; todo: x: 1 -1 
+    ; todo 写成class
 
     if (!IsSet(str)) {
         ToolTip(str?, x?, y?, which?)

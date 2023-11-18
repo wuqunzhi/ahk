@@ -1,9 +1,4 @@
 ; ==========o==========o==========o==========o==========o==========o global
-tmp() {
-    ; run("http://127.0.0.1:8080")
-    runOrActivate(".*10.192.11.100.* ahk_exe explorer.exe ahk_class CabinetWClass", 'm', 'a', "explorer \\10.192.11.100\GPProjectShare")
-}
-CapsLock & 1:: tmp()
 #HotIf
 ~esc:: removeAllTip()
 CapsLock Up:: send("{esc}") ;, tipLM("esc")
@@ -59,14 +54,23 @@ CapsLock & f::^!0 ;有道词典
 CapsLock & r:: transRaw() ;!todo?
 CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
 
-
-CapsLock & 0:: private.nas()
-#h:: markWindow.toggle(1)
-#+h:: markWindow.mark(1)
+tmp() {
+    ; run("http://127.0.0.1:8080")
+}
+CapsLock & `:: markWindow.maymark()
+; CapsLock & 1:: markWindow.toggle(1)
+CapsLock & 1:: private.nas()
+CapsLock & 2:: markWindow.toggle(2)
+CapsLock & 3:: markWindow.toggle(3)
+CapsLock & 4:: markWindow.toggle(4)
+CapsLock & 5:: markWindow.toggle(5)
+CapsLock & 6:: markWindow.toggle(6)
+CapsLock & 7:: markWindow.toggle(7)
+CapsLock & 8:: markWindow.toggle(8)
+CapsLock & 9:: markWindow.toggle(9)
+#h:: markWindow.toggle(10)
+#+h:: markWindow.mark(10)
 CapsLock & alt:: return
-CapsLock & p:: return
-CapsLock & 9:: return
-CapsLock & ":: return
 
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
@@ -85,10 +89,19 @@ CapsLock & ":: return
 #+e:: run("explorer.exe")
 #t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
 #w:: send("{blink}^!w"), SetTimer(focus_wx, -10)
-
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: runOrActivate(win_cloudmusic, 'c', 'sa', dk2 "/wyy")
+; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
+#+h::#+left
+#+l::#+Right
+; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
+#+h::#+left
+#+l::#+Right
+#+h::#+left
+#+l::#+Right
+#+h::#+left
+#+l::#+Right
 
 GroupAdd("games", "ahk_class Engine")
 #HotIf WinExist("ahk_group games")

@@ -73,7 +73,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             switch func {
                 case "run":
                     ; RunWait(args) 阻塞
-                    run(args)
+                    run(args, , "Hide")
                     tipLB("run " args)
                     if (WinWait(winTitle, , 5, excludeTitle?))
                         WinActivate()
@@ -124,6 +124,7 @@ class markWindow {
         WinActive("ahk_id " winid) ? AltTab() : WinActivate("ahk_id " winid)
     }
     static maymark() {
+
         ih := InputHook("T3 L1")
         ; SetTimer countdown.Bind(3), -20
         ih.Start()
