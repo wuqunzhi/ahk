@@ -59,7 +59,7 @@ tmp() {
 }
 CapsLock & `:: markWindow.maymark()
 ; CapsLock & 1:: markWindow.toggle(1)
-CapsLock & 1:: private.nas()
+CapsLock & 1:: privatefun.nas()
 CapsLock & 2:: markWindow.toggle(2)
 CapsLock & 3:: markWindow.toggle(3)
 CapsLock & 4:: markWindow.toggle(4)

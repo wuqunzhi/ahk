@@ -3,8 +3,8 @@
 #SingleInstance Force
 #NoTrayIcon
 #Include config.ahk ;放前面
-#Include Lib\fun_make.ahk
 #Include private.ahk
+#Include Lib\fun_make.ahk
 #HotIf
 
 SetTitleMatchMode("RegEx")
@@ -284,7 +284,7 @@ class WozManager {
                 case "reload": run("*runAs woz.ahk") ;管理员
                     ; case "quit": (MsgBox("quit?", , 1) == "OK") ? Exit : tip("asd")
                 case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : tip("asd")
-                case "nas": private.nas()
+                case "nas": privatefun.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": taskkill(args)
 
