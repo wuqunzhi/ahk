@@ -195,6 +195,7 @@ CapsLock & LButton:: tip(debugInfo('w'), 10000, 1, 1, 12)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
 :?*cx:]t:: sendInputVimFix(Format("{}:{}:{}", A_Hour, A_Min, A_Sec))
 :?*cx:]T:: sendInputVimFix(Format("{}-{}-{} {}:{}:{}", A_YYYY, A_MM, A_DD, A_Hour, A_Min, A_Sec))
+:*?zc:gacp::git add . & git commit -m "stupid" & git push
 sendInputVimFix(str) {
     loop parse str {
         SendInput(A_LoopField)
