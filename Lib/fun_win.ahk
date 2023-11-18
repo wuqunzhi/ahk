@@ -73,7 +73,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             switch func {
                 case "run":
                     ; RunWait(args) 阻塞
-                    run(args, , "Hide")
+                    run(args)
                     tipLB("run " args)
                     if (WinWait(winTitle, , 5, excludeTitle?))
                         WinActivate()

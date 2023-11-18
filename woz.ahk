@@ -284,7 +284,7 @@ class WozManager {
                 case "reload": run("*runAs woz.ahk") ;管理员
                     ; case "quit": (MsgBox("quit?", , 1) == "OK") ? Exit : tip("asd")
                 case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : tip("asd")
-                case "nas": privatefun.nas()
+                case "nas": privatefunc.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": taskkill(args)
 

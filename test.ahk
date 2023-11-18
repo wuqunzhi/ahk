@@ -25,6 +25,7 @@ f7:: Suspend
 
 6:: test()
 test(){
+    winSetCaption(-1)
     ; tip(A_ComSpec)
     run('code D:\vscodeDeemos\Note' )
 

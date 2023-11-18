@@ -19,10 +19,10 @@ endwith(abcd, cd, caseSitive := false) {
     idx := InStr(abcd, cd, caseSitive)
     return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
 }
-class privatefun {
+class privatefunc {
     static nas() {
         winT := Format(".*{}.* {}", private.nasIP, win_explorer)
-        cmd := Format("explorer \\{}\GPProjectShare", privatefun.nasIP)
+        cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
         runOrActivate(winT, 'm', 'a', cmd)
     }
 }

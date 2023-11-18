@@ -59,7 +59,7 @@ tmp() {
 }
 CapsLock & `:: markWindow.maymark()
 ; CapsLock & 1:: markWindow.toggle(1)
-CapsLock & 1:: privatefun.nas()
+CapsLock & 1:: privatefunc.nas()
 CapsLock & 2:: markWindow.toggle(2)
 CapsLock & 3:: markWindow.toggle(3)
 CapsLock & 4:: markWindow.toggle(4)
@@ -83,7 +83,7 @@ CapsLock & alt:: return
 >!k:: runOrActivate(win_vscode, 'b', 'a', "code")
 ; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 ; #k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
-#o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeDeemos\Note")
+#o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeProjects\Note")
 #e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 >!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
 #+e:: run("explorer.exe")
@@ -110,12 +110,6 @@ GroupAdd("games", "ahk_class Engine")
 #s:: runOrActivate(win_steam, 'at', 'a')
 #HotIf
 
-#1:: winSetCaption(-1)
-
-
-; logi option
-+!PgDn:: VirtualDesktop.showCycleRight()
-+!PgUp:: VirtualDesktop.showCycleLeft()
 
 
 ; o==========o==========o==========o==========o==========o c-hjkl
