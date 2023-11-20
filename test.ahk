@@ -10,7 +10,7 @@
 #SingleInstance Force
 #Warn Unreachable, off
 #Include "config.ahk"
-#Include "Lib\fun_make.ahk"
+#Include "Lib\funcs.ahk"
 SetTitleMatchMode("regex")
 ; CoordMode("ToolTip", "Screen")
 SetMouseDelay(-1)
@@ -22,21 +22,29 @@ SetMouseDelay(-1)
 #SuspendExempt true
 f7:: Suspend
 #SuspendExempt false
-
+#Include private.ahk
 6:: test()
+7::{
+    a:=RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    tip(a)
+}
+HotIf()
+#HotIf GetKeyState("LShift", "p")
+#HotIf
+#l::tip(1)
 test(){
-    winSetCaption(-1)
+    ; winSetCaption(-1)
+    lockComputer()
+    ; RegWrite "Test Value", "REG_SZ", "HKEY_LOCAL_MACHINE\SOFTWARE\TestKey", "MyValueName"
+    ; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System","DisableLockWorkstation")
     ; tip(A_ComSpec)
-    run('code D:\vscodeDeemos\Note' )
+    ; run('code D:\vscodeDeemos\Note' )
 
 }
 
 #HotIf 0
-Left::^!,
-Right::^!.
-down::Volume_Down
-Up::Volume_Up
-Space::^!Space
+WheelUp::w
+WheelDown::s
 #HotIf
 
 #HotIf 0

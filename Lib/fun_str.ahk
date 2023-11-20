@@ -19,13 +19,6 @@ endwith(abcd, cd, caseSitive := false) {
     idx := InStr(abcd, cd, caseSitive)
     return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
 }
-class privatefunc {
-    static nas() {
-        winT := Format(".*{}.* {}", private.nasIP, win_explorer)
-        cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
-        runOrActivate(winT, 'm', 'a', cmd)
-    }
-}
 
 startwith(abcd, ab, caseSitive := false) {
     return InStr(abcd, ab, caseSitive) == 1
@@ -43,10 +36,6 @@ startwiths(abcd, strlist, caseSitive := false) {
         if (startwith(abcd, str, caseSitive))
             return true
     return false
-}
-
-get_A_userPath() {
-    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
 }
 
 ; return str*=num

@@ -12,12 +12,6 @@ AltTab() {
     }
 }
 
-lockComputer() {
-    ; !not work
-    RegWrite(0, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableLockWorkstation")
-    DllCall("LockWorkStation")
-    RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System\DisableLockWorkstation")
-}
 
 ;-----------------------------------------------------------------
 ; Check whether the target window is activation target
@@ -89,8 +83,8 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
 }
 
 class markWindow {
-    static winids := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    static winTitle := ["", "", "", "", "", "", "", "", "", ""]
+    static winids := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    static winTitle := ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     static mark(idx) {
         try {
             this.winids[idx] := WinGetID("A")
@@ -438,6 +432,7 @@ ahk(act, name := "", path := name) {
         case "q": ;Quit
             while WinExist(title) {
                 PostMessage(0x111, 65307, , , title)
+                ; 如果报错OSerror,就是权限不够,需要管理员运行
                 showtip("Quit " name)
             }
         case "k": ;KeyHistory

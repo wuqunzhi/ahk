@@ -4,7 +4,7 @@
 #NoTrayIcon
 #Include config.ahk ;放前面
 #Include private.ahk
-#Include Lib\fun_make.ahk
+#Include Lib\funcs.ahk
 #HotIf
 
 SetTitleMatchMode("RegEx")
@@ -73,6 +73,7 @@ class WozManager {
         addcmd("restartexplorer", , , "重启资源管理器")
         addcmd("ps", , , "processManager")
         addcmd("touchpad", , , "切换触摸板")
+        addcmd("lock", , , "锁屏")
         addcmd("remote", "run", "mstsc", "远程桌面连接")
         addcmd("mstsc", "run", "mstsc", "远程桌面连接")
         addcmd("colorhook")
@@ -287,6 +288,7 @@ class WozManager {
                 case "nas": privatefunc.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": taskkill(args)
+                case "lock": lockComputer()
 
                 default: return 0
             }

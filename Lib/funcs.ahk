@@ -1,5 +1,5 @@
 #Include fun_tip.ahk
-#Include fun_base.ahk
+#Include fun_str.ahk
 #Include fun_win.ahk
 #Include fun_copy.ahk
 #Include fun_click.ahk
@@ -8,6 +8,34 @@
 #Include steal\JsRT.ahk
 #Include steal\ActiveScript.ahk
 #Include steal\Monitor.ahk
+#Include ../private.ahk
+
+class privatefunc {
+    static nas() {
+        winT := Format(".*{}.* {}", private.nasIP, win_explorer)
+        cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
+        runOrActivate(winT, 'm', 'a', cmd)
+    }
+}
+; 通过注册表启动锁屏
+lockComputer() {
+    RegWrite(0, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    ; a := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    DllCall("LockWorkStation")
+    SetTimer(disableWinL, -1000)
+    ; https://wyagd001.github.io/v2/docs/lib/Shutdown.htm
+    ; Shutdown()
+    ; 0 = 注销
+    ; 1 = 关机
+    ; 2 = 重启
+    ; 4 = 强制
+    ; 8 = 关闭电源
+}
+; 通过写注册表禁用winl锁屏
+disableWinL() {
+    RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    ; MsgBox("unlock")
+}
 
 ; 关闭一些窗口,减少任务栏占用
 winclear() {
@@ -29,17 +57,6 @@ police() {
     }
 }
 
-SystemLockScreen() {
-    DllCall("LockWorkStation")
-    ; https://wyagd001.github.io/v2/docs/lib/Shutdown.htm
-    ; Shutdown()
-    ; 0 = 注销
-    ; 1 = 关机
-    ; 2 = 重启
-    ; 4 = 强制
-    ; 8 = 关闭电源
-}
-
 eval(str) {
     script := ActiveScript("JScript")
     try {
@@ -47,6 +64,10 @@ eval(str) {
     } catch Error as e {
         return ""
     }
+}
+
+get_A_userPath() {
+    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
 }
 
 creatGui() {
@@ -72,7 +93,6 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
     return g
 }
 
-
 ocr() {
     A_Clipboard := ""
     ; Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
@@ -82,9 +102,6 @@ ocr() {
 
 }
 
-changeBrightness(v) {
-    run("python tools/sbc.py " . v, , "Hide")
-}
 RunWaitOne(command) {
     shell := ComObject("WScript.Shell")
     ; 通过 cmd.exe 执行单条命令

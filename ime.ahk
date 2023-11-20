@@ -35,6 +35,7 @@ RShift:: isCHzhong() ? setCHyingForce() : setCHzhongForce()
 #HotIf isCHzhong() and not ingame
 CapsLock:: setCHyingForce(), tip("英")
 :*b0?x:jkjk:: setCHyingForce(), tip("英")
+:*b0?x:jjjj:: setCHyingForce(), tip("英")
 ^l:: send("{blink}{enter}")    ; , setCHyingForce(), tip("英")
 #hotif
 

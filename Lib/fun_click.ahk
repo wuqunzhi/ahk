@@ -1,3 +1,4 @@
+; (左-右+, 上-下+)
 moveL(n) {
     ; sbclick("0 " n " 0 rel")
     ; click("0," n ",0,Rel")
@@ -8,6 +9,9 @@ moveR(n) {
 }
 moveU(n) {
     MouseMove(0, -n, , "R")
+}
+move(x, y) {
+    MouseMove(x, y, , "R")
 }
 moveD(n) {
     MouseMove(0, n, , "R")
@@ -38,7 +42,9 @@ wheelR(count := 1) {
     send("{blink}{click WR " count "}")
 }
 
-focusCenter(count := 1, rel := 's') {
+
+focusCenter(count := 0, rel := 's') {
+    ; todo rel:='c'
     str := Format("{} {} {}", A_ScreenWidth // 2, A_ScreenHeight // 2, count)
     clickk(str, rel, back := false, blink := true, clickif := true)
 }
@@ -212,21 +218,12 @@ mousec() {
 
 
 /**
- * @param {any} xypos ["10 20 1","10 20"] or "10 20 c" (c:=1 clickif c:=0 move)
+ * @param {any} xypos ["10 20 1","10 20"]
  * @param {string} cmp 1 n l2r u2d
  * @returns {void}
  */
+/*
 cycleclick(xypos, cmp := "n") {
-    ; 一坨屎,没用过
-    len := xypos.length
-    if (len = 1) {
-        x1 := x(xypos[1]), y1 := y(xypos[1]), c1 := c(xypos[1])
-        if (c1)
-            clickif(x1, y1)
-        else
-            send("{blink}{click " . x1 . " " . y1 . " 0 }")
-        return
-    }
     mousegetpos(&mx, &my)
     x(str) {
         xyc := strsplit(str, ' ')
@@ -238,8 +235,7 @@ cycleclick(xypos, cmp := "n") {
     }
     c(str) {
         xyc := strsplit(str, ' ')
-        sc := (xyc.length >= 3) ? integer(xyc[3]) : 0
-        return sc
+        return (xyc.length >= 3) ? integer(xyc[3]) : 0
     }
     d(str) {
         return (x(str) - msx) ** 2 + (y(str) - (msy)) ** 2
@@ -292,3 +288,4 @@ cycleclick(xypos, cmp := "n") {
     }
 
 }
+*/

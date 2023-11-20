@@ -16,11 +16,12 @@
 <^o::!left
 <^i::!right
 <!o::!Up
+<!i::!Down
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
     try Run("cmd", WinGetTitle("A"))
     catch as e
-        run("cmd", get_A_userPath())
+        run("cmd", A_userpath)
 }
 
 #HotIf

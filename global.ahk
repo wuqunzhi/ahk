@@ -54,6 +54,8 @@ CapsLock & f::^!0 ;有道词典
 CapsLock & r:: transRaw() ;!todo?
 CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
 
+NumLock & Numpad1::winSetCaption(-1)
+
 tmp() {
     ; run("http://127.0.0.1:8080")
 }
@@ -68,10 +70,14 @@ CapsLock & 6:: markWindow.toggle(6)
 CapsLock & 7:: markWindow.toggle(7)
 CapsLock & 8:: markWindow.toggle(8)
 CapsLock & 9:: markWindow.toggle(9)
-#h:: markWindow.toggle(10)
-#+h:: markWindow.mark(10)
+>!l::lockComputer()
+#l:: markWindow.toggle(11)
+#+l:: markWindow.mark(11)
+#+h:: markWindow.mark(12)
+#h:: markWindow.toggle(12)
+#+;:: markWindow.mark(13)
+#;:: markWindow.toggle(13)
 CapsLock & alt:: return
-
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 >!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
@@ -92,18 +98,14 @@ CapsLock & alt:: return
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: runOrActivate(win_cloudmusic, 'c', 'sa', dk2 "/wyy")
+
 ; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
-#+h::#+left
-#+l::#+Right
-; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
-#+h::#+left
-#+l::#+Right
-#+h::#+left
-#+l::#+Right
-#+h::#+left
-#+l::#+Right
+; #+h::#+left
+; #+l::#+Right
 
 GroupAdd("games", "ahk_class Engine")
+GroupAdd("games", "ahk_class YYGameMakerYY")
+GroupAdd("games", "ahk_class UnityWndClass")
 #HotIf WinExist("ahk_group games")
 #g:: runOrActivate("ahk_group games", 'at', 'a')
 #HotIf WinExist(win_steam)
