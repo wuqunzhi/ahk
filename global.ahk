@@ -6,14 +6,11 @@ CapsLock Up:: send("{esc}") ;, tipLM("esc")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
 <!CapsLock:: LoopRelatedWindows()
 
-NumLock & k::#k
-NumLock & j::#j
-NumLock & i::#i
-NumLock & p::#p
 
 #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
 #HotIf
+
 ; o==========o==========o==========o==========o VirtualDesktop
 #CapsLock:: VirtualDesktop.showCycleRight()
 #^n:: VirtualDesktop.Create().Show()
@@ -48,16 +45,39 @@ CapsLock & v:: zvim.go("e_n")
 CapsLock & i:: zvim.go("i")
 CapsLock & g:: (zvim.mode == "g_n") ? zvim.go('i') : zvim.go("g_n")
 CapsLock & o::Enter
-CapsLock & p:: autorun(A_Clipboard)
 CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
-CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
-CapsLock & r:: transRaw() ;!todo?
 CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
 CapsLock & c:: writeAndShowCBH()
 CapsLock & f::^!0 ;有道词典
-CapsLock & 1:: private.nas()
+CapsLock & r:: transRaw() ;!todo?
+CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
+
+NumLock & Numpad1::winSetCaption(-1)
+
+tmp() {
+    ; run("http://127.0.0.1:8080")
+}
+CapsLock & `:: markWindow.maymark()
+; CapsLock & 1:: markWindow.toggle(1)
+CapsLock & 1:: privatefunc.nas()
+CapsLock & 2:: markWindow.toggle(2)
+CapsLock & 3:: markWindow.toggle(3)
+CapsLock & 4:: markWindow.toggle(4)
+CapsLock & 5:: markWindow.toggle(5)
+CapsLock & 6:: markWindow.toggle(6)
+CapsLock & 7:: markWindow.toggle(7)
+CapsLock & 8:: markWindow.toggle(8)
+CapsLock & 9:: markWindow.toggle(9)
+>!l::lockComputer()
+#l:: markWindow.toggle(11)
+#+l:: markWindow.mark(11)
+#+h:: markWindow.mark(12)
+#h:: markWindow.toggle(12)
+#+;:: markWindow.mark(13)
+#;:: markWindow.toggle(13)
+CapsLock & alt:: return
 
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
 >!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
@@ -65,38 +85,38 @@ CapsLock & 1:: private.nas()
 #n:: WinMinimize("A")
 #c:: winCenter()
 #j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
-#k:: runOrActivate(win_vscode, 'b', 'a', "code.exe")
+#k:: runOrActivate(win_vscode, 'b', 'a', "code")
+>!k:: runOrActivate(win_vscode, 'b', 'a', "code")
+; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 ; #k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
-#o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeDeemos\Note")
+#o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeProjects\Note")
 #e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 >!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
->!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #+e:: run("explorer.exe")
 #t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
 #w:: send("{blink}^!w"), SetTimer(focus_wx, -10)
-
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: runOrActivate(win_cloudmusic, 'c', 'sa', dk2 "/wyy")
 
+; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
+; #+h::#+left
+; #+l::#+Right
+
 GroupAdd("games", "ahk_class Engine")
+GroupAdd("games", "ahk_class YYGameMakerYY")
+GroupAdd("games", "ahk_class UnityWndClass")
 #HotIf WinExist("ahk_group games")
 #g:: runOrActivate("ahk_group games", 'at', 'a')
 #HotIf WinExist(win_steam)
 #s:: runOrActivate(win_steam, 'at', 'a')
 #HotIf
 
-#1:: winSetCaption(-1)
-
-
-; logi option
-+!PgDn:: VirtualDesktop.showCycleRight()
-+!PgUp:: VirtualDesktop.showCycleLeft()
 
 
 ; o==========o==========o==========o==========o==========o c-hjkl
+; <^b::^u ;!!!c-u c-d翻页
 <^u:: send("{Blink}{bs}")
-<^b::^u ;!!!c-u c-d翻页
 GroupAdd("noc_hjkl", win_vscode)
 GroupAdd("noc_hjkl", win_obsidian)
 GroupAdd("noc_hjkl", win_idea)
@@ -171,6 +191,7 @@ CapsLock & LButton:: tip(debugInfo('w'), 10000, 1, 1, 12)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
 :?*cx:]t:: sendInputVimFix(Format("{}:{}:{}", A_Hour, A_Min, A_Sec))
 :?*cx:]T:: sendInputVimFix(Format("{}-{}-{} {}:{}:{}", A_YYYY, A_MM, A_DD, A_Hour, A_Min, A_Sec))
+:*?zc:gacp::git add . & git commit -m "stupid" & git push
 sendInputVimFix(str) {
     loop parse str {
         SendInput(A_LoopField)

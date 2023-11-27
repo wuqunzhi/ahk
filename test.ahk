@@ -1,76 +1,85 @@
-; #NoEnv æ˜¯v2é»˜è®¤è¡Œä¸º, æ‰€ä»¥è¯¥æŒ‡ä»¤æœ¬èº«å·²ç»è¢«åˆ é™¤. å¦‚æœç­‰æ•ˆçš„å†…ç½®å˜é‡ä¸å¯ç”¨, è¯·ä½¿ç”¨ EnvGet ä»£æ›¿.
-; SendMode é»˜è®¤ä¸ºè¾“å…¥(Input) è€Œä¸æ˜¯äº‹ä»¶(Event).
-; æ ‡é¢˜åŒ¹é…æ¨¡å¼é»˜è®¤ä¸º 2 è€Œä¸æ˜¯ 1.
-; åˆ é™¤äº† SetBatchLines, å› æ­¤æ‰€æœ‰è„šæœ¬éƒ½ä»¥å…¨é€Ÿè¿è¡Œ(ç­‰åŒäº v1 ä¸­çš„ SetBatchLines -1).
-; SetWorkingDir å·¥ä½œç›®å½•é»˜è®¤ä¸º A_ScriptDir. A_InitialWorkingDir åŒ…å«ç”±å¯åŠ¨ AutoHotkey çš„è¿›ç¨‹è®¾ç½®çš„å·¥ä½œç›®å½•.
-; CoordMode é»˜è®¤ä¸º Client(åœ¨ v1.1.05 ç‰ˆä¸­åŠ å…¥), è€Œä¸æ˜¯ Window.
-; è„šæœ¬æ–‡ä»¶(ä½†ä¸åŒ…æ‹¬ ç”± è„šæœ¬è¯»å–çš„æ–‡ä»¶) çš„é»˜è®¤ç¼–ç ç°åœ¨æ˜¯ UTF-8 è€Œä¸æ˜¯ ANSI(CP0). å’Œä»¥å‰ä¸€æ ·, è¿™å¯ä»¥é€šè¿‡ /CP å‘½ä»¤è¡Œå¼€å…³æ¥è¦†ç›–.
-; #NoTrayIcon ;ç”¨äº†è¿™è¡Œæ²¡æ³•SingleInstance,éš¾é€€å‡º
+; #NoEnv ÊÇv2Ä¬ÈÏĞĞÎª, ËùÒÔ¸ÃÖ¸Áî±¾ÉíÒÑ¾­±»É¾³ı. Èç¹ûµÈĞ§µÄÄÚÖÃ±äÁ¿²»¿ÉÓÃ, ÇëÊ¹ÓÃ EnvGet ´úÌæ.
+; SendMode Ä¬ÈÏÎªÊäÈë(Input) ¶ø²»ÊÇÊÂ¼ş(Event).
+; ±êÌâÆ¥ÅäÄ£Ê½Ä¬ÈÏÎª 2 ¶ø²»ÊÇ 1.
+; É¾³ıÁË SetBatchLines, Òò´ËËùÓĞ½Å±¾¶¼ÒÔÈ«ËÙÔËĞĞ(µÈÍ¬ÓÚ v1 ÖĞµÄ SetBatchLines -1).
+; SetWorkingDir ¹¤×÷Ä¿Â¼Ä¬ÈÏÎª A_ScriptDir. A_InitialWorkingDir °üº¬ÓÉÆô¶¯ AutoHotkey µÄ½ø³ÌÉèÖÃµÄ¹¤×÷Ä¿Â¼.
+; CoordMode Ä¬ÈÏÎª Client(ÔÚ v1.1.05 °æÖĞ¼ÓÈë), ¶ø²»ÊÇ Window.
+; ½Å±¾ÎÄ¼ş(µ«²»°üÀ¨ ÓÉ ½Å±¾¶ÁÈ¡µÄÎÄ¼ş) µÄÄ¬ÈÏ±àÂëÏÖÔÚÊÇ UTF-8 ¶ø²»ÊÇ ANSI(CP0). ºÍÒÔÇ°Ò»Ñù, Õâ¿ÉÒÔÍ¨¹ı /CP ÃüÁîĞĞ¿ª¹ØÀ´¸²¸Ç.
+; #NoTrayIcon ;ÓÃÁËÕâĞĞÃ»·¨SingleInstance,ÄÑÍË³ö
 
 #SingleInstance Force
+#Warn Unreachable, off
+#Include "config.ahk"
 #Include "Lib\funcs.ahk"
 SetTitleMatchMode("regex")
 ; CoordMode("ToolTip", "Screen")
-
-; SetMouseDelay 0                                           ; SendInput å¯èƒ½ä¼šé™çº§ä¸º SendEvent, æ­¤æ—¶ä¼šæœ‰ 10ms çš„é»˜è®¤ delay
-; SetWinDelay 0                                             ; é»˜è®¤ä¼šåœ¨ activate, maximize, move ç­‰çª—å£æ“ä½œåç¡çœ  100ms
-; ProcessSetPriority "High"
 SetMouseDelay(-1)
-#HotIf
 
-; WinActivateBottom(".*")
+; SetMouseDelay 0                                           ; SendInput ¿ÉÄÜ»á½µ¼¶Îª SendEvent, ´ËÊ±»áÓĞ 10ms µÄÄ¬ÈÏ delay
+; SetWinDelay 0                                             ; Ä¬ÈÏ»áÔÚ activate, maximize, move µÈ´°¿Ú²Ù×÷ºóË¯Ãß 100ms
+; ProcessSetPriority "High"
 
-6:: test()
-; 6:: MsgBox(getfiles(A_Desktop . "\æ¡Œé¢2\*"))
-7:: WinSetStyle("^0x800000", "A")
-expr := "3+3"
-script := ActiveScript("JScript")
-8:: test()
-a:=""
-test() {
-    if(a){
-        tip("3")
-    }
-    else tip("asd")
-    ; MsgBox(gui.g.Submit())
-    ; tip(type(gui.g.Submit().Prototype))
-    ; for k,v in gui.g.Submit(){
-    ; MsgBox(k . "  " . v )
-    ; }
+#SuspendExempt true
+f7:: Suspend
+#SuspendExempt false
+#Include private.ahk
+HotIf()
+test(){
+    ; winSetCaption(-1)
+    lockComputer()
+    ; RegWrite "Test Value", "REG_SZ", "HKEY_LOCAL_MACHINE\SOFTWARE\TestKey", "MyValueName"
+    ; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System","DisableLockWorkstation")
+    ; tip(A_ComSpec)
+    ; run('code D:\vscodeDeemos\Note' )
+
 }
 
+#HotIf 1
+k::space
+#HotIf
+
+#HotIf 0
+XButton1::^!,
+XButton2::^!.
+WheelDown::Volume_Down
+WheelUp::Volume_Up
+MButton::^!Space
+LButton:: return
+RButton:: return
+#HotIf
 
 
-; 7:: Send("{text}ğŸ¶! ")
+; 7:: Send("{text}?! ")
+
 
 
 ; ==========o==========o==========o==========o==========o other
 /*
 ImageSearch PixelSearch
 SoundPlay
-A_TickCount æ—¶é—´æˆ³A_MSecä¹Ÿæœ‰
+A_TickCount Ê±¼ä´ÁA_MSecÒ²ÓĞ
 ListLines, ListVars
-https: // wyagd001.github.io / v2 / docs / Scripts.htm#lib #includeå’Œåº“æ–‡ä»¶
-; å½“Ctrlè¢«æŒ‰ä½æ—¶,NumLockäº§ç”ŸPauseçš„æŒ‰é”®ä»£ç ,æ‰€ä»¥ä½¿ç”¨^Pauseæ¥ä»£æ›¿^NumLock.
-; é•¿è¡Œ:https://wyagd001.github.io/v2/docs/Scripts.htm#continuation
-; é¼ æ ‡æ»‘åŠ¨æ‰‹åŠ¿ ; https://meta.appinn.net/t/topic/32120
-; è®¾ç½®äº®åº¦: powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,50)
+https: // wyagd001.github.io / v2 / docs / Scripts.htm#lib #includeºÍ¿âÎÄ¼ş
+; µ±Ctrl±»°´×¡Ê±,NumLock²úÉúPauseµÄ°´¼ü´úÂë,ËùÒÔÊ¹ÓÃ^PauseÀ´´úÌæ^NumLock.
+; ³¤ĞĞ:https://wyagd001.github.io/v2/docs/Scripts.htm#continuation
+; Êó±ê»¬¶¯ÊÖÊÆ ; https://meta.appinn.net/t/topic/32120
+; ÉèÖÃÁÁ¶È: powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,50)
 
 */
-; ==========o==========o==========o==========o==========oæ–‡ä»¶
+; ==========o==========o==========o==========o==========oÎÄ¼ş
 /*
-FileReadLine è¯»å–æ–‡ä»¶è¡Œ
-FileRead è¯»å–æ–‡ä»¶
-FileSelect:æ˜¾ç¤ºå¯ä»¥çš„é€‰æ‹©æ–‡ä»¶/æ–‡ä»¶å¤¹çš„æ ‡å‡†å¯¹è¯æ¡†.
-iniread , iniwrite ,inidelete è¯»å–iniæ ¼å¼æ–‡ä»¶
+FileReadLine ¶ÁÈ¡ÎÄ¼şĞĞ
+FileRead ¶ÁÈ¡ÎÄ¼ş
+FileSelect:ÏÔÊ¾¿ÉÒÔµÄÑ¡ÔñÎÄ¼ş/ÎÄ¼ş¼ĞµÄ±ê×¼¶Ô»°¿ò.
+iniread , iniwrite ,inidelete ¶ÁÈ¡ini¸ñÊ½ÎÄ¼ş
 FileCreateShortcut
 FileExist
-; è·å–ç›®å½•,æ–‡ä»¶å,æ–‡ä»¶å¤¹,æ‰©å±•åç­‰:
+; »ñÈ¡Ä¿Â¼,ÎÄ¼şÃû,ÎÄ¼ş¼Ğ,À©Õ¹ÃûµÈ:
 FullFileName := "C:\My Documents\Address List.txt"
 SplitPath FullFileName, &name, &dir, &ext, &name_no_ext, &drive
 */
 ; ==========o==========o==========o==========o==========o Edit
-;  åœ¨æ‰€æœ‰çš„ç¼–è¾‘æ§ä»¶ä¸­çš„è½»æ¾åˆ é™¤å•è¯çš„å¿«æ·é”®. æ²¡ä»€ä¹ˆç”¨
+;  ÔÚËùÓĞµÄ±à¼­¿Ø¼şÖĞµÄÇáËÉÉ¾³ıµ¥´ÊµÄ¿ì½İ¼ü. Ã»Ê²Ã´ÓÃ
 ; #HotIf ActiveControlIsOfClass("Edit")
 ; ActiveControlIsOfClass(Cls) {
 ;     FocusedControl := 0
@@ -82,18 +91,18 @@ SplitPath FullFileName, &name, &dir, &ext, &name_no_ext, &drive
 ;     return (FocusedControlClass = Cls)
 ; }
 ; ==========o==========o==========o==========o==========o inputHook
-; #inputHook :åˆ›å»ºä¸€ä¸ªå¯¹è±¡, è¯¥å¯¹è±¡å¯ç”¨äºæ”¶é›†æˆ–æ‹¦æˆªé”®ç›˜è¾“å…¥.
-; ç¤ºä¾‹1:ç­‰å¾…ç”¨æˆ·æŒ‰ä¸‹ä»»æ„ä¸€ä¸ªé”®.
+; #inputHook :´´½¨Ò»¸ö¶ÔÏó, ¸Ã¶ÔÏó¿ÉÓÃÓÚÊÕ¼¯»òÀ¹½Ø¼üÅÌÊäÈë.
+; Ê¾Àı1:µÈ´ıÓÃ»§°´ÏÂÈÎÒâÒ»¸ö¼ü.
 /* MsgBox KeyWaitAny()
-MsgBox KeyWaitAny("V")    ; å†æ¥ä¸€é, ä½†ä¸é˜»æ­¢æŒ‰é”®.
+MsgBox KeyWaitAny("V")    ; ÔÙÀ´Ò»±é, µ«²»×èÖ¹°´¼ü.
 KeyWaitAny(Options := "") {
     ih := InputHook(Options)
     if !InStr(Options, "V")
         ih.VisibleNonText := false
-    ih.KeyOpt("{All}", "E")    ; ç»“æŸ
+    ih.KeyOpt("{All}", "E")    ; ½áÊø
     ih.Start()
     ih.Wait()
-    return ih.EndKey    ; è¿”å›æŒ‰é”®åç§°
+    return ih.EndKey    ; ·µ»Ø°´¼üÃû³Æ
 } */
 ; ==========o==========o==========o==========o==========o inputHook
 /*
@@ -111,13 +120,13 @@ CheckPauseSuspend(wParam) {
 ; ==========o==========o==========o==========o==========o gui
 /*
 MyGui.Add("Link", , 'Links may be used anywhere in the text like <a id="A">this</a> or <a id="B">that</a>')
-EditPaste ;æŒ‡å®šçš„å­—ç¬¦ä¸²ç²˜è´´åˆ° Edit æ§ä»¶æ’å…¥ç¬¦å·(æ–‡æœ¬æ’å…¥ç‚¹) å¤„
-EditGetLine è¿”å› Edit æ§ä»¶ä¸­æŒ‡å®šè¡Œçš„æ–‡æœ¬.
+EditPaste ;Ö¸¶¨µÄ×Ö·û´®Õ³Ìùµ½ Edit ¿Ø¼ş²åÈë·ûºÅ(ÎÄ±¾²åÈëµã) ´¦
+EditGetLine ·µ»Ø Edit ¿Ø¼şÖĞÖ¸¶¨ĞĞµÄÎÄ±¾.
 MyGui := Gui(, "Title of Window")
-MyGui.Opt("+AlwaysOnTop +Disabled -SysMenu +Owner")  ; +Owner é¿å…æ˜¾ç¤ºä»»åŠ¡æ æŒ‰é’®.
+MyGui.Opt("+AlwaysOnTop +Disabled -SysMenu +Owner")  ; +Owner ±ÜÃâÏÔÊ¾ÈÎÎñÀ¸°´Å¥.
 MyGui.Add("Text",, "Some text to display.")
-MyGui.Show("NoActivate")  ; NoActivate è®©å½“å‰æ´»åŠ¨çª—å£ç»§ç»­ä¿æŒæ´»åŠ¨çŠ¶æ€.
-; ä»æ–‡ä»¶å¤¹ä¸­è·å–æ–‡ä»¶ååˆ—è¡¨å¹¶æŠŠå®ƒä»¬æ”¾å…¥ ListView:
+MyGui.Show("NoActivate")  ; NoActivate ÈÃµ±Ç°»î¶¯´°¿Ú¼ÌĞø±£³Ö»î¶¯×´Ì¬.
+; ´ÓÎÄ¼ş¼ĞÖĞ»ñÈ¡ÎÄ¼şÃûÁĞ±í²¢°ÑËüÃÇ·ÅÈë ListView:
 Loop Files, A_MyDocuments "\*.*"
     LV.Add(, A_LoopFileName, A_LoopFileSizeKB)
 */

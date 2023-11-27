@@ -1,5 +1,5 @@
 #Include fun_tip.ahk
-#Include fun_base.ahk
+#Include fun_str.ahk
 #Include fun_win.ahk
 #Include fun_copy.ahk
 #Include fun_click.ahk
@@ -8,9 +8,21 @@
 #Include steal\JsRT.ahk
 #Include steal\ActiveScript.ahk
 #Include steal\Monitor.ahk
+#Include ../private.ahk
 
-SystemLockScreen() {
+class privatefunc {
+    static nas() {
+        winT := Format(".*{}.* {}", private.nasIP, win_explorer)
+        cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
+        runOrActivate(winT, 'm', 'a', cmd)
+    }
+}
+; 通过注册表启动锁屏
+lockComputer() {
+    RegWrite(0, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    ; a := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
     DllCall("LockWorkStation")
+    SetTimer(disableWinL, -1000)
     ; https://wyagd001.github.io/v2/docs/lib/Shutdown.htm
     ; Shutdown()
     ; 0 = 注销
@@ -18,6 +30,31 @@ SystemLockScreen() {
     ; 2 = 重启
     ; 4 = 强制
     ; 8 = 关闭电源
+}
+; 通过写注册表禁用winl锁屏
+disableWinL() {
+    RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
+    ; MsgBox("unlock")
+}
+
+; 关闭一些窗口,减少任务栏占用
+winclear() {
+    GroupAdd("winclear", win_cloudmusic)
+    GroupAdd("winclear", win_qqmusic)
+    GroupAdd("winclear", win_wechat)
+    GroupAdd("winclear", win_explorer)
+    GroupAdd("winclear", win_taskManager)
+    GroupAdd("winclear", win_youdao)
+    WinClose("ahk_group winclear")
+}
+
+police() {
+    return
+    if (WinExist("Windows 安全中心警报 ahk_exe rundll32.exe ahk_class #32770")) {
+        WinActivate()
+        WinWaitActive()
+        Send("{blink}{enter}")
+    }
 }
 
 eval(str) {
@@ -27,6 +64,10 @@ eval(str) {
     } catch Error as e {
         return ""
     }
+}
+
+get_A_userPath() {
+    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
 }
 
 creatGui() {
@@ -52,7 +93,6 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
     return g
 }
 
-
 ocr() {
     A_Clipboard := ""
     ; Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
@@ -62,9 +102,6 @@ ocr() {
 
 }
 
-changeBrightness(v) {
-    run("python tools/sbc.py " . v, , "Hide")
-}
 RunWaitOne(command) {
     shell := ComObject("WScript.Shell")
     ; 通过 cmd.exe 执行单条命令
@@ -106,7 +143,7 @@ toggleTouchpad() {
     static touchpad := 1
     touchpad := !touchpad
     run(a_windir "\system32\systemsettingsadminflows.exe enabletouchpad " touchpad)
-    tipLM("touchpad " touchpad)
+    tipMM("touchpad " touchpad)
     ; send("#i")
     ; if (winwaitactive("ahk_exe applicationframehost.exe", , 5)) {
     ;     sleep(500)
@@ -150,7 +187,7 @@ togglekey(key := "LButton") {
 
 
 showIntxt(str) {
-    path := A_userPath() . "\showintxt.txt"
+    path := get_A_userPath() . "\showintxt.txt"
     f := FileOpen(path, 'a')
     f.Write(str)
     f.Close()
@@ -233,6 +270,8 @@ autorun(str := A_Clipboard) {
             run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
             or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
+            ; or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}")
+            or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*")
             run "chrome.exe " str
         ; %AppData%\code
         else if RegExMatch(str, "%(\w+)%(\\[^%]+)*", &matchs) and EnvGet(matchs[1]) {
@@ -281,13 +320,15 @@ cmdClipReturn(command) {
     return cmdInfo
 }
 
-
 ; transform clipb string to markdown table
-; use default sep <space><space> or \t
-transtable(str, sep := " |\t") {
+; use default sep <space><space>
+transtable(str) {
     ; tabstr := RegExReplace(str, "m)^|$|  |\t", "|")
-    tabstr := RegExReplace(str, "m)" sep, "|")
-    return "|--|--|`n|:-|:-|`n" tabstr
+    res := RegExReplace(str, " {2,}", "|")
+    res := RegExReplace(res, "m)^(?!\|)", "|")
+    res := RegExReplace(res, "m)(?<!\|)$", "|")
+    res := RegExReplace(res, "m)^\|$", "")
+    return "|--|--|`n|:-:|:-:|`n" res
 }
 
 transRaw(str := A_Clipboard, mode := 1) {

@@ -38,10 +38,6 @@ startwiths(abcd, strlist, caseSitive := false) {
     return false
 }
 
-A_userPath() {
-    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
-}
-
 ; return str*=num
 strdot(str, num) {
     res := ""

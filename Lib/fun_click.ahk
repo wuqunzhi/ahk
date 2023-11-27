@@ -1,3 +1,4 @@
+; (左-右+, 上-下+)
 moveL(n) {
     ; sbclick("0 " n " 0 rel")
     ; click("0," n ",0,Rel")
@@ -9,8 +10,23 @@ moveR(n) {
 moveU(n) {
     MouseMove(0, -n, , "R")
 }
+move(x, y) {
+    MouseMove(x, y, , "R")
+}
 moveD(n) {
     MouseMove(0, n, , "R")
+}
+moveDMost() {
+    clickRelS(Format("{} {} 0", msx(), A_ScreenHeight - 20))
+}
+moveUMost() {
+    clickRelS(Format("{} {} 0", msx(), 0))
+}
+moveLMost() {
+    clickRelS(Format("{} {} 0", 0, msy()))
+}
+moveRMost() {
+    clickRelS(Format("{} {} 0", A_ScreenWidth - 10, msy()))
 }
 wheelD(count := 1) {
     ; sbclick("WD " count)
@@ -24,6 +40,13 @@ wheelL(count := 1) {
 }
 wheelR(count := 1) {
     send("{blink}{click WR " count "}")
+}
+
+
+focusCenter(count := 0, rel := 's') {
+    ; todo rel:='c'
+    str := Format("{} {} {}", A_ScreenWidth // 2, A_ScreenHeight // 2, count)
+    clickk(str, rel, back := false, blink := true, clickif := true)
 }
 
 ; search img in client and click
@@ -49,30 +72,68 @@ clickb(str) {
 }
 
 ;send("{blink}{click " str "}")
-sbclick(str) {
+sbclick(str, rel := 'c') {
+    switch rel {
+        case 's': coordmode("mouse", "Screen")
+        case 'w': coordmode("mouse", "Window")
+        default: coordmode("mouse", "Client")
+    }
+
     send("{blink}{click " str "}")
+    CoordMode("Mouse", "Client")
 }
 
-;click relative to screen
-clickRelToScreen(str) {
+clickk(str, rel := 'c', back := false, blink := true, clickif := false) {
+    if (clickif) {
+        poslist := StrSplitFix(str, ' ')
+        dstx := Integer(poslist[1]), dsty := Integer(poslist[2])
+        curx := mx(rel), cury := my(rel)
+        if (dstx == curx && dsty == cury)
+            return
+    }
+    switch rel {
+        case 's': coordmode('mouse', 'Screen')
+        case 'w': coordmode('mouse', 'Window')
+        case 'c': coordmode('mouse', 'Window')
+        case 'm': nop()
+        case 'rel': nop()
+        default: coordmode('mouse', 'Client')
+    }
+    x := 0, y := 0
+    back ? MouseGetPos(&x, &y) : 0
+    blink ? blink := '{blink}' : ''
+    rel == 'm' ? rel := 'Rel' : ''
+    send(blink '{click ' str ' ' rel '}')
+    back ? send(blink '{click ' x ' ' y ' 0 ' rel '}') : 0
+    CoordMode('Mouse', 'Client')
+}
+
+; click rel to Screen
+clickRelS(str) {
     coordmode("mouse", "Screen")
     click(str)
     CoordMode("Mouse", "Client")
 }
-
-;click relative to window
-clickRelToWindow(str) {
+; click rel to Window
+clickRelW(str) {
     coordmode("mouse", "Window")
     click(str)
     CoordMode("Mouse", "Client")
 }
-
-;click relative to Client
-clickRelToClient(str) {
-    coordmode("mouse", "Client")
-    click(str)
+; click rel to Client
+clickRelC(str) {
     CoordMode("Mouse", "Client")
+    click(str)
 }
+; click rel to Client
+clickRel(str, rel := 'c') {
+    switch rel {
+        case 'c': clickRelC(str)
+        case 's': clickRelS(str)
+        case 'w': clickRelW(str)
+    }
+}
+
 
 ; click only if no in giving pos
 clickif(x, y, c := 1) {
@@ -82,46 +143,102 @@ clickif(x, y, c := 1) {
         send("{blink}{click " x " " y " " c "}")
 }
 
-;click(x*w, y*h) ;(coord to client)
-clickfocus(x := 0.5, y := 0.5) {
-    WinGetPos(, , &w, &h, "A")
-    x := x <= 1 ? Integer(x * w) : x
-    y := y <= 1 ? Integer(y * h) : y
-    click(x ", " y)
+mx(rel) {
+    switch rel {
+        case 'c': return mcx()
+        case 's': return msx()
+        case 'w': return mwx()
+        default: return msx()
+    }
 }
 
+my(rel) {
+    switch rel {
+        case 'c': return mcy()
+        case 's': return msy()
+        case 'w': return mwy()
+        default: return msy()
+    }
+}
+
+msx() {
+    CoordMode("Mouse", "Screen")
+    MouseGetPos(&x)
+    CoordMode("Mouse", "Client")
+    return x
+}
+msy() {
+    CoordMode("Mouse", "Screen")
+    MouseGetPos(, &y)
+    CoordMode("Mouse", "Client")
+    return y
+}
+mwx() {
+    CoordMode("Mouse", "Window")
+    MouseGetPos(&x)
+    CoordMode("Mouse", "Client")
+    return x
+}
+mwy() {
+    CoordMode("Mouse", "Window")
+    MouseGetPos(, &y)
+    CoordMode("Mouse", "Client")
+    return y
+}
+mcx() {
+    CoordMode("Mouse", "Client")
+    MouseGetPos(&x)
+    CoordMode("Mouse", "Client")
+    return x
+}
+mcy() {
+    CoordMode("Mouse", "Client")
+    MouseGetPos(, &y)
+    CoordMode("Mouse", "Client")
+    return y
+}
+mouses() {
+    CoordMode("Mouse", "Screen")
+    MouseGetPos(&x, &y)
+    CoordMode("Mouse", "Client")
+    return [x, y]
+}
+mousew() {
+    CoordMode("Mouse", "Window")
+    MouseGetPos(&x, &y)
+    CoordMode("Mouse", "Client")
+    return [x, y]
+}
+mousec() {
+    CoordMode("Mouse", "Client")
+    MouseGetPos(&x, &y)
+    CoordMode("Mouse", "Client")
+    return [x, y]
+}
+
+
 /**
- * @param {any} xypos ["10 20 1","10 20"] or "10 20 c" (c:=1 clickif c:=0 move)
+ * @param {any} xypos ["10 20 1","10 20"]
  * @param {string} cmp 1 n l2r u2d
  * @returns {void}
  */
+/*
 cycleclick(xypos, cmp := "n") {
-    ; 一坨屎,没用过
-    len := xypos.length
-    if (len = 1) {
-        x1 := x(xypos[1]), y1 := y(xypos[1]), c1 := c(xypos[1])
-        if (c1)
-            clickif(x1, y1)
-        else
-            send("{blink}{click " . x1 . " " . y1 . " 0 }")
-        return
-    }
     mousegetpos(&mx, &my)
     x(str) {
         xyc := strsplit(str, ' ')
-        return xyc[1] = "x" ? mx : integer(xyc[1])
+        return xyc[1] = "x" ? msx : integer(xyc[1])
     }
     y(str) {
         xyc := strsplit(str, ' ')
-        return xyc[2] = "y" ? my : integer(xyc[2])
+        return xyc[2] = "y" ? msy : integer(xyc[2])
     }
     c(str) {
         xyc := strsplit(str, ' ')
-        sc := (xyc.length >= 3) ? integer(xyc[3]) : 0
-        return sc
+        return (xyc.length >= 3) ? integer(xyc[3]) : 0
     }
     d(str) {
-        return (x(str) - mx) ** 2 + (y(str) - (my)) ** 2
+        return (x(str) - msx) ** 2 + (y(str) - (msy)) ** 2
     }
     next(i) {
         return mod(a_index, len) + 1
@@ -171,3 +288,4 @@ cycleclick(xypos, cmp := "n") {
     }
 
 }
+*/

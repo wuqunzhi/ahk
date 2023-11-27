@@ -9,7 +9,7 @@ plaincopy() {
 }
 
 ; append to clipborad use "^c"
-appendCopy(sep := "`n",usekey:="^c") {
+appendCopy(sep := "`n", usekey := "^c") {
     tmp := A_Clipboard . sep
     A_Clipboard := ""
     send(usekey)
@@ -30,12 +30,12 @@ copyandshow(str, append := "", time := 2000) {
     if (append) {
         A_Clipboard .= (append . str)
         Sleep(200)
-        tip("附加到剪贴板: " str, time, 1, 1)
+        tipRB("附加到剪贴板: " str, time)
     } else {
         A_Clipboard := str
         if (InStr(str, '`n'))
             str := '`n' . str
-        tip("已复制: " str, time, 1, 1)
+        tipRB("已复制: " str, time)
     }
 }
 

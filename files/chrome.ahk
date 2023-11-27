@@ -2,6 +2,7 @@
 ; SetTitleMatchMode "RegEx"
 
 #HotIf WinActive(win_chrome)
+:*?zc:aft2:::after2022
 <!h:: send("^+{Tab}")
 <!l:: send("^{Tab}")
 <!<+h::A

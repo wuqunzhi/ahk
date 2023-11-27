@@ -22,6 +22,18 @@
 > 见files/*.ahk
 - 定义了在特定窗口生效的一系列快捷键
 
+## 热字串
+- 日期时间
+  - `]d` :: 当前日期 `YYYY-MM-DD`
+  - `]t` :: 当前时间 `hh:mm:ss`
+  - `]T` :: 当前日期时间 `YYYY-MM-DD hh:mm:ss`
+- 符号 (英文符号后面加`转中文符号)
+  - ``` .` ``` :: `。`
+  - ``` ,` ``` :: `，`
+  - ``` `` ``` :: `、`
+- `ch2` `Ch3` ... `ch9` : 选择输入第i个剪贴板历史
+- `CH2` `CH3` ... `CH9` : 将前i个剪贴板历史合并复制到剪贴板
+
 ## 输入法相关
 > 见ime.ahk
 - 左`shift` 强制切换为英文输入法
@@ -92,16 +104,19 @@
 
 - GUI_Normal mode:
   - `hjkl`, `a-hjkl`, `s-hjkl` 不同速率上下左右移动鼠标
+  - `wasd`, `<s-wasd>`, 不同速率上下左右滚动滑轮
   - `n` `q` 鼠标左键, `m` `e` 鼠标右键, `v` 按住左键, `o` 回车
-  - `w`, `s`, `<s-w>`, `<s-s>` 滚动滑轮 
+  - `gg`, `G`, `gh`, `gl`, `<sapce>-hjkl` 移动鼠标到最上下左右处
+  - `gm`, `zz`，`<c-s-c>` 鼠标居中
   - `:` 命令行模式(设置参数)
+  - `yy` 复制底部显示参数
+  - `-` `=` `<s-->` `<s-=>` `<a-->` `<a-=>` 调节 `对应的hjkl` 移动距离
   - `t` 进入 GUI_Window 模式
 
 - GUI_Window mode:
   - `hjkl`, `<s-hjkl>` 调节当前窗口位置
-  - `wasd`, `<s-wasd>`, `<a-wasd>` 调节当前窗口大小
+  - `wasd`, `<s-wasd>` 调节当前窗口大小
   - `m`, `n`, `r`, `c` 最大化,最小化,恢复,居中当前窗口
-  - `ws`, `<s-ws>` 滚动滑轮 
   - `:` 命令行模式(设置参数)
   - `t` 进入 GUI_Normal 模式
 
@@ -122,4 +137,4 @@
 
 - Edit_Oppend mode: (模拟vim OperatorPending模式)
   - 支持 `yw` `yy` `yj` `yk` `yH` `yL` `dw` `dd` `dj` `dk` `dH` `dL` `cw` `cc` `cj` `ck` `cH` `cL` 操作
-  - `esc` 进入Normal模式
+  - `esc` 回到Edit_Normal模式
