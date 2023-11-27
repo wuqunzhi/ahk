@@ -147,7 +147,6 @@ class zvim {
     static GN_showSettings() {
         tipLB(zvim.GN_getSettings())
     }
-
     static GN_getSettings() {
         return Format("
         (

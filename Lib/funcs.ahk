@@ -270,6 +270,8 @@ autorun(str := A_Clipboard) {
             run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
             or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
+            ; or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}")
+            or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*")
             run "chrome.exe " str
         ; %AppData%\code
         else if RegExMatch(str, "%(\w+)%(\\[^%]+)*", &matchs) and EnvGet(matchs[1]) {

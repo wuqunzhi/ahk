@@ -1,5 +1,6 @@
 #HotIf WinActive(win_cloudmusic)
 global wyy_h := 42
+global wyy_w := 50
 <^<+c:: vim_wyy(1)
 <^<!l:: clickb("300 784")
 ^m:: sbclick("40 800"), sleep(200), sbclick("1111 400 0")
@@ -7,16 +8,19 @@ global wyy_h := 42
 ^o:: clickb("54 43")
 ^f:: clickb("520 40"), vim_wyy(0)
 
+
 #HotIf WinActive(win_cloudmusic) and vim_wyy()
 i:: vim_wyy(0)
 q:: vim_wyy(0)
+n:: click()
 
 c:: winReset(1277, 837)
-h:: moveL(50)
-l:: moveR(50)
-~h & j::move(-50,50)
-a:: moveL(50)
-d:: moveR(50)
+h:: moveL(wyy_w)
+l:: moveR(wyy_w)
++h:: moveL(wyy_w * 4)
++l:: moveR(wyy_w * 4)
+a:: moveL(wyy_w)
+d:: moveR(wyy_w)
 j:: moveD(wyy_h)
 k:: moveU(wyy_h)
 +j:: moveD(wyy_h * 4)

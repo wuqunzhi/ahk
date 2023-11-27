@@ -115,6 +115,10 @@ class markWindow {
             return
         }
         winid := this.winids[idx]
+        if(!WinExist("ahk_id " winid)){
+            markWindow.mark(idx)
+            return
+        }
         WinActive("ahk_id " winid) ? AltTab() : WinActivate("ahk_id " winid)
     }
     static maymark() {

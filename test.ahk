@@ -23,15 +23,7 @@ SetMouseDelay(-1)
 f7:: Suspend
 #SuspendExempt false
 #Include private.ahk
-6:: test()
-7::{
-    a:=RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
-    tip(a)
-}
 HotIf()
-#HotIf GetKeyState("LShift", "p")
-#HotIf
-#l::tip(1)
 test(){
     ; winSetCaption(-1)
     lockComputer()
@@ -42,9 +34,8 @@ test(){
 
 }
 
-#HotIf 0
-WheelUp::w
-WheelDown::s
+#HotIf 1
+k::space
 #HotIf
 
 #HotIf 0

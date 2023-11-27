@@ -15,6 +15,7 @@
 <^n:: run("explorer.exe")
 <^o::!left
 <^i::!right
+<^b::!Up
 <!o::!Up
 <!i::!Down
 <!`:: runCmdInCurrentDir()

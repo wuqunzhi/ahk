@@ -115,8 +115,8 @@ GroupAdd("games", "ahk_class UnityWndClass")
 
 
 ; o==========o==========o==========o==========o==========o c-hjkl
+; <^b::^u ;!!!c-u c-d翻页
 <^u:: send("{Blink}{bs}")
-<^b::^u ;!!!c-u c-d翻页
 GroupAdd("noc_hjkl", win_vscode)
 GroupAdd("noc_hjkl", win_obsidian)
 GroupAdd("noc_hjkl", win_idea)
