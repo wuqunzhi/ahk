@@ -10,9 +10,9 @@
 SetTitleMatchMode("RegEx")
 CoordMode("ToolTip", "Screen")
 
-woz := WozManager()
+woz := WozUI()
 <^space:: woz.toggleGui(), KeyWait("space")
-~esc:: woz.hideGui(), removeAllTip(5)
+~esc:: woz.hideGui(), ti.removeAllTip(5)
 >^space:: ahkManager()
 win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
 #HotIf WinActive(win_woz)
@@ -21,10 +21,14 @@ NumpadEnter::tab
 <^l::tab
 #HotIf
 
-class WozManager {
+class WozUI {
     lastcmd := ""
     timer := this.updateOSD.Bind(this)
     g := this.creatGui()
+    showy := 200
+    UIHeight := 76
+    tipx := 770
+    maxTipLines := (A_ScreenHeight - A_TaskbarHeight - this.showy - this.UIHeight) // 20
     cmds := Map()
     __New() {
         this.addcmds()
@@ -34,12 +38,12 @@ class WozManager {
         addcmd(id, func := id, args := "", hint := id, flag := "", pattern := "") {
             this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
-        for filename in getfiles(dk2 "\*") {
+        for filename in getfiles(A_desktop2 "\*") {
             if (endwiths(filename, [".jpg", ".png", ".jpeg"]))
                 continue
             if (endwith(filename, ".lnk"))
                 filename := SubStr(filename, 1, StrLen(filename) - 4)
-            addcmd(filename, "run", dk2 "\" filename, "run " filename)
+            addcmd(filename, "run", A_desktop2 "\" filename, "run " filename)
         }
 
         addcmd("^k (.*)`t$", "kill", "fromid", "kill (.*)", "reg", "^k .*$")
@@ -106,7 +110,7 @@ class WozManager {
         ; addCommand("document", "run", userpath . "\Documents\", "C:\Users\79481\Documents")
         addcmd("system", "run", "C:\Windows\System\", "C:\Windows\System")
         addcmd("sys32", "run", "C:\Windows\System32\", "C:\Windows\System32")
-        addcmd("dk2", "run", dk2, "桌面2")
+        addcmd("dk2", "run", A_desktop2, "桌面2")
         addcmd("appdata", "run", A_userpath "\AppData\", "~\AppData")
         addcmd("roam", "run", A_AppData, "%AppData%")
         addcmd("host", "run", "C:\Windows\System32\drivers\etc", "host")
@@ -143,7 +147,7 @@ class WozManager {
     updateOSD() {
         ; 记录之前的输入与结果
         static text := ""
-        static hints := ""
+        static hints := []
         static uniqueMatch := "" ;唯一匹配的cmd
         static matchCommands := Map()
 
@@ -153,13 +157,14 @@ class WozManager {
         if (input == "")
             return
         if (input != text) { ;有变化才更新
+            linecount := 0
             text := input
-            matchCommands.Clear()
-            hints := "", uniqueMatch := ""
+            matchCommands.Clear(), hints := [], uniqueMatch := ""
             expr := startwith(text, "=") ? SubStr(text, 2) : text
             calres := eval(expr)
             if (calres) {
-                hints .= Format("{:-30}`t `n", calres)
+                hints.push(Format("{:-30}`t", calres))
+                linecount++
                 if (startwith(text, "=")) {
                     this.showHints(hints)
                     return
@@ -167,7 +172,9 @@ class WozManager {
             }
             for k, v in this.cmds {
                 if (k == text) { ;全匹配
-                    hints := Format("{:-30}`t# {}`n", k, v[3])
+                    hints := []
+                    hints.push(Format("{:-30}`t# {}", k, v[3]))
+                    linecount++
                     matchCommands.Clear()
                     matchCommands.Set(k, v), uniqueMatch := k
                     break
@@ -177,21 +184,25 @@ class WozManager {
                 pattern := v[5]
                 if (match(k, text, flag)) {
                     matchCommands.Set(k, v), uniqueMatch := k
-                    hints .= Format("{:-30}`t# {}`n", k, v[3])
+                    hints.push(Format("{:-30}`t# {}", k, v[3]))
                 } else {
                     ; 不匹配也可能需要补充hint
                     if (flag == "reg") {
                         if (RegExMatch(text, pattern))
-                            hints .= Format("{:-30}`t# {}`n", k, v[3])
+                            hints.push(Format("{:-30}`t# {}", k, v[3]))
                     }
                     else if (flag == "full" or flag == "^$") {
                         if (startwith(k, text))
-                            hints .= Format("{:-30}`t# {}`n", "^" k "$", v[3])
+                            hints.push(Format("{:-30}`t# {}", "^" k "$", v[3]))
                     }
                     else if (flag == "$") {
                         if (InStr(k, text))
-                            hints .= Format("{:-30}`t# {}`n", k "$", v[3])
+                            hints.push(Format("{:-30}`t# {}", k "$", v[3]))
                     }
+                }
+                if (hints.Length >= this.maxTipLines - 1) {
+                    hints.push('...')
+                    break
                 }
 
                 match(k, text, flag) {
@@ -245,32 +256,33 @@ class WozManager {
     }
 
     showHints(hints) {
+        res := strJoin(hints, '`n')
         static num := 1
         num := nextn(num, 3)
-        tip(hints, 500, 771, 276, num)
+        ti.ultimate(res, 500, this.tipx, this.showy + this.UIHeight, num)
     }
 
     deal(func, args) {
         try {
             keep := 0
             switch func {
-                case "run": run(args), tipLB("run " args)
-                case "runAs": run("*runAs " args), tipLB("*runAs " args)
-                case "Hrun": run(args, , "Hide"), tipLB("Hrun " args)
-                case "HrunAs": run("*runAs " args, , "Hide"), tipLB("*HrunAs " args)
+                case "run": run(args), ti.LB("run " args)
+                case "runAs": run("*runAs " args), ti.LB("*runAs " args)
+                case "Hrun": run(args, , "Hide"), ti.LB("Hrun " args)
+                case "HrunAs": run("*runAs " args, , "Hide"), ti.LB("*HrunAs " args)
                 case "runs":
                     for s in StrSplit(args, "|", ' ')
                         run(s)
-                    tipLB("runs: `n" StrReplace(args, "|", "`n"))
+                    ti.LB("runs: `n" StrReplace(args, "|", "`n"))
 
                 case "mousemove": click(args . " 0")
-                case "-v": tipRB(A_ScriptName " version AHK " A_AhkVersion)
+                case "-v": ti.RB(A_ScriptName " version AHK " A_AhkVersion)
                 case "restartexplorer": restartExplorer()
                 case "ps": processManager()
                 case "showintxt": showIntxt(A_Clipboard)
                 case "recycleEmpty":
                     if (MsgBox("是否清空回收站?", "", 1) = "ok")
-                        FileRecycleEmpty(), tipLB("FileRecycleEmpty")
+                        FileRecycleEmpty(), ti.LB("FileRecycleEmpty")
                 case "winclear": winclear()
                 case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
                 case "colorhook": colorg.toggleshow() ;!!!!!
@@ -281,10 +293,9 @@ class WozManager {
                     run("sysdm.cpl"), WinWaitActive("系统属性")
                     send("{ctrl Down}{Tab 2}{ctrl Up}!n")
                 case "ahkmanager": ahkManager()
-                case "ls": tipRB(ahk("ls"), 5000)
+                case "ls": ti.RB(ahk("ls"), 5000)
                 case "reload": run("*runAs woz.ahk") ;管理员
-                    ; case "quit": (MsgBox("quit?", , 1) == "OK") ? Exit : tip("asd")
-                case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : tip("asd")
+                case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : 0
                 case "nas": privatefunc.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": taskkill(args)
@@ -324,7 +335,7 @@ class WozManager {
     }
 
     showGui() {
-        this.g.Show("y200")
+        this.g.Show("y" . this.showy)
         this.g["edit1"].Value := "tab: " . this.lastcmd
         send("^a")
         SetTimer(this.timer, 200)

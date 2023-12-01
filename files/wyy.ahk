@@ -6,7 +6,7 @@ global wyy_w := 50
 ^m:: sbclick("40 800"), sleep(200), sbclick("1111 400 0")
 ^i:: sbclick("40 800"), sleep(200), sbclick("1111 400 0")
 ^o:: clickb("54 43")
-^f:: clickb("520 40"), vim_wyy(0)
+^f:: sbclick("520 40"),sbclick("666 40 0") vim_wyy(0)
 
 
 #HotIf WinActive(win_cloudmusic) and vim_wyy()

@@ -66,9 +66,6 @@ eval(str) {
     }
 }
 
-get_A_userPath() {
-    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
-}
 
 creatGui() {
     g := Gui()
@@ -95,12 +92,16 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
 
 ocr() {
     A_Clipboard := ""
-    ; Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
-    Run "tools/textshotw.exe eng+chi_sim"
-    ClipWait(5)
-    tipRB(A_Clipboard)
+    ; Run "tools/textshotw.exe eng+chi_sim"
 
+    send("^{f3}") ;
+    KeyWait("LButton", "D T5")
+    KeyWait("LButton")
+    ti.p(34)
+    ClipWait(5)
+    ti.RB(A_Clipboard)
 }
+
 
 RunWaitOne(command) {
     shell := ComObject("WScript.Shell")
@@ -143,7 +144,7 @@ toggleTouchpad() {
     static touchpad := 1
     touchpad := !touchpad
     run(a_windir "\system32\systemsettingsadminflows.exe enabletouchpad " touchpad)
-    tipMM("touchpad " touchpad)
+    ti.MM("touchpad " touchpad, 1000)
     ; send("#i")
     ; if (winwaitactive("ahk_exe applicationframehost.exe", , 5)) {
     ;     sleep(500)
@@ -172,7 +173,7 @@ toggleqqmusic() {
 togglegame() {
     global ingame
     ingame := !ingame
-    tip("ingame: " . ingame)
+    ti.p("ingame: " . ingame)
 }
 
 ; toggle key down and up (logical state)
@@ -187,7 +188,7 @@ togglekey(key := "LButton") {
 
 
 showIntxt(str) {
-    path := get_A_userPath() . "\showintxt.txt"
+    path := A_userPath . "\showintxt.txt"
     f := FileOpen(path, 'a')
     f.Write(str)
     f.Close()
@@ -342,7 +343,7 @@ transRaw(str := A_Clipboard, mode := 1) {
     ; str := RegExReplace(str, "m)$", """`",")
 
     A_Clipboard := str
-    tip("transRaw done")
+    ti.p("transRaw done")
 
 
     ; https://wyagd001.github.io/v2/docs/commands/Hotstring.htm#ExHelper
@@ -380,7 +381,7 @@ switchChromeAddress(mode := "ts gb") {
     send "^c"
     ClipWait
     tmp := A_Clipboard
-    tip(tmp, 2000)
+    ti.p(tmp, 2000)
     counts := 0
     ; i)不区分大小写 (?<!)后向否定预查,(?!)前向否定
     if (InStr(mode, "gb")) {
@@ -404,7 +405,7 @@ switchChromeAddress(mode := "ts gb") {
             tmp := StrReplace(tmp, "\zh", "\en", &count2)
         }
     }
-    tip(tmp, 2000)
+    ti.p(tmp, 2000)
     if (tmp = A_Clipboard) ;没有替换
         return
     A_Clipboard := tmp

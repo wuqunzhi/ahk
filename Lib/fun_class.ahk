@@ -17,7 +17,7 @@ class Brightness {
         curB := this.GetBrightness()
         newB := min(max(curB + d, 0), 100)
         this.SetBrightness(newB)
-        tip("" newB, , 900, 500)
+        ti.MM(newB, 1000)
     }
 }
 
@@ -36,7 +36,7 @@ class VirtualDesktop {
         index := VirtualDesktop.Current.Index
         rightNext := mod(index + 1, count)
         VirtualDesktop.GetAt(rightNext).Show()
-        tipLM(rightNext . "")
+        ti.LM(rightNext)
     }
     static showCycleLeft() {
         ; by wqz
@@ -44,7 +44,7 @@ class VirtualDesktop {
         index := VirtualDesktop.Current.Index
         leftNext := mod(index + count - 1, count)
         VirtualDesktop.GetAt(leftNext).Show()
-        tipLM(leftNext . "")
+        ti.LM(leftNext)
     }
     static Create() => (ComCall(10, this.IVirtualDesktopManagerInternal, "ptr*", &newDesktop := 0), VirtualDesktop(newDesktop))
     Id => (ComCall(4, this, "ptr", id := Buffer(16)), id.ToString := (_) => (DllCall('ole32\StringFromGUID2', "ptr", _, "ptr", buf := Buffer(78), "int", 39), StrGet(buf)), id)
@@ -140,7 +140,6 @@ class timerGUI {
     timer := this.UpdateTime.Bind(this)
 
     UpdateTime() {
-        ; tip("123", 5000, , , , 'r')
         this.deadline -= 1
         ; remainseconds := DateDiff(this.deadline, A_Now, "Seconds")
         life := this.deadline
@@ -221,5 +220,3 @@ class timerGUI {
         return WinExist("ahk_exe AutoHotkey64.exe ahk_id " this.g.Hwnd)
     }
 }
-
-

@@ -43,7 +43,7 @@ init() {
     SetMouseDelay(-1)
     SetCapsLockState "AlwaysOff"
     SetNumLockState "AlwaysOn"
-    tipLB(A_ScriptName " running. AHK " A_AhkVersion)
+    ti.LB(A_ScriptName " running. AHK " A_AhkVersion)
     SetTimer(police, 1000) ;! return
     disableWinL()
 }

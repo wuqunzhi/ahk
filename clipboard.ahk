@@ -10,7 +10,7 @@ AddToClipboardHistory() {
     clipboardHistory.Push(A_Clipboard)
 }
 
-writeAndShowCBH(filePath := get_A_userPath() . "\ClipboardHistory.txt", append := '`n') {
+writeAndShowCBH(filePath := A_userPath . "\ClipboardHistory.txt", append := '`n') {
     ; f := FileOpen(filePath, "w" )
     f := FileOpen(filePath, "w", "utf-8")
     for index, value in clipboardHistory
@@ -38,7 +38,7 @@ getClipboardHistory(last, append := "`n") {
     loop last {
         res .= clipboardHistory[len - (last - A_Index)] . append
     }
-    tipRM(res)
+    ti.RM(res)
     A_Clipboard := res
     ; send("+{Insert}")
 }

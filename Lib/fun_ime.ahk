@@ -76,7 +76,7 @@ setCusor(mode := 0) {
             ; DllCall("SystemParametersInfo", "UInt", SPI_SETCURSORS, "UInt", 0, "UInt", 0, "UInt", 0)
         }
     } catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
     return
 }
 
@@ -91,16 +91,14 @@ getImeId() {
         DetectHiddenWindows DetectSave
         return InputLocaleID
     } catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
-        ; MsgBox(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
 
 }
 ;设置当前窗口进程的输入法id; 微软拼音(无论中英文) 134481924 ; 美式键盘 67699721
 setImeId(IMEID) {
     try res := SendMessage(0x50, 0, IMEID, , "A")
     catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
-        ; MsgBox(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
     return res
 }
 ; 获取输入法mode EN:1,英:0,中:1或1025(中文标点)
@@ -116,7 +114,7 @@ getImeMode() {
         DetectHiddenWindows DetectSave
         Return res
     } catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
     ; 已知任务管理器会error
 }
 ; 设置输入法mode EN:1,英:0,中:1或1025(中文标点)
@@ -131,7 +129,7 @@ setImeMode(mode) {
         DetectHiddenWindows DetectSave
         Return res
     } catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
 }
 
 ; --------设置任务栏颜色
@@ -164,5 +162,5 @@ TaskBar_SetAttr(accent_state := 0, gradient_color := "0x01000000") {
             throw Error("Failed to set transparency / blur", -1)
         return true
     } catch as e
-        tip(type(e) " in " e.What ", which was called at line " e.Line)
+        log(e)
 }

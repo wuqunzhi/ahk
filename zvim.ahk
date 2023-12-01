@@ -19,20 +19,20 @@ class zvim {
                 winSpy_GW(), SetTimer(winSpy_GW, 250)
             case "e_n":
                 removeAllSpy()
-                tip("-- Edit Normal --", "oo", 0.45, 1, 16)
+                ti.MB("-- Edit Normal --", "oo")
             case "e_v":
                 removeAllSpy()
-                tip("-- Edit Visual --", "oo", 0.45, 1, 16)
+                ti.MB("-- Edit Visual --", "oo")
             case "e_i":
                 removeAllSpy()
-                tip("-- Edit Insert --", "oo", 0.45, 1, 16)
+                ti.MB("-- Edit Insert --", "oo")
             case "e_o":
                 removeAllSpy()
-                tip("-- Edit Oppend --", "oo", 0.45, 1, 16)
+                ti.MB("-- Edit Oppend --", "oo")
             default:    ;insert
                 removeAllSpy()
-                tip(, , , , 16)
-                tip("-- Insert --", 1000, 0.45, 1)
+                ; ti.MB()
+                ti.MB("-- Insert --", 1000)
         }
         removeAllSpy() {
             SetTimer(winSpy_GN, 0)
@@ -40,25 +40,25 @@ class zvim {
         }
         winSpy_GW() {
             str := Format("-- Gui Window {} --", debugInfo("wcpos"))
-            tip(str, "oo", 0.45, 1, 16)
+            ti.MB(str, "oo")
         }
         winSpy_GN() {
             str := Format("-- Gui Normal {} --", debugInfo(zvim.GN_showMode, ' '))
-            tip(str, "oo", 0.45, 1, 16)
+            ti.MB(str, "oo")
         }
     }
 
     static GN_adjust(parm, dif) {
         switch parm {
-            case 'x1': zvim.GN_x[1] += dif, tip(parm " " zvim.GN_x[1])
-            case 'x2': zvim.GN_x[2] += dif, tip(parm " " zvim.GN_x[2])
-            case 'x3': zvim.GN_x[3] += dif, tip(parm " " zvim.GN_x[3])
-            case 'y1': zvim.GN_y[1] += dif, tip(parm " " zvim.GN_y[1])
-            case 'y2': zvim.GN_y[2] += dif, tip(parm " " zvim.GN_y[2])
-            case 'y3': zvim.GN_y[3] += dif, tip(parm " " zvim.GN_y[3])
-            case 'xy1': zvim.GN_x[1] += dif, zvim.GN_y[1] += dif, tip(parm " " zvim.GN_x[1] " " zvim.GN_y[1])
-            case 'xy2': zvim.GN_x[2] += dif, zvim.GN_y[2] += dif, tip(parm " " zvim.GN_x[2] " " zvim.GN_y[2])
-            case 'xy3': zvim.GN_x[3] += dif, zvim.GN_y[3] += dif, tip(parm " " zvim.GN_x[3] " " zvim.GN_y[3])
+            case 'x1': zvim.GN_x[1] += dif, ti.p(parm " " zvim.GN_x[1])
+            case 'x2': zvim.GN_x[2] += dif, ti.p(parm " " zvim.GN_x[2])
+            case 'x3': zvim.GN_x[3] += dif, ti.p(parm " " zvim.GN_x[3])
+            case 'y1': zvim.GN_y[1] += dif, ti.p(parm " " zvim.GN_y[1])
+            case 'y2': zvim.GN_y[2] += dif, ti.p(parm " " zvim.GN_y[2])
+            case 'y3': zvim.GN_y[3] += dif, ti.p(parm " " zvim.GN_y[3])
+            case 'xy1': zvim.GN_x[1] += dif, zvim.GN_y[1] += dif, ti.p(parm " " zvim.GN_x[1] " " zvim.GN_y[1])
+            case 'xy2': zvim.GN_x[2] += dif, zvim.GN_y[2] += dif, ti.p(parm " " zvim.GN_x[2] " " zvim.GN_y[2])
+            case 'xy3': zvim.GN_x[3] += dif, zvim.GN_y[3] += dif, ti.p(parm " " zvim.GN_x[3] " " zvim.GN_y[3])
             default:
         }
     }
@@ -145,7 +145,7 @@ class zvim {
         }
     }
     static GN_showSettings() {
-        tipLB(zvim.GN_getSettings())
+        ti.LB(zvim.GN_getSettings())
     }
     static GN_getSettings() {
         return Format("

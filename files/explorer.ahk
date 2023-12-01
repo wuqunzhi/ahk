@@ -8,8 +8,10 @@
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
 :*x?b0zc:  c:: run("explore c:")
+:*x?b0zc:  o:: winO()
 :*x?b0zc:  ~:: run("explore " A_userpath)
 `;:: send("{enter}")
+
 
 #HotIf WinActive(win_explorer)
 <^n:: run("explorer.exe")
@@ -17,7 +19,9 @@
 <^i::!right
 <^b::!Up
 <!o::!Up
-<!i::!Down
+<!i::!left
+<!h::!Up
+<!l::!left
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
     try Run("cmd", WinGetTitle("A"))

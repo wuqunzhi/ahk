@@ -1,7 +1,8 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
-~esc:: removeAllTip()
-CapsLock Up:: send("{esc}") ;, tipLM("esc")
+f3:: ocr()
+~esc:: ti.removeAllTip()
+CapsLock Up:: send("{esc}") ;, ti.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
 <!CapsLock:: LoopRelatedWindows()
@@ -54,7 +55,7 @@ CapsLock & f::^!0 ;有道词典
 CapsLock & r:: transRaw() ;!todo?
 CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
 
-NumLock & Numpad1::winSetCaption(-1)
+NumLock & Numpad1:: winSetCaption(-1)
 
 tmp() {
     ; run("http://127.0.0.1:8080")
@@ -70,7 +71,7 @@ CapsLock & 6:: markWindow.toggle(6)
 CapsLock & 7:: markWindow.toggle(7)
 CapsLock & 8:: markWindow.toggle(8)
 CapsLock & 9:: markWindow.toggle(9)
->!l::lockComputer()
+>!l:: lockComputer()
 #l:: markWindow.toggle(11)
 #+l:: markWindow.mark(11)
 #+h:: markWindow.mark(12)
@@ -79,8 +80,8 @@ CapsLock & 9:: markWindow.toggle(9)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return
 
->!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
->!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tipRB(top ": " WinGetTitle("A"))
+>!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", ti.RB(top ": " WinGetTitle("A"))
+>!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", ti.RB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
@@ -97,7 +98,7 @@ CapsLock & alt:: return
 #w:: send("{blink}^!w"), SetTimer(focus_wx, -10)
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
-#y:: runOrActivate(win_cloudmusic, 'c', 'sa', dk2 "/wyy")
+#y:: runOrActivate(win_cloudmusic, 'c', 'sa', A_desktop2 "/wyy")
 
 ; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
 ; #+h::#+left
@@ -111,7 +112,6 @@ GroupAdd("games", "ahk_class UnityWndClass")
 #HotIf WinExist(win_steam)
 #s:: runOrActivate(win_steam, 'at', 'a')
 #HotIf
-
 
 
 ; o==========o==========o==========o==========o==========o c-hjkl
@@ -139,7 +139,6 @@ GroupAdd("noc_hjkl", win_woz)
 #HotIf
 
 ; o==========o==========o==========o==========o==========o c-w , c-s-w
-; ^+w:: WinClose("A"), tip("WinClose A", 1000, 0.5, 0.5)    ;关闭 to obsidian
 GroupAdd("noc_w", win_vscode)
 GroupAdd("noc_w", win_chrome)
 GroupAdd("noc_w", win_edge)
@@ -150,9 +149,9 @@ GroupAdd("noc_w", win_wt)       ; windows ternimal
 GroupAdd("noc_w", win_vim)      ; vim
 GroupAdd("noc_w", win_idea)     ; idea
 #HotIf !WinActive("ahk_group noc_w") and not ingame
-^+w:: pid := WinGetPID("A"), tipMM("taskkill " ProcessClose(pid))    ;强制关闭
+^+w:: pid := WinGetPID("A"), ti.MM("taskkill " ProcessClose(pid))    ;强制关闭
 ; WinKill("A"),
-^w:: WinClose("A"), tipLM("WinClose A")    ;关闭
+^w:: WinClose("A"), ti.LM("WinClose A")    ;关闭
 #HotIf
 
 ; o==========o==========o==========o==========o==========o a-`
@@ -175,7 +174,7 @@ CapsLock & Numpad3:: listWins(, showEach := true)
 CapsLock & Numpad4:: ahkManager()
 CapsLock & Numpad5:: copyandshow(debugInfo('w1'))
 CapsLock & q:: run("https://wyagd001.github.io/v2/docs/lib/" A_Clipboard ".htm")
-CapsLock & LButton:: tip(debugInfo('w'), 10000, 1, 1, 12)
+CapsLock & LButton:: ti.RB(debugInfo('w'), 10000)
 #HotIf
 
 

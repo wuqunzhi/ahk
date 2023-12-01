@@ -58,7 +58,7 @@ imgclick(file, back := 0, count := 1, offsetX := 10, offsetY := 10) {
         click(x + offsetX " " y + offsetY " " count)
         if (back)
             click(savex " " savey " 0")
-    } else tip("no found: " file)
+    } else ti.p("no found: " file)
     return res ? x + offsetX " " y + offsetY : 0
 }
 
