@@ -93,7 +93,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
                 case "run":
                     ; RunWait(args) 阻塞
                     run(args)
-                    ti.LB("run " args)
+                    tip.LB("run " args)
                     if (WinWait(winTitle, , 5, excludeTitle?))
                         WinActivate()
                 default:
@@ -117,7 +117,7 @@ class markWindow {
             ahkclass := WinGetClass("A")
             ahkexe := WinGetProcessName("A")
             this.winTitle[idx] := Format("{} ahk_class {} ahk_exe {}", title, ahkclass, ahkexe)
-            ti.RB(Format("mark {}: {}", idx, this.winTitle[idx]))
+            tip.RB(Format("mark {}: {}", idx, this.winTitle[idx]))
 
         } catch Error as e {
             logM(e)
@@ -163,7 +163,7 @@ class markWindow {
 
 countdown(seconds) {
     loop seconds {
-        ti.MM(seconds + 1 - A_Index, 950)
+        tip.MM(seconds + 1 - A_Index, 950)
         Sleep(1000)
     }
 }
@@ -381,7 +381,7 @@ taskkill(PIDOrName) {
     )
     PIDOrName := fullname.Get(PIDOrName, PIDOrName)
     str := ProcessClose(PIDOrName) ? "" : "failed"
-    ti.LB(Format("taskkill {} {}", PIDOrName, str))
+    tip.LB(Format("taskkill {} {}", PIDOrName, str))
 }
 
 
@@ -404,7 +404,7 @@ taskkill(PIDOrName) {
  */
 ahk(act, name := "", path := name) {
     showtip(str) {
-        ti.LB(str)
+        tip.LB(str)
     }
     if ( not endwith(name, ".ahk"))
         name .= ".ahk"

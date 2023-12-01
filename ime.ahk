@@ -6,8 +6,8 @@
 ; ; CapsLock + NumLock 全部窗口设置英文
 ; ; 中文时输入jkjk或按CapsLock切换为英文
 
->!Rshift:: setEnForce(), ti.p("美式键盘")
-CapsLock & NumLock:: setCHyingAll(), ti.p("全部窗口设置英文", 3000)
+>!Rshift:: setEnForce(), tip.p("美式键盘")
+CapsLock & NumLock:: setCHyingAll(), tip.p("全部窗口设置英文", 3000)
 ; >+.:: setCHzhong1025Force()
 
 global ingame
@@ -33,9 +33,9 @@ RShift:: isCHzhong() ? setCHyingForce() : setCHzhongForce()
 
 ; 中文时输入jkjk或按CapsLock切换为英文
 #HotIf isCHzhong() and not ingame
-CapsLock:: setCHyingForce(), ti.p("英")
-:*b0?x:jkjk:: setCHyingForce(), ti.p("英")
-:*b0?x:jjjj:: setCHyingForce(), ti.p("英")
+CapsLock:: setCHyingForce(), tip.p("英")
+:*b0?x:jkjk:: setCHyingForce(), tip.p("英")
+:*b0?x:jjjj:: setCHyingForce(), tip.p("英")
 ^l:: send("{blink}{enter}")    ; , setCHyingForce(), tip("英")
 #hotif
 

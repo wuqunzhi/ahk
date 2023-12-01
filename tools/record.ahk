@@ -7,10 +7,10 @@ CapsLock & f11:: {
     Global recording := !recording
     global recordstring
     if (recording) {
-        ti.LB("开始录制", 600000)
+        tip.LB("开始录制", 600000)
     } else {
         filepath := A_ScriptDir "\rec_" A_Hour A_MM A_Sec ".ahk"
-        ti.LB("结束录制:保存到 " filepath, 5000)
+        tip.LB("结束录制:保存到 " filepath, 5000)
         f := FileOpen(filepath, "a")
         head := "
         (
@@ -59,6 +59,7 @@ Click, 1264, 462, 0
 Sleep, 47
 Click, 1264, 462 Left, Up
 .......
+
 
 
 

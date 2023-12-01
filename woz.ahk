@@ -12,7 +12,7 @@ CoordMode("ToolTip", "Screen")
 
 woz := WozUI()
 <^space:: woz.toggleGui(), KeyWait("space")
-~esc:: woz.hideGui(), ti.removeAllTip(5)
+~esc:: woz.hideGui(), tip.removeAllTip(5)
 >^space:: ahkManager()
 win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
 #HotIf WinActive(win_woz)
@@ -259,30 +259,30 @@ class WozUI {
         res := strJoin(hints, '`n')
         static num := 1
         num := nextn(num, 3)
-        ti.ultimate(res, 500, this.tipx, this.showy + this.UIHeight, num)
+        tip.ultimate(res, 500, this.tipx, this.showy + this.UIHeight, num)
     }
 
     deal(func, args) {
         try {
             keep := 0
             switch func {
-                case "run": run(args), ti.LB("run " args)
-                case "runAs": run("*runAs " args), ti.LB("*runAs " args)
-                case "Hrun": run(args, , "Hide"), ti.LB("Hrun " args)
-                case "HrunAs": run("*runAs " args, , "Hide"), ti.LB("*HrunAs " args)
+                case "run": run(args), tip.LB("run " args)
+                case "runAs": run("*runAs " args), tip.LB("*runAs " args)
+                case "Hrun": run(args, , "Hide"), tip.LB("Hrun " args)
+                case "HrunAs": run("*runAs " args, , "Hide"), tip.LB("*HrunAs " args)
                 case "runs":
                     for s in StrSplit(args, "|", ' ')
                         run(s)
-                    ti.LB("runs: `n" StrReplace(args, "|", "`n"))
+                    tip.LB("runs: `n" StrReplace(args, "|", "`n"))
 
                 case "mousemove": click(args . " 0")
-                case "-v": ti.RB(A_ScriptName " version AHK " A_AhkVersion)
+                case "-v": tip.RB(A_ScriptName " version AHK " A_AhkVersion)
                 case "restartexplorer": restartExplorer()
                 case "ps": processManager()
                 case "showintxt": showIntxt(A_Clipboard)
                 case "recycleEmpty":
                     if (MsgBox("是否清空回收站?", "", 1) = "ok")
-                        FileRecycleEmpty(), ti.LB("FileRecycleEmpty")
+                        FileRecycleEmpty(), tip.LB("FileRecycleEmpty")
                 case "winclear": winclear()
                 case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
                 case "colorhook": colorg.toggleshow() ;!!!!!
@@ -293,7 +293,7 @@ class WozUI {
                     run("sysdm.cpl"), WinWaitActive("系统属性")
                     send("{ctrl Down}{Tab 2}{ctrl Up}!n")
                 case "ahkmanager": ahkManager()
-                case "ls": ti.RB(ahk("ls"), 5000)
+                case "ls": tip.RB(ahk("ls"), 5000)
                 case "reload": run("*runAs woz.ahk") ;管理员
                 case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : 0
                 case "nas": privatefunc.nas()

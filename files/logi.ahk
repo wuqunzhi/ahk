@@ -1,5 +1,5 @@
 #HotIf 0
 XButton1::^!home
-XButton2:: ti.p("a")
+XButton2:: tip.p("a")
 ; MButton:: return
 #HotIf

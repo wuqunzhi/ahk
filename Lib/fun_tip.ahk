@@ -1,4 +1,4 @@
-class ti {
+class tip {
     static removeTips := []
     static randomMaxIndex := 10
     static tipWidth := A_ScreenWidth // 20
@@ -15,7 +15,7 @@ class ti {
     static __New() {
         CoordMode("ToolTip", "Screen")
         loop 20
-            ti.removeTips.Push(ToolTip.bind(, , , A_Index))
+            tip.removeTips.Push(ToolTip.bind(, , , A_Index))
     }
     /**
      * @param x,y  
@@ -67,8 +67,8 @@ class ti {
                 x := !IsSet(x) ? unset : Random(1, A_ScreenWidth)
                 y := !IsSet(y) ? unset : Random(1, A_ScreenHeight)
             case "n": ; n
-                x := !IsSet(x) ? unset : genn(A_ScreenWidth, ti.tipWidth, x)
-                y := !IsSet(y) ? unset : genn(A_ScreenHeight - A_TaskbarHeight, ti.tipHeight, y)
+                x := !IsSet(x) ? unset : genn(A_ScreenWidth, tip.tipWidth, x)
+                y := !IsSet(y) ? unset : genn(A_ScreenHeight - A_TaskbarHeight, tip.tipHeight, y)
                 genxy(winx, winw, x) {
                     if (!(0 <= x and x <= 1))
                         winw := 1
@@ -81,58 +81,58 @@ class ti {
 
         ; which
         static c := 1
-        which := IsSet(which) ? which : Mod(c++, ti.randomMaxIndex) + 1
+        which := IsSet(which) ? which : Mod(c++, tip.randomMaxIndex) + 1
 
         ; ToolTip
         tooltip(str?, x?, y?, which)
 
         ; removeTip
-        SetTimer(ti.removeTips[which], 0)
+        SetTimer(tip.removeTips[which], 0)
         if (time != "oo")
-            SetTimer(ti.removeTips[which], -time)
+            SetTimer(tip.removeTips[which], -time)
     }
 
     static p(str := unset, time := 500) {
-        ti.ultimate(str?, time)
+        tip.ultimate(str?, time)
     }
     static mouse(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        ti.ultimate(str?, time, x?, y?, which?, 'm')
+        tip.ultimate(str?, time, x?, y?, which?, 'm')
     }
     static client(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        ti.ultimate(str?, time, x?, y?, which?, 'c')
+        tip.ultimate(str?, time, x?, y?, which?, 'c')
     }
     static random(str, time := 500, which := unset) {
-        ti.ultimate(str, time, , , which?, 'r')
+        tip.ultimate(str, time, , , which?, 'r')
     }
     static n(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        ti.ultimate(str?, time, x?, y?, which?, 'n')
+        tip.ultimate(str?, time, x?, y?, which?, 'n')
     }
     static LT(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 0, 0, ti.pos_lt)
+        tip.ultimate(str?, time, 0, 0, tip.pos_lt)
     }
     static MT(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 0.45, 0, ti.pos_mt)
+        tip.ultimate(str?, time, 0.45, 0, tip.pos_mt)
     }
     static RT(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 1, 0, ti.pos_rt)
+        tip.ultimate(str?, time, 1, 0, tip.pos_rt)
     }
     static LM(str := unset, time := 500) {
-        ti.ultimate(str?, time, 0, 0.5, ti.pos_lm)
+        tip.ultimate(str?, time, 0, 0.5, tip.pos_lm)
     }
     static MM(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 0.45, 0.5, ti.pos_mm)
+        tip.ultimate(str?, time, 0.45, 0.5, tip.pos_mm)
     }
     static RM(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 1, 0.5, ti.pos_rm)
+        tip.ultimate(str?, time, 1, 0.5, tip.pos_rm)
     }
     static LB(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 0, 1, ti.pos_lb)
+        tip.ultimate(str?, time, 0, 1, tip.pos_lb)
     }
     static MB(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 0.4, 1, ti.pos_mb)
+        tip.ultimate(str?, time, 0.4, 1, tip.pos_mb)
     }
     static RB(str := unset, time := 3000) {
-        ti.ultimate(str?, time, 1, 1, ti.pos_rb)
+        tip.ultimate(str?, time, 1, 1, tip.pos_rb)
     }
 
     static removeAllTip(num := 20) {
@@ -142,7 +142,7 @@ class ti {
 
     static tipFullScreen(str, septime := 50) {
         loop 20 {
-            ti.random(str, 2000, A_Index)
+            tip.random(str, 2000, A_Index)
             sleep(septime)
         }
     }
@@ -174,7 +174,7 @@ class ti {
 
 
 log(e) {
-    ti.MM(type(e) " in " e.What ", which was called at line " e.Line, 3000)
+    tip.MM(type(e) " in " e.What ", which was called at line " e.Line, 3000)
 }
 logM(e) {
     s := Format("{1}: {2}.`n`nFile:`t{3}`nLine:`t{4}`nWhat:`t{5}`nStack:`n{6}"

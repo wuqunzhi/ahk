@@ -25,7 +25,7 @@ WinTransPlus(num, hwnd := "A") {
     tp += num
     tp := tp >= 10 ? tp <= 255 ? tp : 255 : 10    ;透明会穿透
     WinSetTransparent(tp, hwnd)
-    ti.p("窗口透明度: " tp)
+    tip.p("窗口透明度: " tp)
 }
 
 ; shift + NumLock + 滑轮调节鼠标移动速度
@@ -41,7 +41,7 @@ MouseSpeedPlus(num) {
     if (MouseSpeed >= 0 and MouseSpeed <= 20)
         DllCall("SystemParametersInfo", "UInt", SPI_SETMOUSESPEED, "UInt", 0, "Ptr", MouseSpeed, "UInt", 0)    ;设置鼠标速度(1-20)
     MouseSpeed := MouseSpeed >= 0 ? MouseSpeed <= 20 ? MouseSpeed : 20 : 0
-    ti.p("鼠标速度: " MouseSpeed "`n(你需要10)")
+    tip.p("鼠标速度: " MouseSpeed "`n(你需要10)")
 }
 #HotIf
 

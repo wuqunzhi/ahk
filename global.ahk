@@ -1,7 +1,7 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
 f3:: ocr()
-~esc:: ti.removeAllTip()
+~esc:: tip.removeAllTip()
 CapsLock Up:: send("{esc}") ;, ti.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
@@ -80,8 +80,8 @@ CapsLock & 9:: markWindow.toggle(9)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return
 
->!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", ti.RB(top ": " WinGetTitle("A"))
->!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", ti.RB(top ": " WinGetTitle("A"))
+>!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
+>!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
@@ -149,9 +149,9 @@ GroupAdd("noc_w", win_wt)       ; windows ternimal
 GroupAdd("noc_w", win_vim)      ; vim
 GroupAdd("noc_w", win_idea)     ; idea
 #HotIf !WinActive("ahk_group noc_w") and not ingame
-^+w:: pid := WinGetPID("A"), ti.MM("taskkill " ProcessClose(pid))    ;强制关闭
+^+w:: pid := WinGetPID("A"), tip.MM("taskkill " ProcessClose(pid))    ;强制关闭
 ; WinKill("A"),
-^w:: WinClose("A"), ti.LM("WinClose A")    ;关闭
+^w:: WinClose("A"), tip.LM("WinClose A")    ;关闭
 #HotIf
 
 ; o==========o==========o==========o==========o==========o a-`
@@ -174,7 +174,7 @@ CapsLock & Numpad3:: listWins(, showEach := true)
 CapsLock & Numpad4:: ahkManager()
 CapsLock & Numpad5:: copyandshow(debugInfo('w1'))
 CapsLock & q:: run("https://wyagd001.github.io/v2/docs/lib/" A_Clipboard ".htm")
-CapsLock & LButton:: ti.RB(debugInfo('w'), 10000)
+CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 #HotIf
 
 

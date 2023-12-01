@@ -38,7 +38,7 @@ getClipboardHistory(last, append := "`n") {
     loop last {
         res .= clipboardHistory[len - (last - A_Index)] . append
     }
-    ti.RM(res)
+    tip.RM(res)
     A_Clipboard := res
     ; send("+{Insert}")
 }

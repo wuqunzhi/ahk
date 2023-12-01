@@ -17,7 +17,7 @@ class Brightness {
         curB := this.GetBrightness()
         newB := min(max(curB + d, 0), 100)
         this.SetBrightness(newB)
-        ti.MM(newB, 1000)
+        tip.MM(newB, 1000)
     }
 }
 
@@ -36,7 +36,7 @@ class VirtualDesktop {
         index := VirtualDesktop.Current.Index
         rightNext := mod(index + 1, count)
         VirtualDesktop.GetAt(rightNext).Show()
-        ti.LM(rightNext)
+        tip.LM(rightNext)
     }
     static showCycleLeft() {
         ; by wqz
@@ -44,7 +44,7 @@ class VirtualDesktop {
         index := VirtualDesktop.Current.Index
         leftNext := mod(index + count - 1, count)
         VirtualDesktop.GetAt(leftNext).Show()
-        ti.LM(leftNext)
+        tip.LM(leftNext)
     }
     static Create() => (ComCall(10, this.IVirtualDesktopManagerInternal, "ptr*", &newDesktop := 0), VirtualDesktop(newDesktop))
     Id => (ComCall(4, this, "ptr", id := Buffer(16)), id.ToString := (_) => (DllCall('ole32\StringFromGUID2', "ptr", _, "ptr", buf := Buffer(78), "int", 39), StrGet(buf)), id)
