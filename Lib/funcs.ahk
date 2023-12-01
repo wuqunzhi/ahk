@@ -303,7 +303,7 @@ getfiles(dir, mode := "") {
 focus_wx() {
     win_wechat := "ahk_exe WeChat.exe ahk_class WeChatMainWndForPC"
     if WinWaitActive(win_wechat, , 1) {
-        sbclick("300 360 0")
+        clk.blink("300 360 0")
     }
 }
 
@@ -436,12 +436,12 @@ switchChromeAddress(mode := "ts gb") {
  * @returns {string}   
  * 显示鼠标位置,窗口位置,输入法消息  
  */
-debugInfo(mode, sep := '`n') {
+debugInfo(mode, appendsep := '`n') {
     if (InStr(mode, ',') or InStr(mode, ' ')) {
         loop parse mode, ", " {
             if (A_LoopField == " " or A_LoopField == ",")
                 continue
-            res .= debugInfo(A_LoopField) . sep
+            res .= debugInfo(A_LoopField) . appendsep
         }
         return res
     }

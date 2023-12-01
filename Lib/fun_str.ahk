@@ -20,6 +20,15 @@ endwith(abcd, cd, caseSitive := false) {
     return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
 }
 
+reverseList(lst) {
+    res := []
+    len := lst.Length
+    loop lst.Length {
+        res.Push(lst[len - A_Index + 1])
+    }
+    return res
+}
+
 startwith(abcd, ab, caseSitive := false) {
     return InStr(abcd, ab, caseSitive) == 1
 }

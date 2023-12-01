@@ -114,7 +114,7 @@ class zvim {
             if (args[1] == "go") {
                 x := args[2], y := args[3]
                 rel := (args.Length == 4) ? args[4] : 's'
-                clickRel(Format("{} {} 0", x, y), rel)
+                clk.Rel(Format("{} {} 0", x, y), rel)
                 return
             }
             if (args[1] == "set") {
@@ -182,14 +182,14 @@ class zvim {
             case " k": moveUMost()
             case " h": moveLMost()
             case " l": moveRMost()
-            case " m": focusCenter()
+            case " m": clk.center()
             case "gg": moveUMost()
             case "gh": moveLMost()
             case "gH": moveLMost()
             case "gl": moveRMost()
             case "gL": moveRMost()
-            case "zz": focusCenter()
-            case "gm": focusCenter()
+            case "zz": clk.center()
+            case "gm": clk.center()
         }
         zvim.go("g_n")
     }
@@ -243,6 +243,8 @@ l:: moveR(zvim.GN_x[2])
 +k:: moveU(zvim.GN_y[3])
 +h:: moveL(zvim.GN_y[3])
 +l:: moveR(zvim.GN_y[3])
+Numpad5:: copyandshow(debugInfo(zvim.GN_showMode))
+Numpad8:: clk.k(A_Clipboard)
 ; ~s & a::
 ; ~w & a:: zvim.GN_multiMove('wa')
 ; ~a & w::
@@ -255,7 +257,7 @@ space:: zvim.GN_oppend(' ')
 +g:: moveDMost()
 g:: zvim.GN_oppend('g')
 z:: zvim.GN_oppend('z')
-<^<+c:: focusCenter(0)
+<^<+c:: clk.center(0)
 ; -------------------- 设置调整
 y:: zvim.GN_oppend('y')
 -:: zvim.GN_adjust('xy2', -5)
