@@ -1,6 +1,6 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
-f3:: ocr()
+; f3:: ocr()
 ~esc:: tip.removeAllTip()
 CapsLock Up:: send("{esc}") ;, ti.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
@@ -79,7 +79,8 @@ CapsLock & 9:: markWindow.toggle(9)
 #+;:: markWindow.mark(13)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return
-
+#p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
+#+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 >!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
@@ -107,6 +108,7 @@ CapsLock & alt:: return
 GroupAdd("games", "ahk_class Engine")
 GroupAdd("games", "ahk_class YYGameMakerYY")
 GroupAdd("games", "ahk_class UnityWndClass")
+#HotIf WinActive("ahk_group games")
 #HotIf WinExist("ahk_group games")
 #g:: runOrActivate("ahk_group games", 'at', 'a')
 #HotIf WinExist(win_steam)
@@ -155,7 +157,8 @@ GroupAdd("noc_w", win_idea)     ; idea
 #HotIf
 
 ; o==========o==========o==========o==========o==========o a-`
-GroupAdd("noa_quote", win_vscode)  ; 不在谷歌,vscode
+GroupAdd("noa_quote", win_vscode)
+GroupAdd("noa_quote", win_idea)  ; 不在谷歌,vscode
 #HotIf !WinActive("ahk_group noa_quote")
 <!`:: run("cmd", A_Desktop)
 #HotIf

@@ -1,4 +1,4 @@
-#HotIf WinActive(win_explorer) and !inputfoucs()
+#HotIf WinActive(win_explorer) and !inputfocus()
 ; :*x?b0zc:yy:: copyandshow(WinGetTitle("A"))
 ~y:: {
     stupid := A_TimeSincePriorHotkey = "" ? 501 : A_TimeSincePriorHotkey    ;V2的bug
@@ -24,9 +24,9 @@
 <!l::!left
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
-    try Run("cmd", WinGetTitle("A"))
+    try Run(A_ComSpec, WinGetTitle("A"))
     catch as e
-        run("cmd", A_userpath)
+        run(A_ComSpec, A_userpath)
 }
 
 #HotIf

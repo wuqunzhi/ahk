@@ -34,8 +34,11 @@ init()
 #Include "files\wyy.ahk"
 #Include "files\qqmusic.ahk"
 #Include "global.ahk" ;放最后
+#HotIf 1
+; XButton1::^!home
+; XButton2:: tip.p("a")
+MButton::Numpad2
 #HotIf
-
 
 init() {
     SetTitleMatchMode("RegEx")    ;! case sensitive

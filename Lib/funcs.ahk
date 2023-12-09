@@ -14,7 +14,7 @@ class privatefunc {
     static nas() {
         winT := Format(".*{}.* {}", private.nasIP, win_explorer)
         cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
-        runOrActivate(winT, 'm', 'a', cmd)
+        runOrActivate(winT, 'at', 'a', cmd)
     }
 }
 ; 通过注册表启动锁屏
@@ -31,10 +31,33 @@ lockComputer() {
     ; 4 = 强制
     ; 8 = 关闭电源
 }
+
+; 切换是否合并任务栏按钮
+toggleTaskbarCombineButtons() {
+    ;-----------------------------------------------------------------
+    ; https://www.reddit.com/r/sysadmin/comments/16pptty/gporeg_entry_for_combine_taskbar_button_and_hide/
+    ; 0=Always
+    ; 1=When Taskbar Full
+    ; 2=Never
+    ;-----------------------------------------------------------------
+    num := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")
+    newNum := num == 0 ? 2 : 0
+    RegWrite(newNum, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")
+    ; REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /V MMTaskbarGlomLevel /T REG_DWORD /D 2 /F
+    restartExplorer()
+}
+
 ; 通过写注册表禁用winl锁屏
 disableWinL() {
     RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
-    ; MsgBox("unlock")
+}
+
+;restart explorer.exe
+restartExplorer() {
+    run(A_CWD "\tools\restartexplorer.bat", , 'Hide')
+    ; RunWait("taskkill /im explorer.exe /f", , "Hide")
+    ; Sleep(2000)
+    ; run("C:\Windows\explorer.exe")
 }
 
 ; 关闭一些无关紧要的窗口,减少任务栏占用
@@ -92,15 +115,16 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
 }
 
 ocr() {
-    A_Clipboard := ""
-    ; Run "tools/textshotw.exe eng+chi_sim"
+    tip.p("unset")
+    ; A_Clipboard := ""
+    ; ; Run "tools/textshotw.exe eng+chi_sim"
 
-    send("^{f3}") ;
-    KeyWait("LButton", "D T5")
-    KeyWait("LButton")
-    tip.p(34)
-    ClipWait(5)
-    tip.RB(A_Clipboard)
+    ; send("^{f3}") ;
+    ; KeyWait("LButton", "D T5")
+    ; KeyWait("LButton")
+    ; tip.p(34)
+    ; ClipWait(5)
+    ; tip.RB(A_Clipboard)
 }
 
 
@@ -134,7 +158,7 @@ translate(text := A_Clipboard) {
 
 
 ; !up to now, only work in explorer, notepad
-inputfoucs() {
+inputfocus() {
     ; return a_cursor = "ibeam"
     return caretgetpos(&x, &y)
 }
@@ -266,8 +290,12 @@ getEnvPath(env) {
 autorun(str := A_Clipboard) {
     str := trim(str)
     try {
-        if RegExMatch(str, "^(C:|D:|E:|F:)")
+        ; RegExReplace(str, '^C:\User\.*?\', 'C:\User\79481\')
+        if RegExMatch(str, "^(C:|D:|E:|F:)") {
+            str := RegExReplace(str, 'C:\\Users\\.*?\\', 'C:\Users\79481\')
+            str := RegExReplace(str, 'C:/Users/.*?/', 'C:/Users/79481/')
             run "explorer " str
+        }
         else if startwith(str, "localhost:")
             run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
@@ -353,14 +381,6 @@ transRaw(str := A_Clipboard, mode := 1) {
     ; ClipContent := StrReplace(ClipContent, "`n", "``r")
     ; ClipContent := StrReplace(ClipContent, "`t", "``t")
     ; ClipContent := StrReplace(ClipContent, "`;", "```;")
-}
-
-
-;restart explorer.exe
-restartExplorer() {
-    RunWait("taskkill /im explorer.exe /f", , "Hide")
-    Sleep(2000)
-    runwait("C:\Windows\explorer.exe")
 }
 
 

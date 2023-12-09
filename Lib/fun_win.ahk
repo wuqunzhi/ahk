@@ -1,18 +1,18 @@
-AltTab(includeDesktop := false) {
+AltTab(back2Desktop := false) {
     idList := WinGetList()
     for id in idList {
-        if (includeDesktop && isDesktop(id)) {
+        if (back2Desktop && isDesktop(id)) {
             winToggleDesktop() ;单窗口时能够回到桌面
             break
-            if (WinActive("ahk_id " id))
-                continue
-            If (WinGetTitle("ahk_id " id) == "")
-                continue
-            If (!IsWindow(id))
-                continue
-            WinActivate("ahk_id " id)
-            break
         }
+        if (WinActive("ahk_id " id))
+            continue
+        If (WinGetTitle("ahk_id " id) == "")
+            continue
+        If (!IsWindow(id))
+            continue
+        WinActivate("ahk_id " id)
+        break
     }
 }
 ;-----------------------------------------------------------------
@@ -75,6 +75,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             }
             return
         }
+
         if (WinExist(winTitle, , excludeTitle?)) {
             ; t("e")
             switch ifexist {
@@ -83,6 +84,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             }
             return
         }
+
         if (!WinExist(winTitle, , excludeTitle?)) {
             ; ti.pp("!e")
             if (!ifnoexist)
@@ -94,8 +96,8 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
                     ; RunWait(args) 阻塞
                     run(args)
                     tip.LB("run " args)
-                    if (WinWait(winTitle, , 5, excludeTitle?))
-                        WinActivate()
+                    ; if (WinWait(winTitle, , 5, excludeTitle?))
+                    ; WinActivate()
                 default:
             }
             return
@@ -144,7 +146,7 @@ class markWindow {
             markWindow.mark(idx)
             return
         }
-        WinActive("ahk_id " winid) ? AltTab(true) : WinActivate("ahk_id " winid)
+        WinActive("ahk_id " winid) ? AltTab() : WinActivate("ahk_id " winid)
     }
     static maymark() {
 
@@ -356,30 +358,20 @@ ahkManager() {
     }
 }
 
+; ps
 processManager() {
-    namemap := Map("qm", "QQMusic.exe",
-        "wyy", "cloudmusic.exe",
-        "clash", "clash.exe"
-    )
     str := "杀死进程"
-    for k, v in namemap {
+    for k, v in shortName {
         str .= k . "`t`t" . v . "`n"
     }
     IB := InputBox(str, , "w600 h240") ;"w640 h480"
     res := Trim(IB.Value)
-    taskkill(namemap.get(res, "NameNoExist"))
+    mytaskkill(res)
 }
 
 ; 杀死进程
-taskkill(PIDOrName) {
-    static fullname := Map(
-        "qm", "QQMusic.exe",
-        "wyy", "cloudmusic.exe",
-        "wx", "WeChat.exe",
-        "clash", "Clash for Windows.exe",
-        "yd", "YoudaoDict.exe",
-    )
-    PIDOrName := fullname.Get(PIDOrName, PIDOrName)
+mytaskkill(PIDOrName) {
+    PIDOrName := shortName.Get(PIDOrName, PIDOrName)
     str := ProcessClose(PIDOrName) ? "" : "failed"
     tip.LB(Format("taskkill {} {}", PIDOrName, str))
 }

@@ -23,20 +23,11 @@ SetMouseDelay(-1)
 f7:: Suspend
 #SuspendExempt false
 #Include private.ahk
-b := "123`n4536`n789"
-b := "1234536789"
-9:: tip.n(b, 2000, -9, 0)
-8:: tip.n(b, 2000, -8, 0)
-7:: tip.n(b, 2000, -7, 0)
-6:: tip.n(b, 2000, -6, 0)
-5:: tip.n(b, 2000, -5, 0)
-4:: tip.n(b, 2000, -4, 0)
-3:: tip.n(b, 2000, -3, 0)
-2:: tip.n(b, 2000, -2, 0)
-0:: tip.n(b, 2000, -1, -1)
+str := 'C:/Users/user/AppData/Local/Packages/CanonicalGroupLimited/LocalState/ext4.vhdx'
+str := RegExReplace(str, 'C:\\Users\\.*?\\', 'C:\Users\79481\')
+str := RegExReplace(str, 'C:/Users/.*?/', 'C:/Users/79481/')
 
-test() {
-}
+
 /*
 ----------------------------------------
 LWin & h::

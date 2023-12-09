@@ -15,10 +15,6 @@ strJoin(strs, sep := ", ") {
     return substr(res, 1, -strlen(sep))
 }
 
-endwith(abcd, cd, caseSitive := false) {
-    idx := InStr(abcd, cd, caseSitive)
-    return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
-}
 
 reverseList(lst) {
     res := []
@@ -32,6 +28,10 @@ reverseList(lst) {
 startwith(abcd, ab, caseSitive := false) {
     return InStr(abcd, ab, caseSitive) == 1
 }
+endwith(abcd, cd, caseSitive := false) {
+    idx := InStr(abcd, cd, caseSitive)
+    return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
+}
 
 endwiths(abcd, strlist, caseSitive := false) {
     for str in strlist
@@ -39,12 +39,29 @@ endwiths(abcd, strlist, caseSitive := false) {
             return true
     return false
 }
-
 startwiths(abcd, strlist, caseSitive := false) {
     for str in strlist
         if (startwith(abcd, str, caseSitive))
             return true
     return false
+}
+rtrims(abcd, strlist, caseSitive := false) {
+    for str in strlist
+        if (endwith(abcd, str, caseSitive))
+            if (StrLen(abcd) == StrLen(str))
+                return ''
+            else
+                return SubStr(abcd, 1, StrLen(abcd) - StrLen(str))
+    return abcd
+}
+ltrims(abcd, strlist, caseSitive := false) {
+    for str in strlist
+        if (startwith(abcd, str, caseSitive))
+            if (StrLen(abcd) == StrLen(str))
+                return ''
+            else
+                return SubStr(abcd, StrLen(str) + 1, StrLen(abcd) - StrLen(str))
+    return abcd
 }
 
 ; return str*=num

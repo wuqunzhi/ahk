@@ -26,17 +26,22 @@ showcopy(delay := 200, time := 1000) {
 }
 
 ;copy str and tip
-copyandshow(str, append := "", time := 2000) {
-    if (append) {
-        A_Clipboard .= (append . str)
-        Sleep(200)
-        tip.RB("附加到剪贴板: " str, time)
-    } else {
-        A_Clipboard := str
-        if (InStr(str, '`n'))
-            str := '`n' . str
+copyandshow(str, time := 2000, x := unset, y := unset) {
+    A_Clipboard := str
+    if (InStr(str, '`n'))
+        str := '`n' . str
+    if (isSet(x) && isSet(y))
+        tip.pp("已复制: " str, time, x?, y?)
+    else
         tip.RB("已复制: " str, time)
-    }
+}
+
+appendCopyAndShow(str, append := '`n', time := 2000, x := unset, y := unset) {
+    A_Clipboard .= (append . str)
+    if (isSet(x) && isSet(y))
+        tip.pp("附加到剪贴板: " str, time, x?, y?)
+    else
+        tip.RB("附加到剪贴板: " str, time)
 }
 
 ; time时间内按下key复制str到剪贴板

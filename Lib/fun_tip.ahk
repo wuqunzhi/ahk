@@ -43,7 +43,11 @@ class tip {
      * ; 0 (40)  
      * ;-----------------------  
      */
-    static ultimate(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
+
+    __New(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
+        tip.pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's')
+    }
+    static pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
         if (!IsSet(str)) {
             ToolTip(, , , which?)
             return
@@ -93,46 +97,50 @@ class tip {
     }
 
     static p(str := unset, time := 500) {
-        tip.ultimate(str?, time)
+        tip.pp(str?, time)
     }
     static mouse(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.ultimate(str?, time, x?, y?, which?, 'm')
+        tip.pp(str?, time, x?, y?, which?, 'm')
     }
     static client(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.ultimate(str?, time, x?, y?, which?, 'c')
+        tip.pp(str?, time, x?, y?, which?, 'c')
     }
     static random(str, time := 500, which := unset) {
-        tip.ultimate(str, time, , , which?, 'r')
+        tip.pp(str, time, , , which?, 'r')
     }
     static n(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.ultimate(str?, time, x?, y?, which?, 'n')
+        tip.pp(str?, time, x?, y?, which?, 'n')
     }
     static LT(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 0, 0, tip.pos_lt)
+        tip.pp(str?, time, 0, 0, tip.pos_lt)
     }
     static MT(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 0.45, 0, tip.pos_mt)
+        tip.pp(str?, time, 0.45, 0, tip.pos_mt)
     }
     static RT(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 1, 0, tip.pos_rt)
+        tip.pp(str?, time, 1, 0, tip.pos_rt)
     }
     static LM(str := unset, time := 500) {
-        tip.ultimate(str?, time, 0, 0.5, tip.pos_lm)
+        tip.pp(str?, time, 0, 0.5, tip.pos_lm)
     }
     static MM(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 0.45, 0.5, tip.pos_mm)
+        tip.pp(str?, time, 0.45, 0.5, tip.pos_mm)
     }
     static RM(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 1, 0.5, tip.pos_rm)
+        tip.pp(str?, time, 1, 0.5, tip.pos_rm)
     }
     static LB(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 0, 1, tip.pos_lb)
+        tip.pp(str?, time, 0, 1, tip.pos_lb)
     }
     static MB(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 0.4, 1, tip.pos_mb)
+        tip.pp(str?, time, 0.4, 1, tip.pos_mb)
     }
     static RB(str := unset, time := 3000) {
-        tip.ultimate(str?, time, 1, 1, tip.pos_rb)
+        tip.pp(str?, time, 1, 1, tip.pos_rb)
+    }
+
+    static removeTip(num) {
+        ToolTip(, , , num)
     }
 
     static removeAllTip(num := 20) {
