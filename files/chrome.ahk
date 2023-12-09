@@ -2,13 +2,12 @@
 ; SetTitleMatchMode "RegEx"
 
 #HotIf WinActive(win_chrome)
-:*?zc:aft2:::after2022
+; :*?zc:aft2:::after2022
 <!h:: send("^+{Tab}")
 <!l:: send("^{Tab}")
 <!<+h::A
 <!<+l::D
 <^+h:: send("^t"), setCHyingForce(), sleep(200), send("chrome://history/{enter}")
-<!s:: send("!d* ")
 ^o::!left
 ^i::!right
 CapsLock & t:: switchChromeAddress("gb")
@@ -40,10 +39,7 @@ GroupAdd("vimiumfix", "^设置 - Google Chrome")
 #HotIf WinActive(win_chrome " ahk_group vimiumfix") and !vim_Chrome()
 :*x?b0z:asdasd:: vim_Chrome(-1)
 
-#HotIf WinActive( win_chrome " ahk_group vimiumfix") and vim_Chrome()
-
-;keybindings please don't conflict with zvim
-; $t:: send("^t") ;confliuiot with cap t
+#HotIf WinActive(win_chrome " ahk_group vimiumfix") and vim_Chrome()
 i:: vim_Chrome(0)
 q:: vim_Chrome(0)
 a:: send("^+{Tab}")
@@ -55,7 +51,7 @@ w:: send("{wheelup}")
 s:: send("{wheeldown}")
 #HotIf
 
-; :*x?b0z:c1:: imgclick("img/chrome_onetab.bmp", 1)
+; :*x?b0z:c1:: clk.img("img/chrome_onetab.bmp", 1)
 
 ; h := 110
 ; capslock & 1:: click("51, " h)
@@ -69,16 +65,6 @@ s:: send("{wheeldown}")
     colors := "0x5F6368 0xFA9031  0x1A73E8 0xD93025 0xF9ab00 0x188038 0xD01884 0xbF7dF8 0x007B83 0xFA903E"
     ; MouseGetPos(&x, &y)
     if (InStr(colors, PixelGetColor(28, 18)))
-        clickB("28,18")
+        clk.back("28,18")
     ; Click(x "," y ",0")
 } */
-; {
-;     ;Cap e 浏览器转换ahk v1和v2
-;     MouseGetPos &x,
-;         &y
-;     Click "540, 157"
-;     sleep 200
-;     Click "540, 203"
-;     sleep 200
-;     click x . "," . y ",0"
-; }

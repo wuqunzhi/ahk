@@ -6,9 +6,9 @@
 ; ; CapsLock + NumLock 全部窗口设置英文
 ; ; 中文时输入jkjk或按CapsLock切换为英文
 
->!Rshift:: setEnForce(), tip("美式键盘")
-CapsLock & NumLock:: setCHyingAll(), tip("全部窗口设置英文", 3000)
-; >+.:: setCHzhong1025Force(), tip("中1025") ;!no work
+>!Rshift:: setEnForce(), tip.p("美式键盘")
+CapsLock & NumLock:: setCHyingAll(), tip.p("全部窗口设置英文", 3000)
+; >+.:: setCHzhong1025Force()
 
 global ingame
 #hotif not ingame
@@ -33,9 +33,9 @@ RShift:: isCHzhong() ? setCHyingForce() : setCHzhongForce()
 
 ; 中文时输入jkjk或按CapsLock切换为英文
 #HotIf isCHzhong() and not ingame
-CapsLock:: setCHyingForce(), tip("英")
-:*b0?x:jkjk:: setCHyingForce(), tip("英")
-:*b0?x:jjjj:: setCHyingForce(), tip("英")
+CapsLock:: setCHyingForce(), tip.p("英")
+:*b0?x:jkjk:: setCHyingForce(), tip.p("英")
+:*b0?x:jjjj:: setCHyingForce(), tip.p("英")
 ^l:: send("{blink}{enter}")    ; , setCHyingForce(), tip("英")
 #hotif
 
@@ -45,7 +45,7 @@ watchIfAchange() {
     global curA := WinExist("A")
     if (preA != curA)
         if isCHzhong()
-            tip("中", , A_ScreenWidth // 2, A_ScreenHeight // 2)    ;setCusor(1)
+            ti.p("中", , A_ScreenWidth // 2, A_ScreenHeight // 2)    ;setCusor(1)
     ; Else
     ;     setCusor(0)
     preA := curA

@@ -23,20 +23,39 @@ SetMouseDelay(-1)
 f7:: Suspend
 #SuspendExempt false
 #Include private.ahk
-HotIf()
-test(){
-    ; winSetCaption(-1)
-    lockComputer()
-    ; RegWrite "Test Value", "REG_SZ", "HKEY_LOCAL_MACHINE\SOFTWARE\TestKey", "MyValueName"
-    ; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System","DisableLockWorkstation")
-    ; tip(A_ComSpec)
-    ; run('code D:\vscodeDeemos\Note' )
+str := 'C:/Users/user/AppData/Local/Packages/CanonicalGroupLimited/LocalState/ext4.vhdx'
+str := RegExReplace(str, 'C:\\Users\\.*?\\', 'C:\Users\79481\')
+str := RegExReplace(str, 'C:/Users/.*?/', 'C:/Users/79481/')
 
+
+/*
+----------------------------------------
+LWin & h::
+if toggle := !toggle
+{
+WinHide ahk_class Shell_TrayWnd
+WinHide Start ahk_class Button
+}
+else
+{
+WinShow ahk_class Shell_TrayWnd
+WinShow Start ahk_class Button
+}
+return
+----------------------------------------
+*/
+; winSetCaption(-1)
+; RegWrite "Test Value", "REG_SZ", "HKEY_LOCAL_MACHINE\SOFTWARE\TestKey", "MyValueName"
+; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System","DisableLockWorkstation")
+; tip(A_ComSpec)
+; run('code D:\vscodeDeemos\Note' )
+
+toggleDesktop() {
+    ; https://learn.microsoft.com/en-us/windows/win32/shell/shell-application
+    ; ͬwin+d
+    ComObject("Shell.Application").ToggleDesktop()
 }
 
-#HotIf 1
-k::space
-#HotIf
 
 #HotIf 0
 XButton1::^!,
@@ -50,7 +69,6 @@ RButton:: return
 
 
 ; 7:: Send("{text}?! ")
-
 
 
 ; ==========o==========o==========o==========o==========o other

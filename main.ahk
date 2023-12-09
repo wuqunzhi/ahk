@@ -34,16 +34,24 @@ init()
 #Include "files\wyy.ahk"
 #Include "files\qqmusic.ahk"
 #Include "global.ahk" ;放最后
+#HotIf 1
+; XButton1::^!home
+; XButton2:: tip.p("a")
+MButton::Numpad2
 #HotIf
-
 
 init() {
     SetTitleMatchMode("RegEx")    ;! case sensitive
-    CoordMode("ToolTip", "Screen") ;v2开始 croodMode 默认全是client
+    ;v2开始 croodMode 默认全是client
+    CoordMode("ToolTip", "Screen") ;作用于ToolTip.
+    CoordMode("Pixel", "Client")   ;作用于PixelGetColor, PixelSearch 和 ImageSearch.
+    CoordMode("Caret", "Client")   ;作用于CaretGetPos.
+    CoordMode("Menu", "Client")    ;作用于Menu.Show 方法, 当为其指定坐标时.
+    CoordMode("Mouse", "Client")   ;作用于MouseGetPos, Click 和 MouseMove, MouseClick 和 MouseClickDrag.
     SetMouseDelay(-1)
     SetCapsLockState "AlwaysOff"
     SetNumLockState "AlwaysOn"
-    tipLB(A_ScriptName " running. AHK " A_AhkVersion)
+    tip.LB(A_ScriptName " running. AHK " A_AhkVersion)
     SetTimer(police, 1000) ;! return
     disableWinL()
 }

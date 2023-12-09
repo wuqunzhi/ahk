@@ -5,7 +5,7 @@ plaincopy() {
     sleep(300) ;等复制完
     A_Clipboard := A_Clipboard ;转纯文本
     sleep(300) ;等转化完
-    tip(A_Clipboard)
+    tip.p(A_Clipboard)
 }
 
 ; append to clipborad use "^c"
@@ -15,35 +15,40 @@ appendCopy(sep := "`n", usekey := "^c") {
     send(usekey)
     ClipWait()
     tmp .= A_Clipboard
-    tip(tmp)
+    tip.p(tmp, 2000)
     A_Clipboard := tmp
 }
 
 ;sleep(delay) and tip clipboard
 showcopy(delay := 200, time := 1000) {
     sleep(delay) ;must
-    tip("已复制: " A_Clipboard, time, 0.8, 1)
+    tip.RB("已复制: " A_Clipboard, time)
 }
 
 ;copy str and tip
-copyandshow(str, append := "", time := 2000) {
-    if (append) {
-        A_Clipboard .= (append . str)
-        Sleep(200)
-        tipRB("附加到剪贴板: " str, time)
-    } else {
-        A_Clipboard := str
-        if (InStr(str, '`n'))
-            str := '`n' . str
-        tipRB("已复制: " str, time)
-    }
+copyandshow(str, time := 2000, x := unset, y := unset) {
+    A_Clipboard := str
+    if (InStr(str, '`n'))
+        str := '`n' . str
+    if (isSet(x) && isSet(y))
+        tip.pp("已复制: " str, time, x?, y?)
+    else
+        tip.RB("已复制: " str, time)
+}
+
+appendCopyAndShow(str, append := '`n', time := 2000, x := unset, y := unset) {
+    A_Clipboard .= (append . str)
+    if (isSet(x) && isSet(y))
+        tip.pp("附加到剪贴板: " str, time, x?, y?)
+    else
+        tip.RB("附加到剪贴板: " str, time)
 }
 
 ; time时间内按下key复制str到剪贴板
 mayCopy(str := unset, key := "ctrl", time := 2) {
     if (KeyWait(key, 'DT' . time)) {
         A_Clipboard := str
-        tip("已复制", , 0.5, 1)
+        tip.MM("已复制")
     }
     ; SetTimer () => mayCopy(res), -50
     ; SetTimer () => mayCopy(rest, "t"), -50

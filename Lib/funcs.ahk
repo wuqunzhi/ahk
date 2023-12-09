@@ -14,7 +14,7 @@ class privatefunc {
     static nas() {
         winT := Format(".*{}.* {}", private.nasIP, win_explorer)
         cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
-        runOrActivate(winT, 'm', 'a', cmd)
+        runOrActivate(winT, 'at', 'a', cmd)
     }
 }
 ; 通过注册表启动锁屏
@@ -31,13 +31,36 @@ lockComputer() {
     ; 4 = 强制
     ; 8 = 关闭电源
 }
+
+; 切换是否合并任务栏按钮
+toggleTaskbarCombineButtons() {
+    ;-----------------------------------------------------------------
+    ; https://www.reddit.com/r/sysadmin/comments/16pptty/gporeg_entry_for_combine_taskbar_button_and_hide/
+    ; 0=Always
+    ; 1=When Taskbar Full
+    ; 2=Never
+    ;-----------------------------------------------------------------
+    num := RegRead("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")
+    newNum := num == 0 ? 2 : 0
+    RegWrite(newNum, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced", "TaskbarGlomLevel")
+    ; REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /V MMTaskbarGlomLevel /T REG_DWORD /D 2 /F
+    restartExplorer()
+}
+
 ; 通过写注册表禁用winl锁屏
 disableWinL() {
     RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
-    ; MsgBox("unlock")
 }
 
-; 关闭一些窗口,减少任务栏占用
+;restart explorer.exe
+restartExplorer() {
+    run(A_CWD "\tools\restartexplorer.bat", , 'Hide')
+    ; RunWait("taskkill /im explorer.exe /f", , "Hide")
+    ; Sleep(2000)
+    ; run("C:\Windows\explorer.exe")
+}
+
+; 关闭一些无关紧要的窗口,减少任务栏占用
 winclear() {
     GroupAdd("winclear", win_cloudmusic)
     GroupAdd("winclear", win_qqmusic)
@@ -45,6 +68,7 @@ winclear() {
     GroupAdd("winclear", win_explorer)
     GroupAdd("winclear", win_taskManager)
     GroupAdd("winclear", win_youdao)
+    GroupAdd("winclear", win_clash)
     WinClose("ahk_group winclear")
 }
 
@@ -66,9 +90,6 @@ eval(str) {
     }
 }
 
-get_A_userPath() {
-    return SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
-}
 
 creatGui() {
     g := Gui()
@@ -94,13 +115,18 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
 }
 
 ocr() {
-    A_Clipboard := ""
-    ; Run "D:\Anaconda\envs\test\Scripts\textshotw.exe eng+chi_sim"
-    Run "tools/textshotw.exe eng+chi_sim"
-    ClipWait(5)
-    tipRB(A_Clipboard)
+    tip.p("unset")
+    ; A_Clipboard := ""
+    ; ; Run "tools/textshotw.exe eng+chi_sim"
 
+    ; send("^{f3}") ;
+    ; KeyWait("LButton", "D T5")
+    ; KeyWait("LButton")
+    ; tip.p(34)
+    ; ClipWait(5)
+    ; tip.RB(A_Clipboard)
 }
+
 
 RunWaitOne(command) {
     shell := ComObject("WScript.Shell")
@@ -132,7 +158,7 @@ translate(text := A_Clipboard) {
 
 
 ; !up to now, only work in explorer, notepad
-inputfoucs() {
+inputfocus() {
     ; return a_cursor = "ibeam"
     return caretgetpos(&x, &y)
 }
@@ -143,7 +169,7 @@ toggleTouchpad() {
     static touchpad := 1
     touchpad := !touchpad
     run(a_windir "\system32\systemsettingsadminflows.exe enabletouchpad " touchpad)
-    tipMM("touchpad " touchpad)
+    tip.MM("touchpad " touchpad, 1000)
     ; send("#i")
     ; if (winwaitactive("ahk_exe applicationframehost.exe", , 5)) {
     ;     sleep(500)
@@ -172,7 +198,7 @@ toggleqqmusic() {
 togglegame() {
     global ingame
     ingame := !ingame
-    tip("ingame: " . ingame)
+    tip.p("ingame: " . ingame)
 }
 
 ; toggle key down and up (logical state)
@@ -187,7 +213,7 @@ togglekey(key := "LButton") {
 
 
 showIntxt(str) {
-    path := get_A_userPath() . "\showintxt.txt"
+    path := A_userPath . "\showintxt.txt"
     f := FileOpen(path, 'a')
     f.Write(str)
     f.Close()
@@ -264,8 +290,12 @@ getEnvPath(env) {
 autorun(str := A_Clipboard) {
     str := trim(str)
     try {
-        if RegExMatch(str, "^(C:|D:|E:|F:)")
+        ; RegExReplace(str, '^C:\User\.*?\', 'C:\User\79481\')
+        if RegExMatch(str, "^(C:|D:|E:|F:)") {
+            str := RegExReplace(str, 'C:\\Users\\.*?\\', 'C:\Users\79481\')
+            str := RegExReplace(str, 'C:/Users/.*?/', 'C:/Users/79481/')
             run "explorer " str
+        }
         else if startwith(str, "localhost:")
             run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
@@ -301,7 +331,7 @@ getfiles(dir, mode := "") {
 focus_wx() {
     win_wechat := "ahk_exe WeChat.exe ahk_class WeChatMainWndForPC"
     if WinWaitActive(win_wechat, , 1) {
-        sbclick("300 360 0")
+        clk.blink("300 360 0")
     }
 }
 
@@ -342,7 +372,7 @@ transRaw(str := A_Clipboard, mode := 1) {
     ; str := RegExReplace(str, "m)$", """`",")
 
     A_Clipboard := str
-    tip("transRaw done")
+    tip.p("transRaw done")
 
 
     ; https://wyagd001.github.io/v2/docs/commands/Hotstring.htm#ExHelper
@@ -351,14 +381,6 @@ transRaw(str := A_Clipboard, mode := 1) {
     ; ClipContent := StrReplace(ClipContent, "`n", "``r")
     ; ClipContent := StrReplace(ClipContent, "`t", "``t")
     ; ClipContent := StrReplace(ClipContent, "`;", "```;")
-}
-
-
-;restart explorer.exe
-restartExplorer() {
-    RunWait("taskkill /im explorer.exe /f", , "Hide")
-    Sleep(2000)
-    runwait("C:\Windows\explorer.exe")
 }
 
 
@@ -380,7 +402,7 @@ switchChromeAddress(mode := "ts gb") {
     send "^c"
     ClipWait
     tmp := A_Clipboard
-    tip(tmp, 2000)
+    tip.p(tmp, 2000)
     counts := 0
     ; i)不区分大小写 (?<!)后向否定预查,(?!)前向否定
     if (InStr(mode, "gb")) {
@@ -404,7 +426,7 @@ switchChromeAddress(mode := "ts gb") {
             tmp := StrReplace(tmp, "\zh", "\en", &count2)
         }
     }
-    tip(tmp, 2000)
+    tip.p(tmp, 2000)
     if (tmp = A_Clipboard) ;没有替换
         return
     A_Clipboard := tmp
@@ -434,12 +456,12 @@ switchChromeAddress(mode := "ts gb") {
  * @returns {string}   
  * 显示鼠标位置,窗口位置,输入法消息  
  */
-debugInfo(mode, sep := '`n') {
+debugInfo(mode, appendsep := '`n') {
     if (InStr(mode, ',') or InStr(mode, ' ')) {
         loop parse mode, ", " {
             if (A_LoopField == " " or A_LoopField == ",")
                 continue
-            res .= debugInfo(A_LoopField) . sep
+            res .= debugInfo(A_LoopField) . appendsep
         }
         return res
     }

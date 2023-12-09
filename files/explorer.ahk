@@ -1,4 +1,4 @@
-#HotIf WinActive(win_explorer) and !inputfoucs()
+#HotIf WinActive(win_explorer) and !inputfocus()
 ; :*x?b0zc:yy:: copyandshow(WinGetTitle("A"))
 ~y:: {
     stupid := A_TimeSincePriorHotkey = "" ? 501 : A_TimeSincePriorHotkey    ;V2的bug
@@ -8,8 +8,10 @@
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
 :*x?b0zc:  c:: run("explore c:")
+:*x?b0zc:  o:: winO()
 :*x?b0zc:  ~:: run("explore " A_userpath)
 `;:: send("{enter}")
+
 
 #HotIf WinActive(win_explorer)
 <^n:: run("explorer.exe")
@@ -17,12 +19,14 @@
 <^i::!right
 <^b::!Up
 <!o::!Up
-<!i::!Down
+<!i::!left
+<!h::!Up
+<!l::!left
 <!`:: runCmdInCurrentDir()
 runCmdInCurrentDir() {
-    try Run("cmd", WinGetTitle("A"))
+    try Run(A_ComSpec, WinGetTitle("A"))
     catch as e
-        run("cmd", A_userpath)
+        run(A_ComSpec, A_userpath)
 }
 
 #HotIf

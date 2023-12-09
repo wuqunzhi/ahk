@@ -19,20 +19,20 @@ class zvim {
                 winSpy_GW(), SetTimer(winSpy_GW, 250)
             case "e_n":
                 removeAllSpy()
-                tip("-- Edit Normal --", "oo", 0.45, 1, 16)
+                tip.MB("-- Edit Normal --", "oo")
             case "e_v":
                 removeAllSpy()
-                tip("-- Edit Visual --", "oo", 0.45, 1, 16)
+                tip.MB("-- Edit Visual --", "oo")
             case "e_i":
                 removeAllSpy()
-                tip("-- Edit Insert --", "oo", 0.45, 1, 16)
+                tip.MB("-- Edit Insert --", "oo")
             case "e_o":
                 removeAllSpy()
-                tip("-- Edit Oppend --", "oo", 0.45, 1, 16)
+                tip.MB("-- Edit Oppend --", "oo")
             default:    ;insert
                 removeAllSpy()
-                tip(, , , , 16)
-                tip("-- Insert --", 1000, 0.45, 1)
+                ; ti.MB()
+                tip.MB("-- Insert --", 1000)
         }
         removeAllSpy() {
             SetTimer(winSpy_GN, 0)
@@ -40,25 +40,25 @@ class zvim {
         }
         winSpy_GW() {
             str := Format("-- Gui Window {} --", debugInfo("wcpos"))
-            tip(str, "oo", 0.45, 1, 16)
+            tip.MB(str, "oo")
         }
         winSpy_GN() {
             str := Format("-- Gui Normal {} --", debugInfo(zvim.GN_showMode, ' '))
-            tip(str, "oo", 0.45, 1, 16)
+            tip.MB(str, "oo")
         }
     }
 
     static GN_adjust(parm, dif) {
         switch parm {
-            case 'x1': zvim.GN_x[1] += dif, tip(parm " " zvim.GN_x[1])
-            case 'x2': zvim.GN_x[2] += dif, tip(parm " " zvim.GN_x[2])
-            case 'x3': zvim.GN_x[3] += dif, tip(parm " " zvim.GN_x[3])
-            case 'y1': zvim.GN_y[1] += dif, tip(parm " " zvim.GN_y[1])
-            case 'y2': zvim.GN_y[2] += dif, tip(parm " " zvim.GN_y[2])
-            case 'y3': zvim.GN_y[3] += dif, tip(parm " " zvim.GN_y[3])
-            case 'xy1': zvim.GN_x[1] += dif, zvim.GN_y[1] += dif, tip(parm " " zvim.GN_x[1] " " zvim.GN_y[1])
-            case 'xy2': zvim.GN_x[2] += dif, zvim.GN_y[2] += dif, tip(parm " " zvim.GN_x[2] " " zvim.GN_y[2])
-            case 'xy3': zvim.GN_x[3] += dif, zvim.GN_y[3] += dif, tip(parm " " zvim.GN_x[3] " " zvim.GN_y[3])
+            case 'x1': zvim.GN_x[1] += dif, tip.p(parm " " zvim.GN_x[1])
+            case 'x2': zvim.GN_x[2] += dif, tip.p(parm " " zvim.GN_x[2])
+            case 'x3': zvim.GN_x[3] += dif, tip.p(parm " " zvim.GN_x[3])
+            case 'y1': zvim.GN_y[1] += dif, tip.p(parm " " zvim.GN_y[1])
+            case 'y2': zvim.GN_y[2] += dif, tip.p(parm " " zvim.GN_y[2])
+            case 'y3': zvim.GN_y[3] += dif, tip.p(parm " " zvim.GN_y[3])
+            case 'xy1': zvim.GN_x[1] += dif, zvim.GN_y[1] += dif, tip.p(parm " " zvim.GN_x[1] " " zvim.GN_y[1])
+            case 'xy2': zvim.GN_x[2] += dif, zvim.GN_y[2] += dif, tip.p(parm " " zvim.GN_x[2] " " zvim.GN_y[2])
+            case 'xy3': zvim.GN_x[3] += dif, zvim.GN_y[3] += dif, tip.p(parm " " zvim.GN_x[3] " " zvim.GN_y[3])
             default:
         }
     }
@@ -114,7 +114,7 @@ class zvim {
             if (args[1] == "go") {
                 x := args[2], y := args[3]
                 rel := (args.Length == 4) ? args[4] : 's'
-                clickRel(Format("{} {} 0", x, y), rel)
+                clk.Rel(Format("{} {} 0", x, y), rel)
                 return
             }
             if (args[1] == "set") {
@@ -145,7 +145,7 @@ class zvim {
         }
     }
     static GN_showSettings() {
-        tipLB(zvim.GN_getSettings())
+        tip.LB(zvim.GN_getSettings())
     }
     static GN_getSettings() {
         return Format("
@@ -182,14 +182,14 @@ class zvim {
             case " k": moveUMost()
             case " h": moveLMost()
             case " l": moveRMost()
-            case " m": focusCenter()
+            case " m": clk.center()
             case "gg": moveUMost()
             case "gh": moveLMost()
             case "gH": moveLMost()
             case "gl": moveRMost()
             case "gL": moveRMost()
-            case "zz": focusCenter()
-            case "gm": focusCenter()
+            case "zz": clk.center()
+            case "gm": clk.center()
         }
         zvim.go("g_n")
     }
@@ -243,6 +243,8 @@ l:: moveR(zvim.GN_x[2])
 +k:: moveU(zvim.GN_y[3])
 +h:: moveL(zvim.GN_y[3])
 +l:: moveR(zvim.GN_y[3])
+Numpad5:: copyandshow(debugInfo(zvim.GN_showMode))
+Numpad8:: clk.k(A_Clipboard)
 ; ~s & a::
 ; ~w & a:: zvim.GN_multiMove('wa')
 ; ~a & w::
@@ -255,7 +257,7 @@ space:: zvim.GN_oppend(' ')
 +g:: moveDMost()
 g:: zvim.GN_oppend('g')
 z:: zvim.GN_oppend('z')
-<^<+c:: focusCenter(0)
+<^<+c:: clk.center(0)
 ; -------------------- 设置调整
 y:: zvim.GN_oppend('y')
 -:: zvim.GN_adjust('xy2', -5)
