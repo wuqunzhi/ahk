@@ -8,7 +8,7 @@
 ## 全局设置
 > global.ahk
 - 锁定`CapsLock`状态,需要按住右`Alt`键+`Capslock`切换大小写状态
-- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换`NumLock`状态   
+- 锁定`NumLock`状态,需要按住右`Alt`键+`NumLock`切换`NumLock`状态
 - 将`CapsLock`映射为`esc` (松开时触发)
 - 定义一系列快捷键
   - `CapsLock` + ...  
@@ -65,7 +65,7 @@
 - 按 `tab` 执行上一条历史命令
 - 全匹配也会执行
 - 添加正则匹配支持
-- 添加表达式计算支持
+- 添加表达式计算支持以 `m ` 开头
 
 ## zvim
 > 见zvim.ahk - 启发自[win-vind](https://github.com/pit-ray/win-vind)
