@@ -1,9 +1,17 @@
+class Clip {
+    static clear() => (A_Clipboard := '', Clip)
+    static Clip_Saved := ''
+    static save() => (Clip.Clip_Saved := A_Clipboard, Clip)
+    static load() => (A_Clipboard := Clip.Clip_Saved, Clip)
+    static transplain() => (A_Clipboard := A_Clipboard, Clip) ;转纯文本
+}
+
 ; * use ctrl-c
 plaincopy() {
     ; send("+{AppsKey}a"), sleep(50)
     send "^c"
     sleep(300) ;等复制完
-    A_Clipboard := A_Clipboard ;转纯文本
+    Clip.transplain()
     sleep(300) ;等转化完
     tip.p(A_Clipboard)
 }
@@ -53,4 +61,18 @@ mayCopy(str := unset, key := "ctrl", time := 2) {
     ; SetTimer () => mayCopy(res), -50
     ; SetTimer () => mayCopy(rest, "t"), -50
     ; SetTimer () => mayCopy(resw, "w"), -50
+}
+
+
+;todo no use
+cmdClipReturn(command, waittime := 2) {
+    Clip.save().clear()
+    try {
+        RunWait(A_ComSpec " /C " command " | CLIP", , "Hide")
+        ClipWait waittime
+    }
+    cmdInfo := A_Clipboard
+    Sleep 500
+    Clip.load()
+    return cmdInfo
 }

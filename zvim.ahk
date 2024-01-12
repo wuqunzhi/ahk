@@ -31,7 +31,6 @@ class zvim {
                 tip.MB("-- Edit Oppend --", "oo")
             default:    ;insert
                 removeAllSpy()
-                ; ti.MB()
                 tip.MB("-- Insert --", 1000)
         }
         removeAllSpy() {
@@ -68,6 +67,7 @@ class zvim {
             ; SendEvent("{d up}{d Down}")
         }
     }
+
     static GN_multiMove(keys) {
         x := 0, y := 0, i := 2
         i := GetKeyState('Shift', 'p') ? 3 : i
@@ -129,6 +129,7 @@ class zvim {
                 }
             }
         }
+
         GN_set(parm, value) {
             switch parm {
                 case 'x': zvim.GN_x[2] := Integer(value)
@@ -351,7 +352,6 @@ g:: zvim.EN_oppend("g")
 ; -------------------- 操作
 x:: send("{bs}")
 +d:: send("+{end}{bs}")
-+c:: send("+{end}{bs}"), zvim.go("e_i")
 u:: send("^z")
 p:: send("^v")
 ; -------------------- oppend
@@ -362,6 +362,10 @@ c:: zvim.EN_oppend("c")
 i:: zvim.go("e_i")
 a:: zvim.go("e_i")
 o:: send("{end}{enter}"), zvim.go("e_i")
++o:: send("{home}{enter}{up}"), zvim.go("e_i")
++c:: send("+{end}{bs}"), zvim.go("e_i")
++i:: send("{Blind}{home}"), KeyWait("shift"), Send("{left}"), zvim.go("e_i")
++a:: send("{Blind}{end}"), KeyWait("shift"), Send("{right}"), zvim.go("e_i")
 v:: zvim.go("e_v")
 
 ; -------------------- Edit Insert --------------------

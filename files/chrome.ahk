@@ -1,29 +1,17 @@
 ; ; ==========o==========o==========o==========o==========o==========o chrome
-; SetTitleMatchMode "RegEx"
-
 #HotIf WinActive(win_chrome)
+; MButton::Numpad2
 ; :*?zc:aft2:::after2022
 <!h:: send("^+{Tab}")
 <!l:: send("^{Tab}")
 <!<+h::A
 <!<+l::D
-<^+h:: send("^t"), setCHyingForce(), sleep(200), send("chrome://history/{enter}")
+<^+h:: send("^t"), IME.setCHying(), sleep(200), send("chrome://history/{enter}")
 ^o::!left
 ^i::!right
-CapsLock & t:: switchChromeAddress("gb")
 #HotIf
 
 ; -------------------------------- 防vimmium失效的地方补充快捷键
-vim_Chrome(vim?) {
-    static use := 1
-    if (!isset(vim))
-        return use
-    use := (vim = -1) ? !use : vim
-    return use
-
-}
-
-
 GroupAdd("vimiumfix", "^OneTab - Google Chrome")
 GroupAdd("vimiumfix", "^无标题 - Google Chrome")
 GroupAdd("vimiumfix", "chrome-extension")
@@ -32,24 +20,24 @@ GroupAdd("vimiumfix", "\.pdf - Google")
 GroupAdd("vimiumfix", "^设置 - Google Chrome")
 
 #HotIf WinActive(win_chrome " ahk_group vimiumfix")
-^[:: {
-    vim_Chrome(-1)
-    KeyWait("[")
-}
-#HotIf WinActive(win_chrome " ahk_group vimiumfix") and !vim_Chrome()
-:*x?b0z:asdasd:: vim_Chrome(-1)
+^[:: Chrome.vim(-1), KeyWait("[")
+#HotIf WinActive(win_chrome " ahk_group vimiumfix") and !Chrome.vim()
+:*x?b0z:asdasd:: Chrome.vim(-1)
 
-#HotIf WinActive(win_chrome " ahk_group vimiumfix") and vim_Chrome()
-i:: vim_Chrome(0)
-q:: vim_Chrome(0)
+#HotIf WinActive(win_chrome " ahk_group vimiumfix") and Chrome.vim()
+i:: Chrome.vim(0)
+q:: Chrome.vim(0)
 a:: send("^+{Tab}")
 d:: send("^{Tab}")
 <+x:: send("^+t")
-k:: send("{wheelup}")
 j:: send("{wheeldown}")
+k:: send("{wheelup}")
 w:: send("{wheelup}")
 s:: send("{wheeldown}")
 #HotIf
+
+class Chrome extends VimControl {
+}
 
 ; :*x?b0z:c1:: clk.img("img/chrome_onetab.bmp", 1)
 

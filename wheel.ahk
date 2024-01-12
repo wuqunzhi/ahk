@@ -30,8 +30,8 @@ WinTransPlus(num, hwnd := "A") {
 
 ; shift + NumLock + 滑轮调节鼠标移动速度
 #HotIf GetKeyState("NumLock", "p")
-+WheelDown:: MouseSpeedPlus(-1)
-+WheelUp:: MouseSpeedPlus(1)
+Shift & WheelDown:: MouseSpeedPlus(-1)
+Shift & WheelUp:: MouseSpeedPlus(1)
 MouseSpeedPlus(num) {
     SPI_GETMOUSESPEED := 0x70
     SPI_SETMOUSESPEED := 0x71

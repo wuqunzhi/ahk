@@ -9,7 +9,7 @@
 
 SetTitleMatchMode("RegEx")
 CoordMode("ToolTip", "Screen")
-
+tip.n(A_ScriptName " running. AHK " A_AhkVersion, 1000, 0, -2)
 woz := WozUI()
 <^space:: woz.toggleGui(), KeyWait("space")
 ~esc:: woz.hideGui(), tip.removeAllTip(5)
@@ -22,6 +22,7 @@ NumpadEnter::tab
 #HotIf WinActive(win_woz) and woz.mode == 'math'
 ^c:: copyandshow(woz.copystr, 3000, 1190, 223)
 <^l::
+enter::
 tab:: copyandshow(woz.copystr, 5000, 1190, 223), woz.hideGui()
 #HotIf
 
@@ -84,6 +85,7 @@ class WozUI {
         addcmd("nop")
         addcmd("-v", , , A_AhkVersion)
         addcmd("timer")
+        addcmd("game")
         addcmd("showintxt", , , "将剪贴板内容用vscode打开") ;
         addcmd("bluetooth", , , "打开蓝牙设置")
         addcmd("ls", , , "list all ahk")
@@ -133,7 +135,7 @@ class WozUI {
         addcmd("vsdeemo", "run", "D:\VSCodeDeemo\", "D:\VSCodeDeemo\")
         addcmd("vsprojects", "run", "D:\vscodeProjects", "D:\vscodeProjects")
         addcmd("vssetting", "run", A_userpath "\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
-        addcmd("wsl", "run", "\\wsl$\Ubuntu-20.04", "wsl")
+        addcmd("wsl", "run", "\\wsl.localhost\Ubuntu", "wsl")
         addcmd("vim", "run", "D:\vim\vim90\", "D:\vim\vim90\")
         addcmd("vimrc", "run", A_userpath "\vimfiles\", A_userpath "\vimfiles\")
 
@@ -298,7 +300,7 @@ class WozUI {
                 case "ls": tip.RB(ahk("ls"), 5000)
                 case "reload": run("*runAs " A_ScriptName) ;管理员
                 case "quit": (MsgBox("quit?", , 1) == "OK") ? ahk("q", "woz.ahk") : 0
-                case "nas": privatefunc.nas()
+                case "nas": private.nas()
                 case "ahkq": ahk("q", args)
                 case "kill": mytaskkill(args)
                 case "lock": lockComputer()

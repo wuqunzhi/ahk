@@ -220,7 +220,7 @@ winReset(w := unset, h := unset) {
     ; WinMove((A_ScreenWidth - w) / 2, (A_ScreenHeight - h) / 2, , , "A"); wincenter
 }
 
-; 切换最大化
+; 切换窗口最大化
 WinToggleMaximize() {
     WinGetMinMax("A") = 1 ? WinRestore("A") : WinMaximize("A")
 }
@@ -361,7 +361,7 @@ ahkManager() {
 ; ps
 processManager() {
     str := "杀死进程"
-    for k, v in shortName {
+    for k, v in abbrName {
         str .= k . "`t`t" . v . "`n"
     }
     IB := InputBox(str, , "w600 h240") ;"w640 h480"
@@ -371,7 +371,7 @@ processManager() {
 
 ; 杀死进程
 mytaskkill(PIDOrName) {
-    PIDOrName := shortName.Get(PIDOrName, PIDOrName)
+    PIDOrName := abbrName.Get(PIDOrName, PIDOrName)
     str := ProcessClose(PIDOrName) ? "" : "failed"
     tip.LB(Format("taskkill {} {}", PIDOrName, str))
 }
@@ -542,8 +542,9 @@ winy() {
     WinGetPos(&x, &y, &w, &h, "A")
     return y
 }
-winx() {
-    WinGetPos(&x, &y, &w, &h, "A")
+winx(winT?) {
+    t := isSet(winT) ? winT : "A"
+    WinGetPos(&x, &y, &w, &h, t)
     return x
 }
 winw() {
@@ -554,11 +555,29 @@ winh() {
     WinGetPos(&x, &y, &w, &h, "A")
     return h
 }
+wincw() {
+    WinGetClientPos(&x, &y, &w, &h, "A")
+    return w
+}
 winch() {
     WinGetClientPos(&x, &y, &w, &h, "A")
     return h
 }
-wincw() {
-    WinGetClientPos(&x, &y, &w, &h, "A")
-    return w
+mousecolor() {
+    MouseGetPos(&mxs, &mys)
+    color := PixelGetColor(mxs, mys)
+    return color
+}
+
+/**
+ * 移动活动窗口位置
+ */
+MakeWindowDraggable() {
+    hwnd := WinExist("A")
+    if (WinGetMinMax("A"))
+        WinRestore("A")
+
+    PostMessage("0x0112", "0xF010", 0)
+    Sleep 50
+    SendInput("{Right}")
 }
