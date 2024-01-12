@@ -5,6 +5,13 @@
     if (A_PriorKey = "y" and stupid < 500)
         copyandshow(WinGetTitle("A"))
 }
+~t:: {
+    stupid := A_TimeSincePriorHotkey = "" ? 501 : A_TimeSincePriorHotkey    ;V2的bug
+    if (A_PriorKey = "y" and stupid < 500)
+        try Run("explorer.exe " WinGetTitle("A"))
+        catch as e
+            run("explorer.exe " A_userpath)
+}
 :*x?b0zc:  d:: run("explore d:")
 :*x?b0zc:  e:: run("explore e:")
 :*x?b0zc:  c:: run("explore c:")

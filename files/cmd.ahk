@@ -1,3 +1,3 @@
 #HotIf WinActive(win_cmd)
-<!`::WinClose("A")
+<!`:: WinClose("A")
 #HotIf

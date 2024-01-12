@@ -1,20 +1,39 @@
+mouseMoveFix(x, y) {
+    ; 多显示器下 mousemove , click 等有bug
+    ; https://www.autohotkey.com/boards/viewtopic.php?t=61242
+    DllCall("SetCursorPos", "int", x, "int", y)
+}
 ; (左-右+, 上-下+)
 moveL(n) {
-    ; clk.blink("0 " n " 0 rel")
-    ; click("0," n ",0,Rel")
-    MouseMove(-n, 0, , "R")
+    ;1. send("{blink}{click 50 0 Rel}")
+    ;2. MouseMove(-n, 0, , "R")
+    xy := mouses()
+    x := xy[1], y := xy[2]
+    mouseMoveFix(x - n, y)
 }
 moveR(n) {
-    MouseMove(n, 0, , "R")
+    ; MouseMove(n, 0, , "R")
+    xy := mouses()
+    x := xy[1], y := xy[2]
+    mouseMoveFix(x + n, y)
 }
 moveU(n) {
-    MouseMove(0, -n, , "R")
-}
-move(x, y) {
-    MouseMove(x, y, , "R")
+    ; MouseMove(0, -n, , "R")
+    xy := mouses()
+    x := xy[1], y := xy[2]
+    mouseMoveFix(x, y - n)
 }
 moveD(n) {
-    MouseMove(0, n, , "R")
+    ; MouseMove(0, n, , "R")
+    xy := mouses()
+    x := xy[1], y := xy[2]
+    mouseMoveFix(x, y + n)
+}
+move(dx, dy) {
+    ; MouseMove(dx, dy, , "R")
+    xy := mouses()
+    x := xy[0], y := xy[1]
+    DllCall("SetCursorPos", "int", x + dx, "int", y + dy)
 }
 moveDMost() {
     clk.s(Format("{} {} 0", msx(), A_ScreenHeight - 20))
@@ -90,12 +109,12 @@ class clk {
     }
 
     ; search img in client and click
-    static img(file, back := 0, count := 1, offsetX := 10, offsetY := 10) {
-        ; file := "*22 " . file
+    static img(file, x1 := 0, y1 := 0, x2 := wincw(), y2 := winch(), err := 20, offsetX := 10, offsetY := 10, count := 1, back := 0) {
+        file := Format('*{} {}', err, file)
         mousegetpos(&savex, &savey)
-        res := imagesearch(&x, &y, 0, 0, winw(), winh(), file)
+        res := imagesearch(&x, &y, x1, y1, x2, y2, file)
         if (res) {
-            click(x + offsetX " " y + offsetY " " count)
+            send('{blink}{click ' (x + offsetX) ' ' (y + offsetY) ' ' count '}')
             if (back)
                 click(savex " " savey " 0")
         } else tip.p("no found: " file)

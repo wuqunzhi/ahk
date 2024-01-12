@@ -1,6 +1,6 @@
 #SingleInstance force
 #Include ..\Lib\funcs.ahk
-; !没写完,大概这样.
+; !todo
 global recording := 0
 global recordstring := ""
 CapsLock & f11:: {
@@ -59,6 +59,8 @@ Click, 1264, 462, 0
 Sleep, 47
 Click, 1264, 462 Left, Up
 .......
+
+
 
 
 

@@ -1,18 +1,6 @@
 SystemSleep() {
    DllCall("PowrProf\SetSuspendState")
 }
-/**
- * 移动活动窗口位置
- */
-MakeWindowDraggable() {
-   hwnd := WinExist("A")
-   if (WinGetMinMax("A"))
-      WinRestore("A")
-
-   PostMessage("0x0112", "0xF010", 0)
-   Sleep 50
-   SendInput("{Right}")
-}
 
 IsDesktop() {
    return WinActive("Program Manager ahk_class Progman") || WinActive("ahk_class WorkerW")
@@ -37,11 +25,11 @@ Send("{text}我爱尼娅! ")
 Send("{text}➤")
 Send("{text}🐶")
 ; 如果是文件夹直接打开
-/* 
+/*
 if (InStr(FileExist(programPath), "D")) {
    Run(programPath)
    return
-} 
+}
 */
 
 /*

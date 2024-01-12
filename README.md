@@ -125,7 +125,7 @@
   - `hjkl` `wb` `HL` `0$` `gg` `G` `^u` `^d` 移动
   - `x` `D` `C` `u` `p` 操作
   - `y` `d` `c` 等待操作数(oppend模式)
-  - `i` `a` `o` `C` 进入insert模式
+  - `i` `a` `o` `O` `C` `A` `I` 进入insert模式
   - `v` 进入visual模式
 
 - Edit_Insert mode: (模拟vim Insert模式)
@@ -136,5 +136,9 @@
   - `c` `d` `y` `p` `v` 操作, 操作完成后切换到相应模式
 
 - Edit_Oppend mode: (模拟vim OperatorPending模式)
-  - 支持 `yw` `yy` `yj` `yk` `yH` `yL` `dw` `dd` `dj` `dk` `dH` `dL` `cw` `cc` `cj` `ck` `cH` `cL` 操作
+  - 支持操作:
+   - `yw` `yy` `yj` `yk` `yH` `yL`
+   - `dw` `dd` `dj` `dk` `dH` `dL`
+   - `cw` `cc` `cj` `ck` `cH` `cL`
   - `esc` 回到Edit_Normal模式
+

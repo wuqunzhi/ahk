@@ -7,16 +7,12 @@
 #Include fun_class.ahk
 #Include steal\JsRT.ahk
 #Include steal\ActiveScript.ahk
+#Include steal\Brightess.ahk
+#Include steal\VisualDesktop.ahk
 #Include steal\Monitor.ahk
 #Include ../private.ahk
 
-class privatefunc {
-    static nas() {
-        winT := Format(".*{}.* {}", private.nasIP, win_explorer)
-        cmd := Format("explorer \\{}\GPProjectShare", private.nasIP)
-        runOrActivate(winT, 'at', 'a', cmd)
-    }
-}
+
 ; 通过注册表启动锁屏
 lockComputer() {
     RegWrite(0, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System", "DisableLockWorkstation")
@@ -73,6 +69,17 @@ winclear() {
 }
 
 police() {
+    static done := false
+    if done
+        return
+    DetectHiddenWindows(1)
+    if (WinExist("Internet Download Manager ahk_exe IDMan.exe ahk_class #32770")) {
+        ProcessClose(WinGetPID())
+        tip.p('kill idm')
+        done := true
+        DetectHiddenWindows(0)
+        return
+    }
     return
     if (WinExist("Windows 安全中心警报 ahk_exe rundll32.exe ahk_class #32770")) {
         WinActivate()
@@ -109,8 +116,7 @@ creathookgui(fontsize := 16, fontcolor := "000000", fontname?) {
     g.opt("+alwaysontop -caption +toolwindow") ; +toolwindow 避免显示任务栏按钮和 alt-tab 菜单项.
     g.backcolor := "123456" ; 可以是任何 rgb 颜色(下面会变成透明的).
     winsettranscolor(g.backcolor, g)
-    ; winsettransparent(55, colorgui)
-    g.setfont(Format("s{} c{}", fontsize, fontcolor), fontname?) ;"consolas")    ; 设置大字体(32 磅).
+    g.setfont(Format("s{} c{} W700 Q5", fontsize, fontcolor), fontname?) ;"consolas")    ; 设置大字体(32 磅).
     return g
 }
 
@@ -299,6 +305,8 @@ autorun(str := A_Clipboard) {
         else if startwith(str, "localhost:")
             run "chrome.exe http://" str
         else if RegExMatch(str, "^(http:\/\/|https:\/\/)")
+            or RegExMatch(str, ".(com|net|cn|io|org|htm|html)")
+            ; or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}")
             or RegExMatch(str, "(com|net|cn|io|org|htm|html)$")
             ; or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}")
             or RegExMatch(str, "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}.*")
@@ -329,29 +337,24 @@ getfiles(dir, mode := "") {
 }
 
 focus_wx() {
-    win_wechat := "ahk_exe WeChat.exe ahk_class WeChatMainWndForPC"
-    if WinWaitActive(win_wechat, , 1) {
-        clk.blink("300 360 0")
+    ; if WinWaitActive(win_wechat, , 1) {
+    ;     clk.blink("300 360 0")
+    ; }
+}
+
+youdaoFanyi() {
+    if (WinActive(win_youdao)) {
+        Send("^!0")
+        return
+    }
+    Send("^!0")
+    if WinWaitActive(win_youdao, , 1) {
+        Send('^v')
     }
 }
 
-;todo no use
-cmdClipReturn(command) {
-    cmdInfo := ""
-    Clip_Saved := A_Clipboard
-    try {
-        A_Clipboard := ""
-        RunWait(A_ComSpec " /C " command " | CLIP", , "Hide")
-        ClipWait 2
-        cmdInfo := A_Clipboard
-        Sleep 500
-    }
-    A_Clipboard := Clip_Saved
-    return cmdInfo
-}
 
-; transform clipb string to markdown table
-; use default sep <space><space>
+; !todo transform clipb string to markdown table
 transtable(str) {
     ; tabstr := RegExReplace(str, "m)^|$|  |\t", "|")
     res := RegExReplace(str, " {2,}", "|")
@@ -361,6 +364,7 @@ transtable(str) {
     return "|--|--|`n|:-:|:-:|`n" res
 }
 
+; !todo
 transRaw(str := A_Clipboard, mode := 1) {
     str := StrReplace(str, '"', '\"') ; " -> \"
     str := StrReplace(str, '`t', '\t') ; " -> \"
@@ -373,8 +377,6 @@ transRaw(str := A_Clipboard, mode := 1) {
 
     A_Clipboard := str
     tip.p("transRaw done")
-
-
     ; https://wyagd001.github.io/v2/docs/commands/Hotstring.htm#ExHelper
     ; ClipContent := StrReplace(A_Clipboard, "``", "````")    ; 首先进行此替换以避免和后面的操作冲突.
     ; ClipContent := StrReplace(ClipContent, "`r`n", "``r")    ; 在 MS Word 等软件中中使用 `r 会比 `n 工作的更好.
@@ -482,8 +484,8 @@ debugInfo(mode, appendsep := '`n') {
                 )", A_CoordModeToolTip, A_CoordModeMouse, A_CoordModePixel, A_DetectHiddenWindows)
 
             case 'i':
-                imeId := getImeId()
-                imeMode := getImeMode()
+                imeId := IME.getImeId()
+                imeMode := IME.getImeMode()
                 res := Format("imeId,mode: {}, {}", imeId, imeMode)
 
             case 'ms': ; 相对screen的鼠标位置

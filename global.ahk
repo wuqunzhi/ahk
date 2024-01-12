@@ -1,32 +1,42 @@
 ; ==========o==========o==========o==========o==========o==========o global
 #HotIf
-; f3:: ocr()
+SetCapsLockState "AlwaysOff"
+SetNumLockState "AlwaysOn"
 ~esc:: tip.removeAllTip()
 CapsLock Up:: send("{esc}") ;, ti.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
->!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn")
+>!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn"), tip.LM(GetKeyState("NumLock", "T"))
 <!CapsLock:: LoopRelatedWindows()
 
 
+; f3:: ocr()
 #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
 #HotIf
-
-; o==========o==========o==========o==========o VirtualDesktop
-#CapsLock:: VirtualDesktop.showCycleRight()
+; o==========o==========o==========o==========o MultiMonitor VirtualDesktop
 #^n:: VirtualDesktop.Create().Show()
 #^w:: VirtualDesktop.Current.Remove()
 #^h:: VirtualDesktop.showCycleLeft()
 #^l:: VirtualDesktop.showCycleRight()
+#h:: MultiMonitor.activate(0)
+#l:: MultiMonitor.activate(1)
+#+h::+#Left
+#+l::+#Right
+#tab:: MultiMonitor.activateNext()
+; #h:: markWindow.toggle(12)
+<^>!j::+#Left
+#CapsLock::+#Left
+<^>!k::+#Right
+; o==========o==========o==========o==========o MultiMonitor VirtualDesktop
 
 
 ; >^>!/::^!/
 ; #HotIf !GetKeyState("ctrl", 'p')
 ; Ralt:: send("RButton")    ;shift f10
-; Ralt::RButton    ;shift f10
+; Ralt:: RButton    ;shift f10
 ; #HotIf
 CapsLock & f1:: ocr()
-CapsLock & end:: togglegame()
+CapsLock & ':: togglegame()
 CapsLock & down:: moveD(1)
 CapsLock & up:: moveU(1)
 CapsLock & left:: moveL(1)
@@ -50,21 +60,25 @@ CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
 CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
-CapsLock & c:: writeAndShowCBH()
-CapsLock & f::^!0 ;有道词典
+CapsLock & c:: CBH.writeAndShowCBH()
+CapsLock & f::^!0 ;youdao
+CapsLock & p:: youdaoFanyi()
 CapsLock & r:: transRaw() ;!todo?
 CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
 
+
 NumLock & Numpad1:: winSetCaption(-1)
+NumLock & Numpad2:: WinSetTransColor(mousecolor() " 150", "A")
 
 tmp() {
     ; run("http://127.0.0.1:8080")
 }
+
+
 CapsLock & `:: markWindow.maymark()
-; CapsLock & 1:: markWindow.toggle(1)
-CapsLock & 1:: privatefunc.nas()
-CapsLock & 2:: markWindow.toggle(2)
-CapsLock & 3:: markWindow.toggle(3)
+CapsLock & 1:: private.nas()
+CapsLock & 2:: runOrActivate(Format('\Q{}\guopai\E', A_Desktop), 'at', 'a', Format("explorer {}", A_Desktop '\guopai'))
+CapsLock & 3:: private.genCmd()
 CapsLock & 4:: markWindow.toggle(4)
 CapsLock & 5:: markWindow.toggle(5)
 CapsLock & 6:: markWindow.toggle(6)
@@ -72,31 +86,33 @@ CapsLock & 7:: markWindow.toggle(7)
 CapsLock & 8:: markWindow.toggle(8)
 CapsLock & 9:: markWindow.toggle(9)
 >!l:: lockComputer()
-#l:: markWindow.toggle(11)
-#+l:: markWindow.mark(11)
-#+h:: markWindow.mark(12)
-#h:: markWindow.toggle(12)
+; #l:: markWindow.toggle(11)
+; #+l:: markWindow.mark(11)
+; #+h:: markWindow.mark(12)
+; #h:: markWindow.toggle(12)
 #+;:: markWindow.mark(13)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return
-#p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
-#+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 >!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 >!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
-#j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
-#k:: runOrActivate(win_vscode, 'b', 'a', "code")
->!k:: runOrActivate(win_vscode, 'b', 'a', "code")
+#j:: runOrActivate([win_chrome, "画中画"], 'b', 'a', "chrome.exe")
+; #k:: runOrActivate(win_vscode, 'b', 'a', "code")
+#k:: {
+    WinGetList(win_vscode).Length > 1 ?
+        runOrActivate([win_vscode, "Note - "], 'b', 'a', "code.exe") :
+            runOrActivate(win_vscode, 'b', 'a', "code.exe")
+}
+; >!k:: runOrActivate(win_vscode, 'b', 'a', "code")
 ; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
-; #k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeProjects\Note")
 #e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 >!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
 #+e:: run("explorer.exe")
 #t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
-#w:: send("{blink}^!w"), SetTimer(focus_wx, -10)
+#w:: send("{blink}^!w") ; SetTimer(focus_wx, -10)
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: runOrActivate(win_cloudmusic, 'c', 'sa', A_desktop2 "/wyy")
@@ -108,6 +124,7 @@ CapsLock & alt:: return
 GroupAdd("games", "ahk_class Engine")
 GroupAdd("games", "ahk_class YYGameMakerYY")
 GroupAdd("games", "ahk_class UnityWndClass")
+GroupAdd("games", "ahk_class SDL.app ahk_exe steamwebhelper.exe", , "Menu")
 #HotIf WinActive("ahk_group games")
 #HotIf WinExist("ahk_group games")
 #g:: runOrActivate("ahk_group games", 'at', 'a')
@@ -165,9 +182,7 @@ GroupAdd("noa_quote", win_idea)  ; 不在谷歌,vscode
 
 ; o==========o==========o==========o==========o==========o 调试相关
 CapsLock & Numpad1:: runOrActivate("Window Spy", "c", 'a', "D:\AutoHotkey_2.0.10\WindowSpy.ahk")
-CapsLock & Numpad2::
-{
-    ; Cap f2 ;打开脚本主窗口
+CapsLock & Numpad2:: { ;打开脚本主窗口
     WinShow("ahk_id" . A_ScriptHwnd)    ;WinShow可以检测隐藏
     WinActivate("ahk_id" . A_ScriptHwnd)
     send ("{f5}")
@@ -186,7 +201,11 @@ CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 ; 符号后面加`转中文符号
 :*?:.``::。
 :*?:,``::，
+:*?::``::：
+:*?:;``::；
 :*?:\``::、
+:*?:<``::《
+:*?:>``::》
 
 ; :?*x:]t:: SendInput Format("{}:{}:{}", A_Hour, A_Min, A_Sec) ;在vscodeVim中有bug,估计是input太快的原因
 ; :?*x:]d:: SendInput Format("{}-{}-{}", A_YYYY, A_MM, A_DD)
@@ -200,3 +219,5 @@ sendInputVimFix(str) {
         Sleep(60)
     }
 }
+
+#HotIf

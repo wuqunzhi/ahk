@@ -6,29 +6,87 @@
 ; CoordMode 默认为 Client(在 v1.1.05 版中加入), 而不是 Window.
 ; 脚本文件(但不包括 由 脚本读取的文件) 的默认编码现在是 UTF-8 而不是 ANSI(CP0). 和以前一样, 这可以通过 /CP 命令行开关来覆盖.
 ; #NoTrayIcon ;用了这行没法SingleInstance,难退出
-
+;---------------------------------
 #SingleInstance Force
 #Warn Unreachable, off
-#Include "config.ahk"
-#Include "Lib\funcs.ahk"
+#Include config.ahk
+#Include private.ahk
+#Include Lib\funcs.ahk
+#SuspendExempt true
+f7:: Suspend
+#SuspendExempt false
+;---------------------------------
 SetTitleMatchMode("regex")
-; CoordMode("ToolTip", "Screen")
+DetectHiddenWindows(1)
 SetMouseDelay(-1)
+;---------------------------------
+; CoordMode("Mouse", "Screen")
 
+Numpad7:: MultiMonitor.mouseFocusNext
+Numpad8:: MultiMonitor.clickFocusNext
+Numpad0:: MultiMonitor.activateNext
+
+
+; CoordMode("ToolTip", "Screen")
 ; SetMouseDelay 0                                           ; SendInput 可能会降级为 SendEvent, 此时会有 10ms 的默认 delay
 ; SetWinDelay 0                                             ; 默认会在 activate, maximize, move 等窗口操作后睡眠 100ms
 ; ProcessSetPriority "High"
 
-#SuspendExempt true
-f7:: Suspend
-#SuspendExempt false
-#Include private.ahk
-str := 'C:/Users/user/AppData/Local/Packages/CanonicalGroupLimited/LocalState/ext4.vhdx'
-str := RegExReplace(str, 'C:\\Users\\.*?\\', 'C:\Users\79481\')
-str := RegExReplace(str, 'C:/Users/.*?/', 'C:/Users/79481/')
+; todo
+; offpin all
+;
+test() {
+    ; Windows 键+ Home – 最小化除活动窗口之外的所有窗口。
+    MakeWindowDraggable()
+    winSetCaption(-1)
+}
+sendRequset() {
+    oHttp := ComObject("WinHttp.Winhttprequest.5.1")
+    ; oHttp.open("GET", "https://api.live.bilibili.com/xlive/web-ucenter/v1/xfetter/GetWebList?page=1")
+    oHttp.open("GET", "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/w_live_users?size=10")
+    oHttp.send()
+    MsgBox oHttp.responseText
+}
 
+winScroll(wintitle := "A", cont?) {
+    ; https://www.autohotkey.com/board/topic/87514-sendmessage-scroll-down-a-certain-number-of-lines/
+    ; MouseGetPos(, , &win, &cont)
+    ; ControlGetFocus, control, A
+    ; MsgBox(cont)
+    ; SB_LINEUP = 0
+    ; SB_LINEDOWN = 1
+    ; SB_PAGEUP = 2
+    ; SB_PAGEDOWN = 3
+    ; SB_THUMBPOSITION = 4
+    ; SB_THUMBTRACK = 5
+    ; SB_TOP = 6
+    ; SB_BOTTOM = 7
+    ; SB_ENDSCROLL = 8
+    SendMessage(0x115, 1, 0, , "A")
+}
+
+f1() {
+    MouseGetPos(, , &win, &cont)
+    ; http://www.autohotkey.com/forum/topic7976.htmlk
+    SendMessage(0x0002, , , cont, "A") ; WM_DESTROY
+    SendMessage(0x0082, , , cont, "A") ; WM_NCDESTROY
+    WinRedraw("A")
+}
+f2() {
+    ; http://www.autohotkey.com/forum/viewtopic.php?t=2859#1816
+    MouseGetPos(, , &win, &cont)
+    SendMessage(0x10, , , cont, "A") ; WM_CLOSE
+}
+
+toggleDesktop() {
+    ; https://learn.microsoft.com/en-us/windows/win32/shell/shell-application
+    ; 同win+d
+    ComObject("Shell.Application").ToggleDesktop()
+}
 
 /*
+----------------------------------------
+循环与切换: 见 files\slaythespire.ahk fxnxl
 ----------------------------------------
 LWin & h::
 if toggle := !toggle
@@ -44,31 +102,10 @@ WinShow Start ahk_class Button
 return
 ----------------------------------------
 */
-; winSetCaption(-1)
 ; RegWrite "Test Value", "REG_SZ", "HKEY_LOCAL_MACHINE\SOFTWARE\TestKey", "MyValueName"
 ; RegWrite(1, "REG_DWORD", "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System","DisableLockWorkstation")
 ; tip(A_ComSpec)
 ; run('code D:\vscodeDeemos\Note' )
-
-toggleDesktop() {
-    ; https://learn.microsoft.com/en-us/windows/win32/shell/shell-application
-    ; 同win+d
-    ComObject("Shell.Application").ToggleDesktop()
-}
-
-
-#HotIf 0
-XButton1::^!,
-XButton2::^!.
-WheelDown::Volume_Down
-WheelUp::Volume_Up
-MButton::^!Space
-LButton:: return
-RButton:: return
-#HotIf
-
-
-; 7:: Send("{text}?! ")
 
 
 ; ==========o==========o==========o==========o==========o other
