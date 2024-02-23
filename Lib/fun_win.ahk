@@ -42,6 +42,17 @@ winToggleDesktop() {
     ComObject("Shell.Application").ToggleDesktop()
 }
 
+wintoggleTop(hwnd := "A") {
+    WinSetAlwaysOnTop(-1, hwnd)
+    top := winGetAlwaysOnTop(hwnd) ? "ontop" : "offtop"
+    tip.RB(top ": " WinGetTitle(hwnd))
+}
+winSetOffTop(hwnd := "A") {
+    WinSetAlwaysOnTop(0, hwnd)
+    top := winGetAlwaysOnTop(hwnd) ? "ontop" : "offtop"
+    tip.RB(top ": " WinGetTitle(hwnd))
+}
+
 ;关闭同类窗口
 winO(Hwnd := unset) {
     curId := IsSet(Hwnd) ? Hwnd : WinGetID("A")
@@ -172,11 +183,11 @@ countdown(seconds) {
 
 
 ; 添加/移除标题栏
-winSetCaption(n) {
+winSetCaption(n, hwnd := "A") {
     switch n {
-        case 1: WinSetStyle("+0xC00000", "A")
-        case 0: WinSetStyle("-0xC00000", "A")
-        case -1: WinSetStyle("^0xC00000", "A")
+        case 1: WinSetStyle("+0xC00000", hwnd)
+        case 0: WinSetStyle("-0xC00000", hwnd)
+        case -1: WinSetStyle("^0xC00000", hwnd)
     }
     ; 7:: WinSetStyle("^0x800000", "A")
     ; 0x40000

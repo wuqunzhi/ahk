@@ -1,14 +1,18 @@
 ; ==========o==========o==========o==========o==========o==========o global
-; #HotIf !inNeighbor()
 #HotIf
+SetCapsLockState "AlwaysOff"
+SetNumLockState "AlwaysOn"
 ~esc:: tip.removeAllTip()
-CapsLock Up:: send("{esc}") ;, tip.LM("esc")
+CapsLock Up:: send("{esc}") ;, ti.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
 >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn"), tip.LM(GetKeyState("NumLock", "T"))
 <!CapsLock:: LoopRelatedWindows()
-; #HotIf GetKeyState("LAlt", "p")
+
+
+; f3:: ocr()
+#HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
-; #HotIf
+#HotIf
 ; o==========o==========o==========o==========o MultiMonitor VirtualDesktop
 #^n:: VirtualDesktop.Create().Show()
 #^w:: VirtualDesktop.Current.Remove()
@@ -19,6 +23,7 @@ CapsLock Up:: send("{esc}") ;, tip.LM("esc")
 #+h::+#Left
 #+l::+#Right
 #tab:: MultiMonitor.activateNext()
+; #h:: markWindow.toggle(12)
 <^>!j::+#Left
 #CapsLock::+#Left
 <^>!k::+#Right
@@ -88,9 +93,8 @@ CapsLock & 9:: markWindow.toggle(9)
 #+;:: markWindow.mark(13)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return
->!p:: wintoggleTop()
->!+p:: winSetOffTop()
-
+>!p:: WinSetAlwaysOnTop(-1, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
+>!+p:: WinSetAlwaysOnTop(0, "A"), top := winGetAlwaysOnTop("A") ? "ontop" : "offtop", tip.RB(top ": " WinGetTitle("A"))
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()

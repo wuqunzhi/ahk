@@ -10,11 +10,13 @@
 SetTitleMatchMode("RegEx")
 CoordMode("ToolTip", "Screen")
 tip.n(A_ScriptName " running. AHK " A_AhkVersion, 1000, 0, -2)
+
 woz := WozUI()
+
 <^space:: woz.toggleGui(), KeyWait("space")
 ~esc:: woz.hideGui(), tip.removeAllTip(5)
 >^space:: ahkManager()
-win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
+
 #HotIf WinActive(win_woz)
 enter::tab
 NumpadEnter::tab
@@ -25,6 +27,7 @@ NumpadEnter::tab
 enter::
 tab:: copyandshow(woz.copystr, 5000, 1190, 223), woz.hideGui()
 #HotIf
+
 
 class WozUI {
     mode := 'hide'
@@ -52,6 +55,14 @@ class WozUI {
         this.g.OnEvent("Escape", (*) => this.hideGui())
     }
     initCMDs() {
+        /**
+         * @param id 命令id
+         * @param func 函数名 
+         * @param args 函数参数 
+         * @param hint 显示描述 
+         * @param flag 匹配规则 ^ * full reg
+         * @param pattern 什么情况显示
+         */
         addcmd(id, func := id, args := "", hint := id, flag := "", pattern := "") {
             this.cmds.Set(id, [func, args, hint, flag, pattern])
         }
@@ -71,6 +82,10 @@ class WozUI {
         addcmd("k wx", "kill", "wx", "kill WeChat.exe", "full")
         addcmd("k clash", "kill", "clash", "kill clash", "full")
         addcmd("k yd", "kill", "yd", "kill youdao", "full")
+
+        addcmd("key", "run", "code D:\vscodeProjects\ahk\keyChange.ahk", "keychange")
+        addcmd("c bililive", "code", vspDir "\bililive", "code bililive")
+        addcmd("c ahk", "code", vspDir "\ahk", "code ahk")
 
 
         ; ahk
@@ -95,6 +110,7 @@ class WozUI {
         addcmd("CombineButtons", , , "切换合并任务栏按钮") ;
         addcmd("ps", , , "processManager")
         addcmd("touchpad", , , "切换触摸板")
+        addcmd("ulpb", , , "切换双拼全拼")
         addcmd("lock", , , "锁屏")
         addcmd("remote", "run", "mstsc", "远程桌面连接")
         addcmd("mstsc", "run", "mstsc", "远程桌面连接")
@@ -278,6 +294,8 @@ class WozUI {
                         run(s)
                     tip.LB("runs: `n" StrReplace(args, "|", "`n"))
 
+                case "code": tip.p(args), run("code " args), tip.LB("code " args)
+
                 case "mousemove": click(args . " 0")
                 case "-v": tip.RB(A_ScriptName " version AHK " A_AhkVersion)
                 case "restartexplorer": restartExplorer()
@@ -291,6 +309,7 @@ class WozUI {
                 case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
                 case "colorhook": colorg.toggleshow() ;!!!!!
                 case "touchpad": toggleTouchpad()
+                case "ulpb": toggleDoublePin()
                 case "bluetooth": Run("control.exe bthprops.cpl")
                     ; case "timer": timeh.toggleshow()
                 case "env":

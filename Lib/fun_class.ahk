@@ -11,6 +11,12 @@ class MultiMonitor {
     ; 切换焦点到目标显示器
     static activate(idx) {
         curIdx := this.getCurrentIndex()
+        curIdx ? tip.LM(0) : tip.LM2(1)
+
+        if (curidx == idx) {
+            curIdx ? tip.LM2(1) : tip.LM(0)
+            return
+        }
         idList := WinGetList()
         for id in idList {
             if (WinActive("ahk_id " id))
@@ -30,6 +36,7 @@ class MultiMonitor {
     }
     ; 切换焦点到下个显示器的激活窗口 好好好
     static activateNext() => this.activate(!this.getCurrentIndex())
+
 
     ; "/Monitor.ahk"
     ; "/VisualDesktop.ahk"

@@ -90,8 +90,14 @@ class IME {
         } catch as e
             log(e)
     }
-
 }
+
+toggleDoublePin() {
+    use := RegRead("HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputMethod\Settings\CHS", "Enable Double Pinyin")
+    tip.LM(use ? "全拼" : "双拼")
+    RegWrite(!use, "REG_DWORD", "HKEY_CURRENT_USER\SOFTWARE\Microsoft\InputMethod\Settings\CHS", "Enable Double Pinyin")
+}
+
 
 ; --------设置鼠标光标: 0默认 1自定义
 setCusor(mode := 0) {

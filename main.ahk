@@ -9,7 +9,6 @@
 #Warn Unreachable, off
 
 ; https://wyagd001.github.io/v2/docs/
-; 297243351
 
 init()
 #Include config.ahk ;放前面
@@ -35,19 +34,24 @@ init()
 #Include files\qqmusic.ahk
 #Include global.ahk ;放最后
 
-#SuspendExempt
+#SuspendExempt true
 CapsLock & \:: Suspend  ; Ctrl+Alt+S
+#SuspendExempt false
+
 
 init() {
-    SetTitleMatchMode("RegEx")    ;! case sensitive
-    ;ahk v2开始 croodMode 默认全是client
+    tip.LB(A_ScriptName " running. AHK " A_AhkVersion)
+
+    SetTitleMatchMode("RegEx")     ;注意大小写敏感
+    ; **ahk v2开始 croodMode 默认全是client**
     CoordMode("ToolTip", "Screen") ;作用于ToolTip.
     CoordMode("Pixel", "Client")   ;作用于PixelGetColor, PixelSearch 和 ImageSearch.
     CoordMode("Caret", "Client")   ;作用于CaretGetPos.
     CoordMode("Menu", "Client")    ;作用于Menu.Show 方法, 当为其指定坐标时.
     CoordMode("Mouse", "Client")   ;作用于MouseGetPos, Click 和 MouseMove, MouseClick 和 MouseClickDrag.
     SetMouseDelay(-1)
-    tip.LB(A_ScriptName " running. AHK " A_AhkVersion)
+    SetCapsLockState "AlwaysOff"
+    SetNumLockState "AlwaysOn"
     SetTimer(police, 1000)
     disableWinL()
 }

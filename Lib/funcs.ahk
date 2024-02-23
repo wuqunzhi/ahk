@@ -12,6 +12,11 @@
 #Include steal\Monitor.ahk
 #Include ../private.ahk
 
+; 是否处于双烤线到另一台机器
+inNeighbor() {
+    return WinActive(win_taskbar) && msx() == 960 && msy() == 540 && mcy() == -490 && mcx() == 960
+}
+
 
 ; 通过注册表启动锁屏
 lockComputer() {

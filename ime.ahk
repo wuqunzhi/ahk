@@ -5,15 +5,15 @@
 ; ; 右shift + 右alt 强制切换为美式键盘
 ; ; CapsLock + NumLock 全部窗口设置英文
 ; ; 中文时输入jkjk或按CapsLock切换为英文
-
+#HotIf
 RShift Up:: IME.isCHzhong() ? IME.setCHying() : IME.setCHzhong()
 >!Rshift:: IME.setEn(), tip.p("美式键盘")
 CapsLock & NumLock:: IME.setCHyingAll(), tip.p("全部窗口设置英文", 3000)
 ; >+.:: setCHzhong1025Force()
+; #HotIf !GetKeyState('LAlt') ;!!!
 
 global ingame
 #HotIf not ingame
-#HotIf !GetKeyState('LAlt') ;!!!
 Lshift Up:: {
     ; 左shift 强制切换为英文输入法
     ; no 右shift 强制切换为中文输入法

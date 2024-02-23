@@ -417,11 +417,12 @@ GroupAdd("jkl2e_n", "ahk_exe chrome.exe")
 #HotIf WinActive("ahk_group jkl2e_n") and zvim.mode == "i"
 ;jkl to enter Edit_Normal
 ~j:: {
-    if KeyWait("k", "D T0.5") {
-        if KeyWait("l", "D T0.5") {
-            send("{bs 3}")
-            zvim.go("e_n")
-        }
-    }
+    if (KeyWait("k", "T0.5"))
+        if KeyWait("k", "D T0.5")
+            if KeyWait("l", "T0.5")
+                if KeyWait("l", "D T0.5") {
+                    send("{bs 3}")
+                    zvim.go("e_n")
+                }
 }
 #HotIf

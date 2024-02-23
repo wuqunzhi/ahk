@@ -12,6 +12,7 @@ class tip {
     static pos_lb := 17
     static pos_mb := 18
     static pos_rb := 19
+    static monitorX := 2400
     static __New() {
         CoordMode("ToolTip", "Screen")
         loop 20
@@ -47,7 +48,7 @@ class tip {
     __New(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
         tip.pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's')
     }
-    static pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
+    static pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's', monitor := 0) {
         if (!IsSet(str)) {
             ToolTip(, , , which?)
             return
@@ -88,6 +89,8 @@ class tip {
         which := IsSet(which) ? which : Mod(c++, tip.randomMaxIndex) + 1
 
         ; ToolTip
+        if (monitor)
+            x += this.monitorX
         tooltip(str?, x?, y?, which)
 
         ; removeTip
@@ -123,11 +126,17 @@ class tip {
     static LM(str := unset, time := 500) {
         tip.pp(str?, time, 0, 0.5, tip.pos_lm)
     }
+    static LM2(str := unset, time := 500) {
+        tip.pp(str?, time, 0, 0.5, tip.pos_lm, , 1)
+    }
     static MM(str := unset, time := 3000) {
         tip.pp(str?, time, 0.45, 0.5, tip.pos_mm)
     }
     static RM(str := unset, time := 3000) {
         tip.pp(str?, time, 1, 0.5, tip.pos_rm)
+    }
+    static RM2(str := unset, time := 3000) {
+        tip.pp(str?, time, 4800, 0.5, tip.pos_rm, , 2)
     }
     static LB(str := unset, time := 3000) {
         tip.pp(str?, time, 0, 1, tip.pos_lb)
