@@ -14,10 +14,10 @@ CapsLock Up:: send("{esc}") ;, tip.LM("esc")
 #^w:: VirtualDesktop.Current.Remove()
 #^h:: VirtualDesktop.showCycleLeft()
 #^l:: VirtualDesktop.showCycleRight()
-#h:: MultiMonitor.activate(0)
-#l:: MultiMonitor.activate(1)
-#+h::+#Left
-#+l::+#Right
+; #h:: MultiMonitor.activate(0)
+; #l:: MultiMonitor.activate(1)
+; #+h::+#Left
+; #+l::+#Right
 #tab:: MultiMonitor.activateNext()
 <^>!j::+#Left
 #CapsLock::+#Left
@@ -81,10 +81,10 @@ CapsLock & 7:: markWindow.toggle(7)
 CapsLock & 8:: markWindow.toggle(8)
 CapsLock & 9:: markWindow.toggle(9)
 >!l:: lockComputer()
-; #l:: markWindow.toggle(11)
-; #+l:: markWindow.mark(11)
-; #+h:: markWindow.mark(12)
-; #h:: markWindow.toggle(12)
+#l:: markWindow.toggle(11)
+#+l:: markWindow.mark(11)
+#+h:: markWindow.mark(12)
+#h:: markWindow.toggle(12)
 #+;:: markWindow.mark(13)
 #;:: markWindow.toggle(13)
 CapsLock & alt:: return

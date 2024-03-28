@@ -1,9 +1,13 @@
 ; XButton1::^Insert ;复制
 ; XButton2::+Insert ;粘贴
 
-#HotIf 1 ; 复制粘贴
+#HotIf 0 ; 复制粘贴
 XButton1::^Insert ;复制
 XButton2::+Insert ;粘贴
+
+#HotIf 0
+RButton::2
+XButton1::2
 
 #HotIf 0 and ingame and WinActive("ahk_group games")
 Space::LButton

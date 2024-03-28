@@ -17,7 +17,7 @@ init()
 #Include zvim.ahk               ; vim键位操作鼠标 hjkl移动鼠标窗口等
 #Include clipboard.ahk          ; 记录剪贴板历史
 #Include ime.ahk                ; 输入法相关
-#Include keyChange.ahk          ; 改键
+#Include keyMap.ahk          ; 改键
 #Include wheel.ahk              ; 鼠标滚轮相关
 #Include files\vscode.ahk
 #Include files\chrome.ahk

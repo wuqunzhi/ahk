@@ -13,8 +13,8 @@ class CBH {
         ; 自定义函数，用于将剪贴板内容添加到历史记录中
         f := FileOpen(filePath, "w", "utf-8")
         for index, value in CBH.clipboardHistory {
-            if StrLen(value) > 1000
-                value := strdot('=', 80) . value . strdot('=', 80)
+            if StrLen(value) > 500
+                value := strdot('+', 80) . '`n' . value . '`n' . strdot('-', 80) . '`n'
             f.Write(value . append)
         }
         f.Close()
