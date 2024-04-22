@@ -2,6 +2,7 @@
 #Include fun_str.ahk
 #Include fun_win.ahk
 #Include fun_copy.ahk
+#Include fun_file.ahk
 #Include fun_click.ahk
 #Include fun_ime.ahk
 #Include fun_class.ahk
@@ -70,6 +71,7 @@ winclear() {
     GroupAdd("winclear", win_taskManager)
     GroupAdd("winclear", win_youdao)
     GroupAdd("winclear", win_clash)
+    GroupAdd("winclear", win_notepad)
     WinClose("ahk_group winclear")
 }
 
@@ -329,17 +331,6 @@ autorun(str := A_Clipboard) {
     }
 }
 
-; 获取dir下所有文件 目前需要加通配符例如
-; C:\Users\79481\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\\*
-getfiles(dir, mode := "") {
-    ; dir := A_Desktop . "\桌面2\*"
-    ; https://wyagd001.github.io/v2/docs/lib/LoopFiles.htm
-    res := []
-    loop files dir, mode {
-        res.Push(A_LoopFileName)
-    }
-    return res
-}
 
 focus_wx() {
     ; if WinWaitActive(win_wechat, , 1) {
@@ -390,8 +381,8 @@ transRaw(str := A_Clipboard, mode := 1) {
     ; ClipContent := StrReplace(ClipContent, "`;", "```;")
 }
 
-
 nop() {
+    return 1
 }
 
 /**

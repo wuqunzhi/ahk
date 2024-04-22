@@ -245,8 +245,8 @@ class clk {
 
 
 }
-
-mx(rel) {
+; 鼠标位置x, 相对rel:c,s,w
+mx(rel := 's') {
     switch rel {
         case 'c': return mcx()
         case 's': return msx()
@@ -254,8 +254,8 @@ mx(rel) {
         default: return msx()
     }
 }
-
-my(rel) {
+; 鼠标位置y, 相对rel:c,s,w
+my(rel := 's') {
     switch rel {
         case 'c': return mcy()
         case 's': return msy()
@@ -263,55 +263,64 @@ my(rel) {
         default: return msy()
     }
 }
-
+; 鼠标位置x, 相对屏幕
 msx() {
     CoordMode("Mouse", "Screen")
     MouseGetPos(&x)
     CoordMode("Mouse", "Client")
     return x
 }
+; 鼠标位置y, 相对屏幕
 msy() {
     CoordMode("Mouse", "Screen")
     MouseGetPos(, &y)
     CoordMode("Mouse", "Client")
     return y
 }
+; 鼠标位置x, 相对当前窗口
 mwx() {
     CoordMode("Mouse", "Window")
     MouseGetPos(&x)
     CoordMode("Mouse", "Client")
     return x
 }
+; 鼠标位置y, 相对当前窗口
 mwy() {
     CoordMode("Mouse", "Window")
     MouseGetPos(, &y)
     CoordMode("Mouse", "Client")
     return y
 }
+; 鼠标位置x, 相对当前client
 mcx() {
     CoordMode("Mouse", "Client")
     MouseGetPos(&x)
     CoordMode("Mouse", "Client")
     return x
 }
+; 鼠标位置y, 相对当前client
 mcy() {
     CoordMode("Mouse", "Client")
     MouseGetPos(, &y)
     CoordMode("Mouse", "Client")
     return y
 }
+
+; 鼠标位置[x, y], 相对屏幕
 mouses() {
     CoordMode("Mouse", "Screen")
     MouseGetPos(&x, &y)
     CoordMode("Mouse", "Client")
     return [x, y]
 }
+; 鼠标位置[x, y], 相对当前窗口
 mousew() {
     CoordMode("Mouse", "Window")
     MouseGetPos(&x, &y)
     CoordMode("Mouse", "Client")
     return [x, y]
 }
+; 鼠标位置[x, y], 相对当前client
 mousec() {
     CoordMode("Mouse", "Client")
     MouseGetPos(&x, &y)

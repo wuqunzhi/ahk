@@ -1,11 +1,18 @@
 #HotIf
 class zvim {
     static mode := "i"
-    static GN_x := [5, 30, 80]
-    static GN_y := [5, 30, 80]
+    static GN_val := Map('x1', 5, 'y1', 5, 'x2', 30, 'y2', 30, 'x3', 80, 'y3', 80, 'showmode', 'ms')
+    static GN_valDefault := zvim.GN_val
+    ; Map('x1', 5, 'y1', 5, 'x2', 30, 'y2', 30, 'x3', 80, 'y3', 80, 'showmode', 'ms')
+    static GN_x := [5, 30, 80]    ;鼠标移动步伐，份3档
+    static GN_y := [5, 30, 80]    ;鼠标移动步伐，份3档
     static GN_showMode := "ms"
-    static GN_default := [5, 5, 30, 30, 80, 80, "ms"]
-    static GW_m := 50    ;刚好是任务栏高度
+    ; static GN_default := [5, 5, 30, 30, 80, 80, "ms"]
+    static GN_mouse_portal := [0, 0] ;鼠标sl记录
+
+    static GW_step := 50    ;窗口移动步伐，50刚好是任务栏高度
+    static GW_v_m := 1      ;dwm 列数
+    static GW_v_n := 1      ;dwm 行数
 
     static go(mode) {
         zvim.mode := mode
@@ -42,23 +49,24 @@ class zvim {
             tip.MB(str, "oo")
         }
         winSpy_GN() {
-            str := Format("-- Gui Normal {} --", debugInfo(zvim.GN_showMode, ' '))
+            str := Format("-- Gui Normal {} --", debugInfo(zvim.GN_val['showmode'], ' '))
             tip.MB(str, "oo")
         }
     }
 
-    static GN_adjust(parm, dif) {
-        switch parm {
-            case 'x1': zvim.GN_x[1] += dif, tip.p(parm " " zvim.GN_x[1])
-            case 'x2': zvim.GN_x[2] += dif, tip.p(parm " " zvim.GN_x[2])
-            case 'x3': zvim.GN_x[3] += dif, tip.p(parm " " zvim.GN_x[3])
-            case 'y1': zvim.GN_y[1] += dif, tip.p(parm " " zvim.GN_y[1])
-            case 'y2': zvim.GN_y[2] += dif, tip.p(parm " " zvim.GN_y[2])
-            case 'y3': zvim.GN_y[3] += dif, tip.p(parm " " zvim.GN_y[3])
-            case 'xy1': zvim.GN_x[1] += dif, zvim.GN_y[1] += dif, tip.p(parm " " zvim.GN_x[1] " " zvim.GN_y[1])
-            case 'xy2': zvim.GN_x[2] += dif, zvim.GN_y[2] += dif, tip.p(parm " " zvim.GN_x[2] " " zvim.GN_y[2])
-            case 'xy3': zvim.GN_x[3] += dif, zvim.GN_y[3] += dif, tip.p(parm " " zvim.GN_x[3] " " zvim.GN_y[3])
-            default:
+    static GN_adjust(key, dif) {
+        switch key {
+            case 'x1', 'x2', 'x3', 'y1', 'y2', 'y3':
+                zvim.GN_val[key] += dif, tip.p(key " : " zvim.GN_val)
+            case 'xy1':
+                zvim.GN_val['x1'] += dif, zvim.GN_val['y1'] += dif
+                tip.p("x1 y1 : " zvim.GN_val['x1'] " " zvim.GN_val['y1'])
+            case 'xy2':
+                zvim.GN_val['x2'] += dif, zvim.GN_val['y2'] += dif
+                tip.p("x2 y2 : " zvim.GN_val['x2'] " " zvim.GN_val['y2'])
+            case 'xy3':
+                zvim.GN_val['x3'] += dif, zvim.GN_val['y3'] += dif
+                tip.p("x3 y3 : " zvim.GN_val['x3'] " " zvim.GN_val['y3'])
         }
     }
 
@@ -67,7 +75,6 @@ class zvim {
             ; SendEvent("{d up}{d Down}")
         }
     }
-
     static GN_multiMove(keys) {
         x := 0, y := 0, i := 2
         i := GetKeyState('Shift', 'p') ? 3 : i
@@ -81,94 +88,18 @@ class zvim {
     }
     static GN_setting() {
         zvim.go("tmpi")
-        prompt := "
-            (
-                支持命令:
-                :set x 30 y 50 x1 5 x3 80
-                :set mode ms c
-                :go 100 200 [c/s/w]
-                :reset
-            )" . "`n" . zvim.GN_getSettings()
-
-        IB := InputBox(prompt, "-- GUI Normal Setting --", "w400 h240") ;"w640 h480"
-        if (IB.result = "Cancel") {
-            zvim.go("g_n")
-            return
-        }
-        res := Trim(IB.Value)
-        try dealcmd(res)
-        catch Error as e {
-            logM(e)
-        }
+        SettingsGUI.run(this.GN_val, this.GN_valDefault, 'GUI_Normal Setting')
         zvim.go("g_n")
-        dealcmd(cmd) {
-            if (cmd == "")
-                return
-            if (cmd == "reset") {
-                zvim.GN_reset()
-                zvim.GN_showSettings()
-                return
-            }
-            args := StrSplit(cmd, A_Space)
-            ; go 100 200 [s/c/w]
-            if (args[1] == "go") {
-                x := args[2], y := args[3]
-                rel := (args.Length == 4) ? args[4] : 's'
-                clk.Rel(Format("{} {} 0", x, y), rel)
-                return
-            }
-            if (args[1] == "set") {
-                if (args[2] == 'mode')
-                    GN_set(args[2], StrSplit(cmd, A_Space, , 3)[3])
-                else {
-                    args.RemoveAt(1)
-                    loop args.Length // 2
-                        GN_set(args[2 * A_Index - 1], args[2 * A_Index])
-                    zvim.GN_showSettings()
-                    return
-                }
-            }
-        }
-
-        GN_set(parm, value) {
-            switch parm {
-                case 'x': zvim.GN_x[2] := Integer(value)
-                case 'y': zvim.GN_y[2] := Integer(value)
-                case 'x1': zvim.GN_x[1] := Integer(value)
-                case 'y1': zvim.GN_y[1] := Integer(value)
-                case 'x3': zvim.GN_x[2] := Integer(value)
-                case 'y2': zvim.GN_y[2] := Integer(value)
-                case 'x3': zvim.GN_x[3] := Integer(value)
-                case 'y3': zvim.GN_y[3] := Integer(value)
-                case 'mode': zvim.GN_showMode := value
-            }
-            zvim.GN_showSettings()
-        }
-    }
-    static GN_showSettings() {
-        tip.LB(zvim.GN_getSettings())
-    }
-    static GN_getSettings() {
-        return Format("
-        (
-            当前设置:
-            x1, y1 : {}, {}
-            x2, y2 : {}, {}
-            x3, y3 : {}, {}
-            showMode: {}
-        )", zvim.GN_x[1], zvim.GN_y[1], zvim.GN_x[2], zvim.GN_y[2],
-            zvim.GN_x[3], zvim.GN_y[3], zvim.GN_showMode)
     }
 
-    static GN_reset() {
-        zvim.GN_x[1] := zvim.GN_default[1]
-        zvim.GN_y[1] := zvim.GN_default[2]
-        zvim.GN_x[2] := zvim.GN_default[3]
-        zvim.GN_y[2] := zvim.GN_default[4]
-        zvim.GN_x[3] := zvim.GN_default[5]
-        zvim.GN_y[3] := zvim.GN_default[6]
-        zvim.GN_showMode := zvim.GN_default[7]
-        zvim.GN_showSettings()
+    static GN_mouse_save() {
+        zvim.GN_mouse_portal := mouses()
+    }
+    static GN_mouse_load() {
+        ; 鼠标位置y, 相对rel:c,s,w
+        x := zvim.GN_mouse_portal[1]
+        y := zvim.GN_mouse_portal[2]
+        clk.s(x " " y " 0")
     }
 
     static GN_oppend(key) {
@@ -178,7 +109,7 @@ class zvim {
         ih.Wait()
         res := ih.Input
         switch key . res, true {
-            case "yy": copyandshow(debugInfo(zvim.GN_showMode, ' '))
+            case "yy": copyandshow(debugInfo(zvim.GN_val['showmode'], ' '))
             case " j": moveDMost()
             case " k": moveUMost()
             case " h": moveLMost()
@@ -193,6 +124,22 @@ class zvim {
             case "gm": clk.center()
         }
         zvim.go("g_n")
+    }
+    static GW_oppend(key) {
+        zvim.go("tmpi")
+        ih := InputHook("T3 L1")
+        ih.Start()
+        ih.Wait()
+        res := ih.Input
+        switch key . res, true {
+            case "v2": DWM.setMN(2, 1).fill(recentWins(2))
+            case "vv": DWM.setMN(2, 1).fill(recentWins(2))
+            case "vV": DWM.setMN(1, 2).fill(recentWins(2))
+            case "vo": DWM.setMN(0).fill(getWinO("A"))
+            case "vt": DWM.transpose().reload()
+            case "v4": DWM.setMN(2, 2)
+        }
+        zvim.go("g_w")
     }
 
     static EN_oppend(key) {
@@ -232,20 +179,20 @@ class zvim {
 ; -------------------- GUI Normal --------------------
 #HotIf zvim.mode = "g_n"
 ; -------------------- 移动鼠标
-!j:: moveD(zvim.GN_x[1])
-!k:: moveU(zvim.GN_x[1])
-!h:: moveL(zvim.GN_y[1])
-!l:: moveR(zvim.GN_y[1])
-j:: moveD(zvim.GN_y[2])
-k:: moveU(zvim.GN_y[2])
-h:: moveL(zvim.GN_x[2])
-l:: moveR(zvim.GN_x[2])
-+j:: moveD(zvim.GN_y[3])
-+k:: moveU(zvim.GN_y[3])
-+h:: moveL(zvim.GN_y[3])
-+l:: moveR(zvim.GN_y[3])
-Numpad5:: copyandshow(debugInfo(zvim.GN_showMode))
-Numpad8:: clk.k(A_Clipboard)
+!j:: moveD(zvim.GN_val['x1'])
+!k:: moveU(zvim.GN_val['x1'])
+!h:: moveL(zvim.GN_val['y1'])
+!l:: moveR(zvim.GN_val['y1'])
+j:: moveD(zvim.GN_val['y2'])
+k:: moveU(zvim.GN_val['y2'])
+h:: moveL(zvim.GN_val['x2'])
+l:: moveR(zvim.GN_val['x2'])
++j:: moveD(zvim.GN_val['y3'])
++k:: moveU(zvim.GN_val['y3'])
++h:: moveL(zvim.GN_val['y3'])
++l:: moveR(zvim.GN_val['y3'])
+Numpad5:: zvim.GN_mouse_save()
+Numpad8:: zvim.GN_mouse_load()
 ; ~s & a::
 ; ~w & a:: zvim.GN_multiMove('wa')
 ; ~a & w::
@@ -297,19 +244,20 @@ i:: zvim.go("i")
 ; -------------------- GUI Window --------------------
 #HotIf zvim.mode = "g_w"
 ; -------------------- 窗口位置
-j:: winMoveD(zvim.GW_m)
-k:: winMoveU(zvim.GW_m)
-h:: winMoveL(zvim.GW_m)
-l:: winMoveR(zvim.GW_m)
+; 5:: DWM.winMoveXYth()
+j:: winMoveD(zvim.GW_step)
+k:: winMoveU(zvim.GW_step)
+h:: winMoveL(zvim.GW_step)
+l:: winMoveR(zvim.GW_step)
 +j:: winMoveDMost()
 +k:: winMoveUMost()
 +h:: winMoveLMost()
 +l:: winMoveRMost()
 ; -------------------- 窗口大小
-s:: winResizeD(zvim.GW_m)
-w:: winResizeD(-zvim.GW_m)
-a:: winResizeL(-zvim.GW_m)
-d:: winResizeL(zvim.GW_m)
+s:: winResizeD(zvim.GW_step)
+w:: winResizeD(-zvim.GW_step)
+a:: winResizeL(-zvim.GW_step)
+d:: winResizeL(zvim.GW_step)
 ; !s:: winResizeD(-zvim.GW_m)
 ; !w:: winResizeU(-zvim.GW_m)
 ; !a:: winResizeH(-zvim.GW_m)
@@ -329,6 +277,11 @@ r:: WinRestore("A")
 ; -------------------- 模式切换
 t:: zvim.go("g_n")
 i:: zvim.go("i")
+; -------------------- dwm
+v:: zvim.GW_oppend('v')
+#HotIf zvim.mode = "g_w" and zvim.GW_v_m * zvim.GW_v_n != 1
+; Left:: winSplitMove(zvim.GW_v_m, zvim.GW_v_n,)
+
 #HotIf
 
 
@@ -411,7 +364,8 @@ v:: send("{down}{up}"), zvim.go("e_n")
 ; #SuspendExempt
 ; >^[:: Suspend(), tip(A_IsSuspended ? "suspend" : "active", , 0, 1, 16)
 ; #SuspendExempt False
-GroupAdd("jkl2e_n", "ahk_exe chrome.exe")
+GroupAdd("jkl2e_n", win_chrome)
+GroupAdd("jkl2e_n", win_notepad)
 
 
 #HotIf WinActive("ahk_group jkl2e_n") and zvim.mode == "i"

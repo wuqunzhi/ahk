@@ -5,6 +5,7 @@
 #Include config.ahk ;放前面
 #Include private.ahk
 #Include Lib\funcs.ahk
+#Include <fun_file>
 #HotIf
 
 SetTitleMatchMode("RegEx")
@@ -83,7 +84,7 @@ class WozUI {
         addcmd("k clash", "kill", "clash", "kill clash", "full")
         addcmd("k yd", "kill", "yd", "kill youdao", "full")
 
-        addcmd("key", "run", "code D:\vscodeProjects\ahk\keyChange.ahk", "keychange")
+        addcmd("key", "run", "code D:\vscodeProjects\ahk\keyMap.ahk", "keyMap")
         addcmd("c bililive", "code", vspDir "\bililive", "code bililive")
         addcmd("c ahk", "code", vspDir "\ahk", "code ahk")
 
@@ -97,20 +98,21 @@ class WozUI {
         addcmd("test", "runAs", "test.ahk", "runAs test.ahk")
         addcmd("dy", "run", "code E:\垃圾桶\dy.txt", "code dy.txt")
 
-        addcmd("nop")
+        ; addcmd("nop")
         addcmd("-v", , , A_AhkVersion)
         addcmd("timer")
         addcmd("game")
+        addcmd("notepad", , , "notepad")
         addcmd("showintxt", , , "将剪贴板内容用vscode打开") ;
         addcmd("bluetooth", , , "打开蓝牙设置")
         addcmd("ls", , , "list all ahk")
-        addcmd("fclr", "recycleEmpty", , "清空回收站")
+        addcmd("fclr", "fclear", , "整理桌面")
         addcmd("wclr", "winclear", , "关闭无关紧要窗口")
         addcmd("restartexplorer", , , "重启资源管理器")
         addcmd("CombineButtons", , , "切换合并任务栏按钮") ;
         addcmd("ps", , , "processManager")
         addcmd("touchpad", , , "切换触摸板")
-        addcmd("ulpb", , , "切换双拼全拼")
+        addcmd("doublepin", , , "切换双拼全拼")
         addcmd("lock", , , "锁屏")
         addcmd("remote", "run", "mstsc", "远程桌面连接")
         addcmd("mstsc", "run", "mstsc", "远程桌面连接")
@@ -297,19 +299,18 @@ class WozUI {
                 case "code": tip.p(args), run("code " args), tip.LB("code " args)
 
                 case "mousemove": click(args . " 0")
+                case "notepad": createNotepad()
                 case "-v": tip.RB(A_ScriptName " version AHK " A_AhkVersion)
                 case "restartexplorer": restartExplorer()
                 case "CombineButtons": toggleTaskbarCombineButtons()
                 case "ps": processManager()
                 case "showintxt": showIntxt(A_Clipboard)
-                case "recycleEmpty":
-                    if (MsgBox("是否清空回收站?", "", 1) = "ok")
-                        FileRecycleEmpty(), tip.LB("FileRecycleEmpty")
+                case "fclear": fclear()
                 case "winclear": winclear()
                 case "record": ahk("t", "record.ahk", ".\utils\record.ahk")
                 case "colorhook": colorg.toggleshow() ;!!!!!
                 case "touchpad": toggleTouchpad()
-                case "ulpb": toggleDoublePin()
+                case "doublepin": toggleDoublePin()
                 case "bluetooth": Run("control.exe bthprops.cpl")
                     ; case "timer": timeh.toggleshow()
                 case "env":

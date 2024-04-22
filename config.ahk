@@ -2,6 +2,7 @@ global ingame := 0
 global win_steam := "Steam ahk_exe steamwebhelper.exe ahk_class SDL_app"               ; steam
 global win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"           ; woz
 global win_chrome := "^.+.*$ ahk_exe chrome.exe ahk_class Chrome_WidgetWin_1"          ; chrome
+global win_notepad := "ahk_exe notepad.exe ahk_class Notepad"          ; chrome
 global win_edge := "ahk_exe msedge.exe ahk_class Chrome_WidgetWin_1"                   ; edge
 global win_vscode := "ahk_exe Code.exe ahk_class Chrome_WidgetWin_1"                   ; vscode
 global win_vscodeNote := "^Note - .* - Visual Studio Code.*$ " win_vscode              ; vscodeNote

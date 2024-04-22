@@ -57,6 +57,101 @@ class VimControl {
 }
 #HotIf
 
+class SettingsGUI {
+    /**
+     * 呼出窗口进行简单的参数设置
+     * 
+     * @param {Map} vals 设置项
+     * @param {Map} defaults 设置项默认值
+     * @param {String} title 窗口标题
+     * @param {Array} prompt 前缀和后缀
+     * @param {string} size 窗口大小  
+     */
+    static run(valsMap, defaults := Map(), title := "setting", prompt := ["", ""], w := 400, h := 0) {
+
+        prompt := "
+        (
+            用法：
+                :set key1 val1 [key2 val2 ...]
+                :set key "val with space"
+                :reset [key]
+            )" . "`n"
+        pre := ""
+        for settingName, settingVal in valsMap {
+            if InStr(settingVal, ' ')
+                settingVal := '"' . settingVal . '"'
+            pre .= Format(':set {} {}`n', settingName, settingVal)
+        }
+        h := h == 0 ? 25 * countLines(pre . prompt) : h
+        tip.p(h)
+        sizestr := Format('w{} h{}', w, h)
+        IB := InputBox(pre . prompt, title, sizestr)
+        if (IB.result = "Cancel") {
+            return
+        }
+        cmd := Trim(IB.Value)
+        try dealcmd(cmd)
+        catch Error as e {
+            logM(e)
+        }
+        dealcmd(cmd) {
+            if (cmd == "")
+                return
+            args := StrSplitFix(cmd, A_Space)
+            if (args.Length <= 2) {
+                switch args[1] {
+                    case "reset":
+                        keys := args.Length == 2 ? args[2] : unset
+                        this.reset(valsMap, defaults, keys)
+                }
+                return
+            }
+            if (args.Length >= 3) {
+                if (args[3][1] == '"') {
+                    args := StrSplitFix(cmd, A_Space, , 3)
+                }
+                switch args[1] {
+                    case "set":
+                        res := ""
+                        loop (args.Length - 1) // 2 {
+                            key := args[2 * A_Index]
+                            val := args[2 * A_Index]
+                            valsMap.Has(key) ? valsMap[key] := val : 0
+                            res .= Format('set {} {}`n', key, val)
+                        }
+                        tip.LB(res)
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param valsMap 
+     * @param defaults 
+     * @param keys Array or String or unset
+     */
+    static reset(valsMap, defaults, resetKeys := unset) {
+        res := ""
+        keys := []
+        if (resetKeys is String)
+            keys.Push(resetKeys)
+        else if (resetKeys is Array)
+            keys := resetKeys
+        else if (!isSet(resetKeys))
+            for key, _ in valsMap
+                keys.push(key)
+
+        for key in keys {
+            if (valsMap.Has(key) and defaults.Has(key)) {
+                valsMap[key] := defaults[key]
+                res .= Format('reset {} {}`n', key, defaults[key])
+            }
+        }
+        tip.LB(keys)
+    }
+}
+
 ; --------------------------------------- GUI
 class colorGUI {
     showpage := 1
@@ -88,7 +183,7 @@ class colorGUI {
     }
     nextColor() {
         static idx := 1
-        colorList := "c00ffff", "cred"
+        colorList := ["c00ffff", "cred"]
         idx := nextn(idx, colorList.Length)
         this.info.opt(colorList[idx])
     }
@@ -156,7 +251,7 @@ class timerGUI {
             this.pause()
             return
         }
-        if (SubStr(res, 1, 1) = 'c') {
+        if (res[1] = 'c') {
             this.color1 := res
             this.t2.opt(this.color1)
             return

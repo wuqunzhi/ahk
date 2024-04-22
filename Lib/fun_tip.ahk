@@ -12,7 +12,7 @@ class tip {
     static pos_lb := 17
     static pos_mb := 18
     static pos_rb := 19
-    static monitorX := 2400
+    static monitorX := 2400 ;!!!多显示器使用
     static __New() {
         CoordMode("ToolTip", "Screen")
         loop 20
@@ -48,7 +48,7 @@ class tip {
     __New(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's') {
         tip.pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's')
     }
-    static pp(str := unset, time := 500, x := unset, y := unset, which := unset, rel := 's', monitor := 0) {
+    static pp(str := unset, time := 500, x := unset, y := unset, which := unset, relto := 's', monitor := 0) {
         if (!IsSet(str)) {
             ToolTip(, , , which?)
             return
@@ -56,7 +56,7 @@ class tip {
         if (IsInteger(str))
             str := String(str)
         ; x,y
-        switch rel {
+        switch relto {
             case "s": ; screen
                 winx := 0, winy := 0, winw := A_ScreenWidth, winh := A_ScreenHeight
                 x := !IsSet(x) ? unset : genxy(winx, winw, x?)
@@ -111,8 +111,16 @@ class tip {
     static random(str, time := 500, which := unset) {
         tip.pp(str, time, , , which?, 'r')
     }
+    ; 将宽分为20份，高度为n*25
     static n(str := unset, time := 500, x := unset, y := unset, which := unset) {
         tip.pp(str?, time, x?, y?, which?, 'n')
+    }
+    static test(str := unset, nth := unset, time := 3000) {
+        static th := 5
+        th += 1
+        th := Mod(th - 1, 40) + 2
+        nth := isset(nth) ? nth : th
+        tip.n(str?, time, 8, nth)
     }
     static LT(str := unset, time := 3000) {
         tip.pp(str?, time, 0, 0, tip.pos_lt)

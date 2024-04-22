@@ -1,5 +1,28 @@
+swap(&a, &b) {
+    tmp := a
+    a := b
+    b := tmp
+}
+; 让string支持[]索引,并支持倒着索引
+DefProp := {}.GetMethod("DefineProp")
+DefProp("".base, "__Item", { get: (var, index) =>
+    (index := index < 0 ? StrLen(var) + index + 1 : index, SubStr(var, index, 1))
+})
+; DelProp := {}.GetMethod("DeleteProp")
+; %DelProp%("".base, "__Item")
+
 ; 自带的StrSplit会带空字符: StrSplit("a  b",' ') => ["a","","b"]
-StrSplitFix(str, Delimiters) {
+StrSplitFix(str, Delimiters, omitChars?, maxparts := -1) {
+    tmpres := StrSplit(str, Delimiters, omitChars?, maxparts)
+    res := []
+    for str in tmpres {
+        if str != ""
+            res.Push(str)
+    }
+    return res
+}
+; 自带的StrSplit会带空字符: StrSplit("a  b",' ') => ["a","","b"]
+StrSplitFix2(str, Delimiters) {
     res := []
     loop parse str, Delimiters {
         if (A_LoopField == "")
@@ -7,6 +30,10 @@ StrSplitFix(str, Delimiters) {
         res.Push(A_LoopField)
     }
     return res
+}
+; 统计行数
+countLines(str) {
+    return StrSplitFix(str, '`n').Length
 }
 strJoin(strs, sep := ", ") {
     res := ""

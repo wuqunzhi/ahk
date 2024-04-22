@@ -21,11 +21,29 @@ DetectHiddenWindows(1)
 SetMouseDelay(-1)
 ;---------------------------------
 ; CoordMode("Mouse", "Screen")
+global i := 1
+8:: {
+    a := 1, b := 2
+    DWM.transpose().transpose()
+    tip.p(DWM.m)
+}
+7:: {
+    tip.p(i)
+    ; winSplitMove(2, 3, 0)
+    global i += 1
+    global i
+    if (i == 7)
+        i := 1
+}
 
-win_git := "ahk_exe mintty.exe ahk_class mintty"
 
 w := WinExist(win_git) ? win_git : win_cmd
-6:: toggleDoublePin()
+
+6:: DWM.fillO()
+5:: createNotepad()
+; 0:: WinActivate(68446)
+9:: WinShow(68446)
+; toggleDoublePin()
 ; Numpad8:: wintoggle0x20(w)
 ; Numpad5:: wintoggleTop(w)
 wintoggle0x20(hwnd) {

@@ -58,18 +58,15 @@ CapsLock & a:: appendCopy()
 CapsLock & c:: CBH.writeAndShowCBH()
 CapsLock & f::^!0 ;youdao
 CapsLock & p:: youdaoFanyi()
-CapsLock & r:: transRaw() ;!todo?
-CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
-
+CapsLock & r:: transRaw() ; !todo ?
+; CapsLock & t:: A_Clipboard := transtable(A_Clipboard), send("^v") ;!todo?
+CapsLock & t:: ((zvim.mode == "g_w") ? zvim.go('i') : zvim.go("g_w"))
 
 NumLock & Numpad1:: winSetCaption(-1)
 NumLock & Numpad2:: WinSetTransColor(mousecolor() " 150", "A")
-
 tmp() {
     ; run("http://127.0.0.1:8080")
 }
-
-
 CapsLock & `:: markWindow.maymark()
 CapsLock & 1:: private.nas()
 CapsLock & 2:: runOrActivate(Format('\Q{}\guopai\E', A_Desktop), 'at', 'a', Format("explorer {}", A_Desktop '\guopai'))
@@ -90,7 +87,6 @@ CapsLock & 9:: markWindow.toggle(9)
 CapsLock & alt:: return
 >!p:: wintoggleTop()
 >!+p:: winSetOffTop()
-
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
@@ -112,11 +108,9 @@ CapsLock & alt:: return
 #a:: send("{blink}^!z")     ; toggle qq
 #q:: send("{blink}^!{f10}") ; toggle qqmusic
 #y:: runOrActivate(win_cloudmusic, 'c', 'sa', A_desktop2 "/wyy")
-
 ; Windows + Shift + 向左键或向右键 : 将桌面上的应用或窗口从一台显示器移动至另一台显示器。
 ; #+h::#+left
 ; #+l::#+Right
-
 GroupAdd("games", "ahk_class Engine")
 GroupAdd("games", "ahk_class YYGameMakerYY")
 GroupAdd("games", "ahk_class UnityWndClass")
@@ -127,8 +121,6 @@ GroupAdd("games", "ahk_class SDL.app ahk_exe steamwebhelper.exe", , "Menu")
 #HotIf WinExist(win_steam)
 #s:: runOrActivate(win_steam, 'at', 'a')
 #HotIf
-
-
 ; o==========o==========o==========o==========o==========o c-hjkl
 ; <^b::^u ;!!!c-u c-d翻页
 <^u:: send("{Blink}{bs}")
@@ -152,7 +144,6 @@ GroupAdd("noc_hjkl", win_woz)
 ; <!h:: send("{blink}{left}")
 ; <!l:: send("{blink}{right}")
 #HotIf
-
 ; o==========o==========o==========o==========o==========o c-w , c-s-w
 GroupAdd("noc_w", win_vscode)
 GroupAdd("noc_w", win_chrome)
@@ -168,14 +159,12 @@ GroupAdd("noc_w", win_idea)     ; idea
 ; WinKill("A"),
 ^w:: WinClose("A"), tip.LM("WinClose A")    ;关闭
 #HotIf
-
 ; o==========o==========o==========o==========o==========o a-`
 GroupAdd("noa_quote", win_vscode)
 GroupAdd("noa_quote", win_idea)  ; 不在谷歌,vscode
 #HotIf !WinActive("ahk_group noa_quote")
 <!`:: run("cmd", A_Desktop)
 #HotIf
-
 ; o==========o==========o==========o==========o==========o 调试相关
 CapsLock & Numpad1:: runOrActivate("Window Spy", "c", 'a', "D:\AutoHotkey_2.0.10\WindowSpy.ahk")
 CapsLock & Numpad2:: { ;打开脚本主窗口
@@ -183,15 +172,12 @@ CapsLock & Numpad2:: { ;打开脚本主窗口
     WinActivate("ahk_id" . A_ScriptHwnd)
     send ("{f5}")
 }
-
 CapsLock & Numpad3:: listWins(, showEach := true)
 CapsLock & Numpad4:: ahkManager()
 CapsLock & Numpad5:: copyandshow(debugInfo('w1'))
 CapsLock & q:: run("https://wyagd001.github.io/v2/docs/lib/" A_Clipboard ".htm")
 CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 #HotIf
-
-
 ; o==========o==========o==========o==========o==========o 热字串
 ; https://wyagd001.github.io/v2/docs/Hotstrings.htm#Options
 ; 符号后面加`转中文符号
@@ -202,7 +188,6 @@ CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 :*?:\``::、
 :*?:<``::《
 :*?:>``::》
-
 ; :?*x:]t:: SendInput Format("{}:{}:{}", A_Hour, A_Min, A_Sec) ;在vscodeVim中有bug,估计是input太快的原因
 ; :?*x:]d:: SendInput Format("{}-{}-{}", A_YYYY, A_MM, A_DD)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
@@ -215,5 +200,4 @@ sendInputVimFix(str) {
         Sleep(60)
     }
 }
-
 #HotIf

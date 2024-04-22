@@ -28,7 +28,7 @@ appendCopy(sep := "`n", usekey := "^c") {
 }
 
 ;sleep(delay) and tip clipboard
-showcopy(delay := 200, time := 1000) {
+showcopy(delay := 200, time := 2000) {
     sleep(delay) ;must
     tip.RB("已复制: " A_Clipboard, time)
 }

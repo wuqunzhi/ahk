@@ -1,3 +1,111 @@
+; restore and move center
+; winReset(0,0) 窗口还原最小尺寸并移动到中间
+winReset(w := unset, h := unset) {
+    WinRestore("A")
+    ; w := IsSet(w) ? w : winw()
+    ; h := IsSet(h) ? h : winh()
+    WinMove(, , w?, h?, "A")
+    winCenter()
+    ; WinMove((A_ScreenWidth - w) / 2, (A_ScreenHeight - h) / 2, , , "A"); wincenter
+}
+; 切换窗口最大化
+WinToggleMaximize() {
+    WinGetMinMax("A") = 1 ? WinRestore("A") : WinMaximize("A")
+}
+; move center
+winCenter() {
+    try {
+        WinMove((A_ScreenWidth - winw()) / 2, (A_ScreenHeight - winh()) / 2, , , "A")
+    } catch Error as e {
+        log(e)
+    }
+}
+/**
+ * @param {number} dx x位置改变量  
+ * @param {number} dy y位置改变量  
+ * @param {number} dw 宽改变量  
+ * @param {number} dh 高改变量  
+ */
+winMovedif(dx := 0, dy := 0, dw := 0, dh := 0) {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(x + dx, y + dy, w + dw, h + dh, "A")
+}
+
+; -------------------- 窗口移动
+; 当前窗口往下移动
+winMoveD(d) {
+    winMovedif(, d)
+}
+; 当前窗口往上移动
+winMoveU(d) {
+    winMovedif(, -d)
+}
+; 当前窗口往左移动
+winMoveL(d) {
+    winMovedif(-d)
+}
+; 当前窗口往右移动
+winMoveR(d) {
+    winMovedif(d)
+}
+; 当前窗口移动最下方
+winMoveDMost() {
+    WinMove(, A_ScreenHeight - winh(), , , "A")
+}
+; 当前窗口移动最上方
+winMoveUMost() {
+    WinMove(, 0, , , "A")
+}
+; 当前窗口移动最左方
+winMoveLMost() {
+    WinMove(0, , , , "A")
+}
+; 当前窗口移动最右方
+winMoveRMost() {
+    WinMove(A_ScreenWidth - winw(), , , , "A")
+}
+; -------------------- 窗口resize
+; 窗口下方调整大小
+winResizeD(d) {
+    winMovedif(, , , d)
+}
+; 窗口上方调整大小
+winResizeU(d) {
+    winMovedif(, -d, , d)
+}
+; 窗口左方调整大小
+winResizeH(d) {
+    winMovedif(-d, , d)
+}
+; 窗口右方调整大小
+winResizeL(d) {
+    winMovedif(, , d)
+}
+; 窗口上方调整最大
+winResizeUMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, 0, , y + h, "A")
+
+}
+; 窗口下方调整最大
+winResizeDMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, , , A_ScreenHeight - y, "A")
+
+}
+; 窗口左方调整最大
+winResizeHMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(0, , x + w, , "A")
+
+}
+; 窗口右方调整最大
+winResizeLMost() {
+    WinGetPos(&x, &y, &w, &h, "A")
+    WinMove(, , A_ScreenWidth - x, , "A")
+}
+
+
 AltTab(back2Desktop := false) {
     idList := WinGetList()
     for id in idList {
@@ -15,6 +123,112 @@ AltTab(back2Desktop := false) {
         break
     }
 }
+
+recentWins(count := 999, includeDesktop := false) {
+    res := []
+    idList := WinGetList()
+    for id in idList {
+        if (!includeDesktop && isDesktop(id)) {
+            continue
+        }
+        If (WinGetTitle("ahk_id " id) == "")
+            continue
+        If (!IsWindow(id))
+            continue
+        res.Push(id)
+        if (res.Length >= count)
+            break
+    }
+    return res
+}
+
+winshowFIx(hwnd) {
+    DetectHiddenWindows true
+    WinHide(hwnd)
+    Sleep(2000)
+    WinShow(hwnd)
+}
+do(val) {
+
+}
+
+class DWM {
+    ; !!!todo
+    static m := 2
+    static n := 1
+    static sizeMap := Map(1, [1, 1], 2, [2, 1], 3, [3, 1], 4, [2, 2], 5, [5, 1], 6, [3, 2])
+    static setMN(m := 1, n := 1) => (this.m := m, this.n := n, DWM)
+    static getMN() => [this.m, this.n]
+    static setMNbyLen(len) => ((len > 6 ? this.setMN(len, 1) : this.setMN(this.sizeMap[len][1], this.sizeMap[len][2])), DWM)
+    static transpose() => (tmp := this.m, this.m := this.n, this.n := tmp, this.fill(), DWM)
+
+    static calMN(th) {
+        if (th == 0)
+            return [0, 0]
+        th := Mod(th - 1, this.m * this.n)
+        xth := mod(th, this.m)
+        yth := th // this.m
+        ; MsgBox(xth " " yth)
+        return [xth, yth]
+    }
+    ; 将屏幕分为m列*n行,将hwnd移动到第n个(!以1开始)
+    static winMoveNth(hwnd := "A", th := 0) {
+        xyth := this.calMN(th)
+        this.winMoveXYth(hwnd, xyth[1], xyth[2])
+    }
+    ; 将屏幕分为m列*n行,将hwnd移动到第x列，第y行(!以0开始)
+    ; 若th = -1, 计算出接近的th，移动第到th个
+    static winMoveXYth(hwnd := "A", xth := -1, yth := -1) {
+        ; MsgBox("winmovexyth " hwnd " " xth " " yth)
+        m := this.m, n := this.n
+        w := A_ScreenWidth // m
+        h := A_ScreenHeight // n
+        xth := xth == -1 ? winx(hwnd) // w : Mod(xth, m)
+        yth := yth == -1 ? winy(hwnd) // h : Mod(yth, n)
+        SetTimer(WinMove.Bind(xth * w, yth * h, w, h, hwnd), -10)
+    }
+
+    static stackExplorer() {
+        idlist := WinGetList(win_explorer)
+        this.stack(idlist, 100, 50, 900, 800, 50, 30)
+        ; this.setMNbyLen(idlist.Length).reload(idlist)
+    }
+
+    static stack(idlist, x0, y0, w, h, dx, dy) {
+        for id in idlist {
+            x := x0 + dx * (A_Index - 1)
+            y := y0 + dy * (A_Index - 1)
+            SetTimer(WinMove.Bind(x, y, w, h, id), -10) ; 不然有bug
+        }
+        for id in idlist {
+            ; WinShow(id)
+            ; WinActivate(id)
+            ; WinRestore(id)
+            WinActivate(id)
+        }
+    }
+
+    static fill(idlist) {
+        if (this.m == 0 or this.n == 0) {
+            this.setMNbyLen(idlist.Length)
+        }
+        for id in idlist {
+            if (A_Index > this.m * this.n)
+                break
+            this.winMoveNth(id, A_Index)
+        }
+        for id in idlist {
+            WinRestore(id)
+            WinShow(id)
+            ; WinActivate(id)
+        }
+    }
+    static reload() {
+
+    }
+
+}
+
 ;-----------------------------------------------------------------
 ; Check whether the target window is activation target
 ; https://www.autohotkey.com/boards/viewtopic.php?style=17&t=101808
@@ -53,12 +267,17 @@ winSetOffTop(hwnd := "A") {
     tip.RB(top ": " WinGetTitle(hwnd))
 }
 
+
+getWinO(hwnd := "A") {
+    ahkexe := WinGetProcessName(WinGetID(hwnd))
+    ahkclass := WinGetClass(hwnd)
+    return WinGetList("ahk_exe " ahkexe " ahk_class " ahkclass)
+}
+
 ;关闭同类窗口
-winO(Hwnd := unset) {
-    curId := IsSet(Hwnd) ? Hwnd : WinGetID("A")
-    ahkexe := WinGetProcessName(curId)
-    ahkclass := WinGetClass(curId)
-    idlist := WinGetList("ahk_exe " ahkexe " ahk_class " ahkclass)
+winO(Hwnd := "A") {
+    curId := WinGetID(Hwnd)
+    idlist := getWinO(Hwnd)
     for id in idlist {
         if (id != curId)
             WinClose(id)
@@ -217,119 +436,6 @@ WinExistAndNotActive(WinTitle?, WinText?, ExcludeTitle?, ExclideText?) {
     return WinExist(WinTitle?, WinText?, ExcludeTitle?, ExclideText?)
         and !WinActive()
     ; and !WinActive(WinTitle?, WinText?, ExcludeTitle?, ExclideText?)
-}
-
-
-; restore and move center
-; winReset(0,0) 窗口还原最小尺寸并移动到中间
-winReset(w := unset, h := unset) {
-    WinRestore("A")
-    ; w := IsSet(w) ? w : winw()
-    ; h := IsSet(h) ? h : winh()
-    WinMove(, , w?, h?, "A")
-    winCenter()
-    ; WinMove((A_ScreenWidth - w) / 2, (A_ScreenHeight - h) / 2, , , "A"); wincenter
-}
-
-; 切换窗口最大化
-WinToggleMaximize() {
-    WinGetMinMax("A") = 1 ? WinRestore("A") : WinMaximize("A")
-}
-
-; move center
-winCenter() {
-    try {
-        WinMove((A_ScreenWidth - winw()) / 2, (A_ScreenHeight - winh()) / 2, , , "A")
-    } catch Error as e {
-        log(e)
-    }
-}
-
-/**
- * @param {number} dx x位置改变量  
- * @param {number} dy y位置改变量  
- * @param {number} dw 宽改变量  
- * @param {number} dh 高改变量  
- */
-winMovedif(dx := 0, dy := 0, dw := 0, dh := 0) {
-    WinGetPos(&x, &y, &w, &h, "A")
-    WinMove(x + dx, y + dy, w + dw, h + dh, "A")
-}
-
-; -------------------- 窗口移动
-; 当前窗口往下移动
-winMoveD(d) {
-    winMovedif(, d)
-}
-; 当前窗口往上移动
-winMoveU(d) {
-    winMovedif(, -d)
-}
-; 当前窗口往左移动
-winMoveL(d) {
-    winMovedif(-d)
-}
-; 当前窗口往右移动
-winMoveR(d) {
-    winMovedif(d)
-}
-; 当前窗口移动最下方
-winMoveDMost() {
-    WinMove(, A_ScreenHeight - winh(), , , "A")
-}
-; 当前窗口移动最上方
-winMoveUMost() {
-    WinMove(, 0, , , "A")
-}
-; 当前窗口移动最左方
-winMoveLMost() {
-    WinMove(0, , , , "A")
-}
-; 当前窗口移动最右方
-winMoveRMost() {
-    WinMove(A_ScreenWidth - winw(), , , , "A")
-}
-
-; -------------------- 窗口resize
-; 窗口下方调整大小
-winResizeD(d) {
-    winMovedif(, , , d)
-}
-; 窗口上方调整大小
-winResizeU(d) {
-    winMovedif(, -d, , d)
-}
-; 窗口左方调整大小
-winResizeH(d) {
-    winMovedif(-d, , d)
-}
-; 窗口右方调整大小
-winResizeL(d) {
-    winMovedif(, , d)
-}
-; 窗口上方调整最大
-winResizeUMost() {
-    WinGetPos(&x, &y, &w, &h, "A")
-    WinMove(, 0, , y + h, "A")
-
-}
-; 窗口下方调整最大
-winResizeDMost() {
-    WinGetPos(&x, &y, &w, &h, "A")
-    WinMove(, , , A_ScreenHeight - y, "A")
-
-}
-; 窗口左方调整最大
-winResizeHMost() {
-    WinGetPos(&x, &y, &w, &h, "A")
-    WinMove(0, , x + w, , "A")
-
-}
-; 窗口右方调整最大
-winResizeLMost() {
-    WinGetPos(&x, &y, &w, &h, "A")
-    WinMove(, , A_ScreenWidth - x, , "A")
-
 }
 
 
@@ -549,13 +655,12 @@ winsAct(idlist, act) {
 }
 
 ; ============================================================
-winy() {
-    WinGetPos(&x, &y, &w, &h, "A")
+winy(hwnd := "A") {
+    WinGetPos(&x, &y, &w, &h, hwnd)
     return y
 }
-winx(winT?) {
-    t := isSet(winT) ? winT : "A"
-    WinGetPos(&x, &y, &w, &h, t)
+winx(hwnd := "A") {
+    WinGetPos(&x, &y, &w, &h, hwnd)
     return x
 }
 winw() {

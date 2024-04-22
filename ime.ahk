@@ -8,9 +8,8 @@
 #HotIf
 RShift Up:: IME.isCHzhong() ? IME.setCHying() : IME.setCHzhong()
 >!Rshift:: IME.setEn(), tip.p("美式键盘")
-CapsLock & NumLock:: IME.setCHyingAll(), tip.p("全部窗口设置英文", 3000)
-; >+.:: setCHzhong1025Force()
-; #HotIf !GetKeyState('LAlt') ;!!!
+
+; CapsLock & NumLock:: IME.setCHyingAll(), tip.p("全部窗口设置英文", 3000)
 
 global ingame
 #HotIf not ingame
@@ -29,11 +28,6 @@ Lshift Up:: {
         IME.setCHying() ;, tip("英")    ; , setCusor(0)
 }
 #HotIf
-
-; #HotIf ingame in woz
-; RShift:: IME.isCHzhong() ? IME.setCHying() : IME.setCHzhong()
-; #HotIf
-
 
 ; 中文时输入jkjk或按CapsLock切换为英文
 #HotIf IME.isCHzhong() and not ingame
