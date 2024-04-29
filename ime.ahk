@@ -28,6 +28,11 @@ Lshift Up:: {
         IME.setCHying() ;, tip("英")    ; , setCusor(0)
 }
 #HotIf
+NumLock:: {
+    stupid := A_TimeSincePriorHotkey = "" ? 501 : A_TimeSincePriorHotkey    ;V2的bug
+    if (A_PriorKey = "NumLock" and stupid < 500)
+        SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn"), tip.LM(GetKeyState("NumLock", "T"))
+}
 
 ; 中文时输入jkjk或按CapsLock切换为英文
 #HotIf IME.isCHzhong() and not ingame

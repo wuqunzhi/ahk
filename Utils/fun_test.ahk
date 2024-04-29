@@ -21,7 +21,6 @@ MouseToActiveWindowCenter() {
    WinGetPos(&X, &Y, &W, &H, "A")
    MouseMove(x + w / 2, y + h / 2)
 }
-Send("{text}我爱尼娅! ")
 Send("{text}➤")
 Send("{text}🐶")
 ; 如果是文件夹直接打开

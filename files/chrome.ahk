@@ -36,23 +36,5 @@ w:: send("{wheelup}")
 s:: send("{wheeldown}")
 #HotIf
 
-class Chrome extends VimControl {
+class Chrome extends VimController {
 }
-
-; :*x?b0z:c1:: clk.img("img/chrome_onetab.bmp", 1)
-
-; h := 110
-; capslock & 1:: click("51, " h)
-; capslock & 2:: click("141, " h)
-; capslock & 3:: click("251, " h)
-; capslock & 4:: click("352, " h)
-; capslock & 5:: click("441, " h)
-; CapsLock & f:: send("/"), sleep(50), send("\b\b{left 2}")
-/* CapsLock & s:: {
-    ;toggle span 第一个标签组
-    colors := "0x5F6368 0xFA9031  0x1A73E8 0xD93025 0xF9ab00 0x188038 0xD01884 0xbF7dF8 0x007B83 0xFA903E"
-    ; MouseGetPos(&x, &y)
-    if (InStr(colors, PixelGetColor(28, 18)))
-        clk.back("28,18")
-    ; Click(x "," y ",0")
-} */

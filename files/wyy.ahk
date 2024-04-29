@@ -39,7 +39,7 @@ w:: wheelU()
 +s:: wheelD(3)
 +w:: wheelU(3)
 
-class wyy extends VimControl {
+class wyy extends VimController {
     static kuaijin(dif) {
         clk.img(A_ScriptDir '/img/wyy_bar1.bmp', 0, 800, wincw(), 830, 50, dif, 3, 1, 1) ||
             clk.img(A_ScriptDir '/img/wyy_bar2.bmp', 0, 800, wincw(), 830, 50, dif, 8, 1, 1)

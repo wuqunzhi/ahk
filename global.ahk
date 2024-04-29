@@ -4,7 +4,7 @@
 ~esc:: tip.removeAllTip()
 CapsLock Up:: send("{esc}") ;, tip.LM("esc")
 >!CapsLock:: SetCapsLockState(GetKeyState("CapsLock", "T") ? "AlwaysOff" : "AlwaysOn")
->!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn"), tip.LM(GetKeyState("NumLock", "T"))
+; >!NumLock:: SetNumLockState(GetKeyState("NumLock", "T") ? "AlwaysOff" : "AlwaysOn"), tip.LM(GetKeyState("NumLock", "T"))
 <!CapsLock:: LoopRelatedWindows()
 ; #HotIf GetKeyState("LAlt", "p")
 ; CapsLock::+Tab
@@ -55,7 +55,7 @@ CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
 CapsLock & y:: copyandshow(debugInfo('w'))
 CapsLock & a:: appendCopy()
-CapsLock & c:: CBH.writeAndShowCBH()
+CapsLock & c:: ClipRecorder.show()
 CapsLock & f::^!0 ;youdao
 CapsLock & p:: youdaoFanyi()
 CapsLock & r:: transRaw() ; !todo ?
@@ -69,7 +69,7 @@ tmp() {
 }
 CapsLock & `:: markWindow.maymark()
 CapsLock & 1:: private.nas()
-CapsLock & 2:: runOrActivate(Format('\Q{}\guopai\E', A_Desktop), 'at', 'a', Format("explorer {}", A_Desktop '\guopai'))
+CapsLock & 2:: runOrActivate(A_Desktopp . "\\tmp.* " win_explorer, 'at', 'a', A_Desktop "\tmp")
 CapsLock & 3:: private.genCmd()
 CapsLock & 4:: markWindow.toggle(4)
 CapsLock & 5:: markWindow.toggle(5)
@@ -100,8 +100,8 @@ CapsLock & alt:: return
 ; >!k:: runOrActivate(win_vscode, 'b', 'a', "code")
 ; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeProjects\Note")
-#e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 >!j:: runOrActivate(win_chrome, 'b', 'a', "chrome.exe")
+#e:: runOrActivate(win_explorer, 'b', 'a', "explorer.exe")
 #+e:: run("explorer.exe")
 #t:: runOrActivate(win_wt, 'b', 'a', "wt.exe")
 #w:: send("{blink}^!w") ; SetTimer(focus_wx, -10)

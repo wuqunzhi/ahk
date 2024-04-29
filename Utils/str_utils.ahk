@@ -5,9 +5,11 @@ swap(&a, &b) {
 }
 ; 让string支持[]索引,并支持倒着索引
 DefProp := {}.GetMethod("DefineProp")
-DefProp("".base, "__Item", { get: (var, index) =>
-    (index := index < 0 ? StrLen(var) + index + 1 : index, SubStr(var, index, 1))
+DefProp("".base, "__Item", {
+    get: (var, index) =>
+        (index := index < 0 ? StrLen(var) + index + 1 : index, SubStr(var, index, 1)),
 })
+
 ; DelProp := {}.GetMethod("DeleteProp")
 ; %DelProp%("".base, "__Item")
 
@@ -41,8 +43,6 @@ strJoin(strs, sep := ", ") {
         res .= (str . sep)
     return substr(res, 1, -strlen(sep))
 }
-
-
 reverseList(lst) {
     res := []
     len := lst.Length
@@ -51,7 +51,6 @@ reverseList(lst) {
     }
     return res
 }
-
 startwith(abcd, ab, caseSitive := false) {
     return InStr(abcd, ab, caseSitive) == 1
 }
@@ -59,7 +58,6 @@ endwith(abcd, cd, caseSitive := false) {
     idx := InStr(abcd, cd, caseSitive)
     return idx && (idx == StrLen(abcd) - StrLen(cd) + 1)
 }
-
 endwiths(abcd, strlist, caseSitive := false) {
     for str in strlist
         if (endwith(abcd, str, caseSitive))
@@ -90,7 +88,6 @@ ltrims(abcd, strlist, caseSitive := false) {
                 return SubStr(abcd, StrLen(str) + 1, StrLen(abcd) - StrLen(str))
     return abcd
 }
-
 ; return str*=num
 strdot(str, num) {
     res := ""
@@ -98,7 +95,6 @@ strdot(str, num) {
         res .= str
     return res
 }
-
 ; 取str的指定行
 strlines(str, lines*) {
     strlines := StrSplit(str, "`n")
@@ -107,19 +103,16 @@ strlines(str, lines*) {
         res .= strlines[line] . "`n"
     return SubStr(res, 1, -1)
 }
-
 ; return mod(num, n) + 1
 nextn(num, n) {
     ; 0 1 2 3 4 5 =>1 2 3 4 5 1
     return mod(num, n) + 1
 }
-
 lastn(num, n) {
     ;0 1 2 3 4 5 =>4 5 1 2 3 4
     res := mod(num, n) - 1
     return res <= 0 ? res + n : res
 }
-
 minutes2hhmm(mins) {
     return Format("{:02}:{:02}", mins // 60, mod(mins, 60))
 }

@@ -11,7 +11,7 @@
 #Warn Unreachable, off
 #Include config.ahk
 #Include private.ahk
-#Include Lib\funcs.ahk
+#Include Utils\entry.ahk
 #SuspendExempt true
 f7:: Suspend
 #SuspendExempt false
@@ -20,32 +20,29 @@ SetTitleMatchMode("regex")
 DetectHiddenWindows(1)
 SetMouseDelay(-1)
 ;---------------------------------
+; 定义一个名为 MyFunction 的函数
+DefProp := {}.GetMethod("DefineProp")
+DefProp("".base, "MyFunction", {
+    Call: (this) => (tip.p("asd"))
+}
+)
+
+; 调用新定义的函数
+; "".MyFunction()
+7:: {
+    s := "asasdasdd"
+    s[2] := '3'
+    tip.p(s)
+}
+
 ; CoordMode("Mouse", "Screen")
 global i := 1
-8:: {
-    a := 1, b := 2
-    DWM.transpose().transpose()
-    tip.p(DWM.m)
-}
-7:: {
-    tip.p(i)
-    ; winSplitMove(2, 3, 0)
-    global i += 1
-    global i
-    if (i == 7)
-        i := 1
-}
 
 
 w := WinExist(win_git) ? win_git : win_cmd
 
 6:: DWM.fillO()
-5:: createNotepad()
-; 0:: WinActivate(68446)
-9:: WinShow(68446)
-; toggleDoublePin()
-; Numpad8:: wintoggle0x20(w)
-; Numpad5:: wintoggleTop(w)
+
 wintoggle0x20(hwnd) {
     static u := 0
     u := !u

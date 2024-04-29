@@ -1,9 +1,9 @@
 ; WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW 输入法
 class IME {
     ; 参考：
-    ; https://zhuanlan.zhihu.com/p/425951648
-    ; https://blog.csdn.net/liuyukuan/article/details/82291632
     ; https://github.com/mudssky/myAHKScripts/blob/main/scripts/switchIME.ahk
+    ; https://blog.csdn.net/liuyukuan/article/details/82291632
+    ; https://zhuanlan.zhihu.com/p/425951648
     /*
     IMEid      ImeMode  输入法
     134481924  1        微软拼音中文 (中文模式输入英文字符，相当于ctrl.)
@@ -24,7 +24,7 @@ class IME {
     static setCHying() => (IME.setImeId(134481924), IME.setImeMode(0))
     ; 强制设置为微软拼音中文模式
     static setCHzhong() => (IME.setImeId(134481924), IME.setImeMode(1))
-    ; 强制设置为微软拼音中文模式且中文标点 ;!no work
+    ; 强制设置为微软拼音中文模式且中文标点 ;!有时没用
     static setCHzhong1025() => (IME.setImeId(134481924), IME.setImeMode(1025))
     ; 全部窗口设置英文 todo
     static setCHyingAll() {
@@ -51,7 +51,6 @@ class IME {
             return InputLocaleID
         } catch as e
             log(e)
-
     }
     ;设置当前窗口进程的输入法id; 微软拼音(无论中英文) 134481924 ; 美式键盘 67699721
     static setImeId(id) {
@@ -132,7 +131,7 @@ setCusor(mode := 0) {
 ; TaskBar_SetAttr(2) ; <- Set transparent
 ; TaskBar_SetAttr(3) ; <- Set blur
 ; TaskBar_SetAttr(0) ; <- Set standard value
-; 该方法设置的颜色会在按到开始菜单等操作后恢复
+; !该方法设置的颜色会在按到开始菜单等操作后恢复
 TaskBar_SetAttr(accent_state := 0, gradient_color := "0x01000000") {
     try {
         static init, hTrayWnd, ver := DllCall("GetVersion") & 0xff < 10

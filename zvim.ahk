@@ -1,13 +1,9 @@
 #HotIf
 class zvim {
     static mode := "i"
-    static GN_val := Map('x1', 5, 'y1', 5, 'x2', 30, 'y2', 30, 'x3', 80, 'y3', 80, 'showmode', 'ms')
+    static GN_val := Map('x1', 5, 'y1', 5, 'x2', 30, 'y2', 30, 'x3', 80,
+        'y3', 80, 'showmode', 'ms')
     static GN_valDefault := zvim.GN_val
-    ; Map('x1', 5, 'y1', 5, 'x2', 30, 'y2', 30, 'x3', 80, 'y3', 80, 'showmode', 'ms')
-    static GN_x := [5, 30, 80]    ;鼠标移动步伐，份3档
-    static GN_y := [5, 30, 80]    ;鼠标移动步伐，份3档
-    static GN_showMode := "ms"
-    ; static GN_default := [5, 5, 30, 30, 80, 80, "ms"]
     static GN_mouse_portal := [0, 0] ;鼠标sl记录
 
     static GW_step := 50    ;窗口移动步伐，50刚好是任务栏高度
@@ -80,10 +76,10 @@ class zvim {
         i := GetKeyState('Shift', 'p') ? 3 : i
         i := GetKeyState('Alt', 'p') ? 1 : i
         switch keys {
-            case 'sa': move(-zvim.GN_x[i], zvim.GN_y[i])
-            case 'sd': move(zvim.GN_x[i], zvim.GN_y[i])
-            case 'wa': move(-zvim.GN_x[i], -zvim.GN_y[i])
-            case 'wd': move(zvim.GN_x[i], -zvim.GN_y[i])
+            case 'sa': move(-zvim.GN_val['x' i], zvim.GN_val['y' i])
+            case 'sd': move(zvim.GN_val['x' i], zvim.GN_val['y' i])
+            case 'wa': move(-zvim.GN_val['x' i], -zvim.GN_val['y' i])
+            case 'wd': move(zvim.GN_val['x' i], -zvim.GN_val['y' i])
         }
     }
     static GN_setting() {
@@ -277,10 +273,8 @@ r:: WinRestore("A")
 ; -------------------- 模式切换
 t:: zvim.go("g_n")
 i:: zvim.go("i")
-; -------------------- dwm
-v:: zvim.GW_oppend('v')
-#HotIf zvim.mode = "g_w" and zvim.GW_v_m * zvim.GW_v_n != 1
-; Left:: winSplitMove(zvim.GW_v_m, zvim.GW_v_n,)
+; -------------------- !!!
+; v:: zvim.GW_oppend('v')
 
 #HotIf
 

@@ -99,67 +99,40 @@ class tip {
             SetTimer(tip.removeTips[which], -time)
     }
 
-    static p(str := unset, time := 500) {
-        tip.pp(str?, time)
-    }
-    static mouse(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.pp(str?, time, x?, y?, which?, 'm')
-    }
-    static client(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.pp(str?, time, x?, y?, which?, 'c')
-    }
-    static random(str, time := 500, which := unset) {
-        tip.pp(str, time, , , which?, 'r')
-    }
+    static p(str := unset, time := 500) => tip.pp(str?, time)
+
+    static mouse(str := unset, time := 500, x := unset, y := unset, which := unset)
+        => tip.pp(str?, time, x?, y?, which?, 'm')
+    static client(str := unset, time := 500, x := unset, y := unset, which := unset)
+        => tip.pp(str?, time, x?, y?, which?, 'c')
+    static random(str, time := 500, which := unset)
+        => tip.pp(str, time, , , which?, 'r')
     ; 将宽分为20份，高度为n*25
-    static n(str := unset, time := 500, x := unset, y := unset, which := unset) {
-        tip.pp(str?, time, x?, y?, which?, 'n')
-    }
-    static test(str := unset, nth := unset, time := 3000) {
-        static th := 5
-        th += 1
-        th := Mod(th - 1, 40) + 2
-        nth := isset(nth) ? nth : th
-        tip.n(str?, time, 8, nth)
-    }
-    static LT(str := unset, time := 3000) {
-        tip.pp(str?, time, 0, 0, tip.pos_lt)
-    }
-    static MT(str := unset, time := 3000) {
-        tip.pp(str?, time, 0.45, 0, tip.pos_mt)
-    }
-    static RT(str := unset, time := 3000) {
-        tip.pp(str?, time, 1, 0, tip.pos_rt)
-    }
-    static LM(str := unset, time := 500) {
-        tip.pp(str?, time, 0, 0.5, tip.pos_lm)
-    }
-    static LM2(str := unset, time := 500) {
-        tip.pp(str?, time, 0, 0.5, tip.pos_lm, , 1)
-    }
-    static MM(str := unset, time := 3000) {
-        tip.pp(str?, time, 0.45, 0.5, tip.pos_mm)
-    }
-    static RM(str := unset, time := 3000) {
-        tip.pp(str?, time, 1, 0.5, tip.pos_rm)
-    }
-    static RM2(str := unset, time := 3000) {
-        tip.pp(str?, time, 4800, 0.5, tip.pos_rm, , 2)
-    }
-    static LB(str := unset, time := 3000) {
-        tip.pp(str?, time, 0, 1, tip.pos_lb)
-    }
-    static MB(str := unset, time := 3000) {
-        tip.pp(str?, time, 0.4, 1, tip.pos_mb)
-    }
-    static RB(str := unset, time := 3000) {
-        tip.pp(str?, time, 1, 1, tip.pos_rb)
-    }
-
-    static removeTip(num) {
-        ToolTip(, , , num)
-    }
-
+    static n(str := unset, time := 500, x := unset, y := unset, which := unset)
+        => tip.pp(str?, time, x?, y?, which?, 'n')
+    static LT(str := unset, time := 3000)
+        => tip.pp(str?, time, 0, 0, tip.pos_lt)
+    static MT(str := unset, time := 3000)
+        => tip.pp(str?, time, 0.45, 0, tip.pos_mt)
+    static RT(str := unset, time := 3000)
+        => tip.pp(str?, time, 1, 0, tip.pos_rt)
+    static LM(str := unset, time := 500)
+        => tip.pp(str?, time, 0, 0.5, tip.pos_lm)
+    static LM2(str := unset, time := 500)
+        => tip.pp(str?, time, 0, 0.5, tip.pos_lm, , 1)
+    static MM(str := unset, time := 3000)
+        => tip.pp(str?, time, 0.45, 0.5, tip.pos_mm)
+    static RM(str := unset, time := 3000)
+        => tip.pp(str?, time, 1, 0.5, tip.pos_rm)
+    static RM2(str := unset, time := 3000)
+        => tip.pp(str?, time, 4800, 0.5, tip.pos_rm, , 2)
+    static LB(str := unset, time := 3000)
+        => tip.pp(str?, time, 0, 1, tip.pos_lb)
+    static MB(str := unset, time := 3000)
+        => tip.pp(str?, time, 0.4, 1, tip.pos_mb)
+    static RB(str := unset, time := 3000)
+        => tip.pp(str?, time, 1, 1, tip.pos_rb)
+    static removeTip(num) => ToolTip(, , , num)
     static removeAllTip(num := 20) {
         Loop num
             ToolTip(, , , A_Index)
@@ -173,7 +146,7 @@ class tip {
     }
 
     static pro(str := unset, time := 5000, x := unset, y := unset, which_ := unset) {
-        ; !todo
+        ; !todo 类似keycastr的文字提示
         ; owner := "a"
         ; owner := "a" ? wingetid("a") : owner
         ; tipgui.opt("+owner" owner "alwaysontop +toolwindow")

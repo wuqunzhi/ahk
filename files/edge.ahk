@@ -10,6 +10,6 @@ s:: wheelD()
 i:: Edge.vim(0)
 #HotIf
 
-class Edge extends VimControl {
+class Edge extends VimController {
 
 }

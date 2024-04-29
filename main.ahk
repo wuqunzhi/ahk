@@ -13,7 +13,7 @@
 init()
 #Include config.ahk ;放前面
 #Include private.ahk
-#Include Lib/funcs.ahk
+#Include Utils/entry.ahk
 #Include zvim.ahk               ; vim键位操作鼠标 hjkl移动鼠标窗口等
 #Include clipboard.ahk          ; 记录剪贴板历史
 #Include ime.ahk                ; 输入法相关

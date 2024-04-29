@@ -17,6 +17,7 @@ global win_vim := "ahk_exe vim.exe"                                             
 global win_desktop := "ahk_exe explorer.exe ahk_class WorkerW"                         ; 桌面
 global win_taskbar := "ahk_exe explorer.exe ahk_class Shell_TrayWnd"                   ; 任务栏
 global win_explorer := "ahk_exe explorer.exe ahk_class CabinetWClass"                  ; 资源管理器
+
 global win_taskManager := "ahk_exe Taskmgr.exe ahk_class TaskManagerWindow"            ; 任务管理器
 global win_cloudmusic := "ahk_exe cloudmusic.exe ahk_class OrpheusBrowserHost"         ; 网易云
 global win_cloudmusicLyric := "ahk_exe cloudmusic.exe ahk_class DesktopLyrics"
@@ -29,6 +30,7 @@ global win_woz := "woz.ahk ahk_exe AutoHotkey64.exe ahk_class AutoHotkeyGUI"
 global vspDir := 'D:\vscodeProjects'
 global A_desktop2 := "E:\桌面2"
 global A_userpath := SubStr(A_Desktop, 1, StrLen(A_Desktop) - 7)
+global A_Desktopp := StrReplace(A_Desktop, '\', '\\') ;C:\\Users\\79481\\Desktop
 global A_TaskbarHeight := 50
 global A_CWD := 'D:\vscodeProjects\ahk'
 global abbrName := Map(

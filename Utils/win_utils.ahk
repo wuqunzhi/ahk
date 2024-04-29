@@ -1,3 +1,57 @@
+/* 多显示器相关 目前仅考虑了左右两个显示器的情况 */
+class MultiMonitor {
+    ; 鼠标移动到下个屏幕中间
+    static mouseFocusNext() => msx() > 2000 ? mouseMoveFix(960, 540) : mouseMoveFix(3600, 640)
+    ; 鼠标移动到下个屏幕中间并点击(workaround)
+    static clickFocusNext() => (this.mouseFocusNext(), send("{blink}{click}"))
+    ; 当前窗口所在显示器序号
+    static getCurrentIndex() => winx() > 2000
+    ; 窗口所在显示器序号
+    static belongIndex(hwnd) => winx(hwnd) > 2000
+    ; 切换焦点到目标显示器
+    static activate(idx) {
+        curIdx := this.getCurrentIndex()
+        curIdx ? tip.LM(0) : tip.LM2(1)
+
+        if (curidx == idx) {
+            curIdx ? tip.LM2(1) : tip.LM(0)
+            return
+        }
+        idList := WinGetList()
+        for id in idList {
+            if (WinActive("ahk_id " id))
+                continue
+            If (WinGetTitle("ahk_id " id) == "")
+                continue
+            If (!IsWindow(id))
+                continue
+            if (isDesktop(id)) {
+                continue
+            }
+            if (this.belongIndex(id) != idx)
+                continue
+            WinActivate("ahk_id " id)
+            break
+        }
+    }
+    ; 切换焦点到下个显示器的激活窗口 好好好
+    static activateNext() => this.activate(!this.getCurrentIndex())
+
+    ; "/Monitor.ahk"
+    ; "/VisualDesktop.ahk"
+    ; +#Left/Right 移动当前窗口到下一屏幕
+}
+
+class VimController {
+    static enable := 1
+    static vim(use?) {
+        if (!isset(use))
+            return this.enable
+        this.enable := use == -1 ? !this.enable : use
+        return this.enable
+    }
+}
+
 ; restore and move center
 ; winReset(0,0) 窗口还原最小尺寸并移动到中间
 winReset(w := unset, h := unset) {
@@ -153,7 +207,7 @@ do(val) {
 }
 
 class DWM {
-    ; !!!todo
+    ; !!!
     static m := 2
     static n := 1
     static sizeMap := Map(1, [1, 1], 2, [2, 1], 3, [3, 1], 4, [2, 2], 5, [5, 1], 6, [3, 2])

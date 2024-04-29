@@ -1,18 +1,24 @@
 #HotIf
-OnClipboardChange CBH.ClipChanged.Bind(CBH)
-class CBH {
-    static clipboardHistory := []
-    static maxHistoryCount := 99
-    static AddToClipboardHistory() {
-        if (this.clipboardHistory.Length >= this.maxHistoryCount)
-            CBH.clipboardHistory.RemoveAt(1)
-        CBH.clipboardHistory.Push(A_Clipboard)
+OnClipboardChange ClipRecorder.ClipChanged.Bind(ClipRecorder)
+class ClipRecorder {
+    static history := []
+    static maxCount := 99
+    static hookEnable := 1
+    static clear() => (ClipRecorder.history := [], this)
+    static record() {
+        if (A_Clipboard == "clipclr") { ;清楚记录
+            this.clear()
+            return
+        }
+        if (this.history.Length >= this.maxCount)
+            this.history.RemoveAt(1)
+        this.history.Push(A_Clipboard)
     }
 
-    static writeAndShowCBH(filePath := A_userPath . "\ClipboardHistory.txt", append := '`n') {
+    static show(filePath := A_userPath . "\ClipboardHistory.txt", append := '`n') {
         ; 自定义函数，用于将剪贴板内容添加到历史记录中
         f := FileOpen(filePath, "w", "utf-8")
-        for index, value in CBH.clipboardHistory {
+        for index, value in ClipRecorder.history {
             if StrLen(value) > 500
                 value := strdot('+', 80) . '`n' . value . '`n' . strdot('-', 80) . '`n'
             f.Write(value . append)
@@ -21,23 +27,22 @@ class CBH {
         run("code " filePath)
     }
 
-    static useClipbHook := 1
     static ClipChanged(clip_type) {
         ; 0 = 剪贴板为空.
         ; 1 = 剪贴板包含可以用文本表示的内容(包括从资源管理器窗口复制的文件).
         ; 2 = 剪贴板包含完全是非文本的内容, 如图片.
-        if (CBH.useClipbHook and clip_type = 1) {
+        if (ClipRecorder.hookEnable and clip_type = 1) {
             ; ClipSaved := A_Clipboard ;保存上一个剪贴板历史
-            CBH.AddToClipboardHistory()
+            ClipRecorder.record()
         }
     }
 
-    static getClipboardHistory(last, append := "`n") {
+    static getHistort(last, append := "`n") {
         res := ""
-        len := CBH.clipboardHistory.Length
+        len := ClipRecorder.history.Length
         last := Min(len, last)
         loop last {
-            res .= CBH.clipboardHistory[len - (last - A_Index)] . append
+            res .= ClipRecorder.history[len - (last - A_Index)] . append
         }
         tip.RM(res)
         A_Clipboard := res
@@ -50,14 +55,14 @@ class CBH {
     }
 }
 
-:?*xc:CH2:: CBH.getClipboardHistory(2)
-:?*xc:CH3:: CBH.getClipboardHistory(3)
-:?*xc:CH4:: CBH.getClipboardHistory(4)
-:?*xc:CH5:: CBH.getClipboardHistory(5)
-:?*xc:CH6:: CBH.getClipboardHistory(6)
-:?*xc:CH7:: CBH.getClipboardHistory(7)
-:?*xc:CH8:: CBH.getClipboardHistory(8)
-:?*xc:CH9:: CBH.getClipboardHistory(9)
+:?*xc:CH2:: ClipRecorder.getHistort(2)
+:?*xc:CH3:: ClipRecorder.getHistort(3)
+:?*xc:CH4:: ClipRecorder.getHistort(4)
+:?*xc:CH5:: ClipRecorder.getHistort(5)
+:?*xc:CH6:: ClipRecorder.getHistort(6)
+:?*xc:CH7:: ClipRecorder.getHistort(7)
+:?*xc:CH8:: ClipRecorder.getHistort(8)
+:?*xc:CH9:: ClipRecorder.getHistort(9)
 ; :?*xc:ch1:: send("#v"), Sleep(200), send("{Down 0}"), Sleep(100), send("{enter}") ; ctrl v
 :?*xc:ch2:: send("#v"), Sleep(200), send("{Down 1}"), Sleep(100), send("{enter}")
 :?*xc:ch3:: send("#v"), Sleep(200), send("{Down 2}"), Sleep(100), send("{enter}")

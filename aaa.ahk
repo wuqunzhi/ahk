@@ -1,34 +1,17 @@
 #Requires AutoHotkey v2.0
+
+#Requires AutoHotkey v2.0
 #Warn Unreachable, off
 #SingleInstance Force
 #NoTrayIcon
 #Include config.ahk ;放前面
 #Include private.ahk
-#Include Utils\entry.ahk
 #HotIf
 
-SetTitleMatchMode("RegEx")
-CoordMode("ToolTip", "Screen")
-tip.LB(A_ScriptName " running. AHK " A_AhkVersion, 2000)
 
 woz := WozUI()
 
-<^space:: woz.toggleGui(), KeyWait("space")
-~esc:: woz.hideGui(), tip.removeAllTip(5)
->^space:: ahkManager()
-
-/* tab自动执行上一条 */
-#HotIf WinActive(win_woz)
-enter::tab
-<^l::tab
-/* 复制计算结果 */
-#HotIf WinActive(win_woz) and woz.mode == 'math'
-^c:: copyandshow(woz.copystr, 3000, 1190, 223)
-<^l::
-enter::
-tab:: copyandshow(woz.copystr, 5000, 1190, 223), woz.hideGui()
-#HotIf
-
+<^space:: woz.toggleGui()
 
 class WozUI {
     mode := 'hide'
@@ -80,58 +63,13 @@ class WozUI {
 
         addcmd("k qm", "kill", "qm", "kill qm", "full")
         addcmd("k wyy", "kill", "wyy", "kill cloudmusic", "full")
-        addcmd("k wx", "kill", "wx", "kill WeChat.exe", "full")
-        addcmd("k clash", "kill", "clash", "kill clash", "full")
-        addcmd("k yd", "kill", "yd", "kill youdao", "full")
-
-        addcmd("key", "run", "code D:\vscodeProjects\ahk\keyMap.ahk", "keyMap")
-        addcmd("c bililive", "code", vspDir "\bililive", "code bililive")
-        addcmd("c ahk", "code", vspDir "\ahk", "code ahk")
-
-
-        ; ahk
-        addcmd("q main", "ahkq", "main", "quit main.ahk", "full")
-        addcmd("q test", "ahkq", "test", "quit test.ahk", "full")
-        addcmd("q woz", "ahkq", "woz", "quit woz.ahk", "full")
-        addcmd("main", "runAs", "main.ahk", "runAs main.ahk")
-        addcmd("woz", "runAs", "woz.ahk", "runAs woz.ahk")
-        addcmd("test", "runAs", "test.ahk", "runAs test.ahk")
-        addcmd("dy", "run", "code E:\垃圾桶\dy.txt", "code dy.txt")
-
-        ; addcmd("nop")
-        addcmd("-v", , , A_AhkVersion)
-        addcmd("timer")
-        addcmd("game")
-        addcmd("notepad", , , "notepad")
-        addcmd("showintxt", , , "将剪贴板内容用vscode打开") ;
         addcmd("bluetooth", , , "打开蓝牙设置")
         addcmd("ls", , , "list all ahk")
         addcmd("fclr", "fclear", , "整理桌面")
         addcmd("wclr", "winclear", , "关闭无关紧要窗口")
-        addcmd("restartexplorer", , , "重启资源管理器")
-        addcmd("CombineButtons", , , "切换合并任务栏按钮") ;
-        addcmd("ps", , , "processManager")
-        addcmd("touchpad", , , "切换触摸板")
-        addcmd("doublepin", , , "切换双拼全拼")
-        addcmd("lock", , , "锁屏")
-        addcmd("remote", "run", "mstsc", "远程桌面连接")
-        addcmd("mstsc", "run", "mstsc", "远程桌面连接")
-        addcmd("colorhook")
-        addcmd("record")
-        addcmd("taskmgr", "run", "taskmgr", "打开任务管理器")
-        addcmd("reload")
-        addcmd("quit")
-        addcmd("ahkmanager")
-
-
-        ; -------------------- 系统配置
-        addcmd("env", "env", "", "环境变量")
-        addcmd("regedit", "run", "regedit", "regedit")
         addcmd("gpedit", "run", "gpedit.msc", "gpedit.msc")
         addcmd("msconfig", "run", "msconfig", "msconfig")
         addcmd("services.msc", "run", "services.msc", "services.msc")
-        addcmd("dxdiag", "run", "dxdiag", "dxdiag")
-        addcmd("cont", "run", "control", "control")
 
         ; -------------------- 系统文件目录
         addcmd("nas", "nas", "", "nas") ;
@@ -139,39 +77,13 @@ class WozUI {
         addcmd("program", "run", "C:\Program Files\", "C:\Program Files")
         addcmd("pro86", "run", "C:\Program Files (x86)\", "C:\Program Files (x86)")
         addcmd("document", "run", A_MyDocuments, A_MyDocuments)
-        ; addCommand("document", "run", userpath . "\Documents\", "C:\Users\79481\Documents")
-        addcmd("system", "run", "C:\Windows\System\", "C:\Windows\System")
-        addcmd("sys32", "run", "C:\Windows\System32\", "C:\Windows\System32")
-        addcmd("dk2", "run", A_desktop2, "桌面2")
-        addcmd("appdata", "run", A_userpath "\AppData\", "~\AppData")
-        addcmd("roam", "run", A_AppData, "%AppData%")
-        addcmd("host", "run", "C:\Windows\System32\drivers\etc", "host")
-        addcmd("startmenu", "run", A_StartMenu, "Start Menu")
-        addcmd("startup", "run", A_Startup, "shell:startup")
 
         ; -------------------- 软件目录
         addcmd("vsdeemo", "run", "D:\VSCodeDeemo\", "D:\VSCodeDeemo\")
         addcmd("vsprojects", "run", "D:\vscodeProjects", "D:\vscodeProjects")
         addcmd("vssetting", "run", A_userpath "\AppData\Roaming\Code\User", "vscode Setting.json 文件夹")
-        addcmd("wsl", "run", "\\wsl.localhost\Ubuntu", "wsl")
-        addcmd("vim", "run", "D:\vim\vim90\", "D:\vim\vim90\")
-        addcmd("vimrc", "run", A_userpath "\vimfiles\", A_userpath "\vimfiles\")
-
-        ; -------------------- 网站
-        addcmd("httpCode", "run", "https://tool.oschina.net/commons?type=5", "http statusCode")
-        addcmd("v2", "run", "https://wyagd001.github.io/v2/docs", "ahkv2")
-        addcmd("win32api", "run", "https://learn.microsoft.com/zh-cn/windows/win32/api", "win32api")
-        addcmd("winkjj", "runs", "https://support.microsoft.com/zh-cn/windows/windows-的键盘快捷方式8F-dcc61a57-8ff0-cffe-9796-cb9706c75eec#WindowsVersion=Windows_10" . "|"
-            . "https://support.google.com/chrome/answer/157179#zippy=%2C标签页和窗口快捷键%2Cgoogle-chrome-功能快捷键%2C地址栏快捷键%2C网页快捷键", "win快捷键")
-        addcmd("regex", "runs", "https://regex101.com" . "|"
-            . "https://tool.oschina.net/uploads/apidocs/jquery/regexp.html", "正则表达式参考网站")
-        addcmd("rgb", "run", "https://www.gairuo.com/p/web-color", "rgb")
-        addcmd("fdu", "runs", "http://ehall.fudan.edu.cn/ywtb-portal/fudan/index.html#/hall" . "|"
-            . "http://yjsxk.fudan.edu.cn/yjsxkapp/sys/xsxkappfudan/xsxkHome/gotoChooseCourse.do" . "|"
-            . "https://elearning.fudan.edu.cn/courses", "fdu")
 
     }
-
     updateOSD(*) {
         ; 记录之前的输入与结果
         static hints := []
@@ -357,20 +269,3 @@ class WozUI {
         ; this.updateOSD()
     }
 }
-
-
-; ==========o==========o==========o==========o==========o hooks
-colorg := colorGUI()
-#HotIf WinExist("ahk_exe AutoHotkey64.exe ahk_id " colorg.g.Hwnd)
-Insert:: copyandshow(colorg.info.Value)
-pgup:: colorg.nextColor()
-pgdn:: colorg.nextPage()
-#HotIf
-
-/*
-timeh := timerhook()
-#HotIf WinExist("ahk_exe AutoHotkey64.exe ahk_id " timeh.g.Hwnd)
-; :*x?b0z:`:`::: timeh.setdeadline()
-:*x?b0z:`::: keywait(":"), KeyWait(":", 'DT1') and timeh.setdeadline()
-#HotIf
-*/

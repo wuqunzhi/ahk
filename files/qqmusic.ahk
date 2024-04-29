@@ -25,7 +25,7 @@ w:: wheelU()
 +j:: wheelD(3)
 +k:: wheelU(3)
 #HotIf
-class qm extends VimControl {
+class qm extends VimController {
     static kuaijin(dif) {
         clk.img(A_ScriptDir '/img/bar1.bmp', 0, 700, wincw(), 800, 50, dif, 3, 1, 1) ||
             clk.img(A_ScriptDir '/img/bar2.bmp', 0, 700, wincw(), 800, 50, dif, 8, 1, 1)

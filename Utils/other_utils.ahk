@@ -1,18 +1,3 @@
-#Include fun_tip.ahk
-#Include fun_str.ahk
-#Include fun_win.ahk
-#Include fun_copy.ahk
-#Include fun_file.ahk
-#Include fun_click.ahk
-#Include fun_ime.ahk
-#Include fun_class.ahk
-#Include steal\JsRT.ahk
-#Include steal\ActiveScript.ahk
-#Include steal\Brightess.ahk
-#Include steal\VisualDesktop.ahk
-#Include steal\Monitor.ahk
-#Include ../private.ahk
-
 ; 是否处于双烤线到另一台机器
 inNeighbor() {
     return WinActive(win_taskbar) && msx() == 960 && msy() == 540 && mcy() == -490 && mcx() == 960
@@ -150,6 +135,7 @@ RunWaitOne(command) {
 }
 
 translate(text := A_Clipboard) {
+    ; todo
     ; 不能hide
     ; msgbox RunWaitOne('D:\VSCodeDeemo\Python3\工具箱\baidu_translate.py "hello stupid"')
     ; Run("cmd /c activate base & python -u D:\VSCodeDeemo\Python3\工具箱\baidu_translate.py hello",,"hide")
