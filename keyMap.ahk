@@ -1,7 +1,25 @@
 ; XButton1::^Insert ;复制
 ; XButton2::+Insert ;粘贴
-#HotIf ingame and WinActive("Dungeon Munchies ahk_exe Dungeon Munchies.exe ahk_class UnityWndClass")
-XButton2::4
+#HotIf ingame and WinActive("TEN ahk_exe TEN.exe ahk_class YYGameMakerYY")
+k::w
+a::left
+d::right
+u::e
+s::down
+i::q
+o::s
+
+#HotIf ingame and WinActive("ANIMAL WELL ahk_exe Animal Well.exe ahk_class GameWindow")
+k::space
+j::x
+q::1
+e::3
+f::z
+u::1
+o::3
+l::3
+`;::3
+tab::v
 
 #HotIf
 

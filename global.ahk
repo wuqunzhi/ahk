@@ -14,10 +14,6 @@ CapsLock Up:: send("{esc}") ;, tip.LM("esc")
 #^w:: VirtualDesktop.Current.Remove()
 #^h:: VirtualDesktop.showCycleLeft()
 #^l:: VirtualDesktop.showCycleRight()
-; #h:: MultiMonitor.activate(0)
-; #l:: MultiMonitor.activate(1)
-; #+h::+#Left
-; #+l::+#Right
 #tab:: MultiMonitor.activateNext()
 <^>!j::+#Left
 #CapsLock::+#Left
@@ -49,7 +45,7 @@ CapsLock & j::down
 CapsLock & k::up
 CapsLock & v:: zvim.go("e_n")
 CapsLock & i:: zvim.go("i")
-CapsLock & g:: (zvim.mode == "g_n") ? zvim.go('i') : zvim.go("g_n")
+CapsLock & g:: ((zvim.mode == "g_n") ? zvim.go('i') : zvim.go("g_n"))
 CapsLock & o::Enter
 CapsLock & e:: autorun(A_Clipboard)
 CapsLock & space:: toggleTouchpad()
@@ -70,7 +66,7 @@ tmp() {
 CapsLock & `:: markWindow.maymark()
 CapsLock & 1:: private.nas()
 CapsLock & 2:: runOrActivate(A_Desktopp . "\\tmp.* " win_explorer, 'at', 'a', A_Desktop "\tmp")
-CapsLock & 3:: private.genCmd()
+CapsLock & 3:: markWindow.toggle(3)
 CapsLock & 4:: markWindow.toggle(4)
 CapsLock & 5:: markWindow.toggle(5)
 CapsLock & 6:: markWindow.toggle(6)
@@ -78,19 +74,32 @@ CapsLock & 7:: markWindow.toggle(7)
 CapsLock & 8:: markWindow.toggle(8)
 CapsLock & 9:: markWindow.toggle(9)
 >!l:: lockComputer()
+
+global MultiMonitorEnable := 0
+CapsLock & alt:: {
+    global MultiMonitorEnable := !MultiMonitorEnable
+    tip.p(MultiMonitorEnable)
+}
+#HotIf MultiMonitorEnable
+#h:: MultiMonitor.activate(0)
+#l:: MultiMonitor.activate(1)
+#+h::+#Left
+#+l::+#Right
+#HotIf
 #l:: markWindow.toggle(11)
+#h:: markWindow.toggle(12)
 #+l:: markWindow.mark(11)
 #+h:: markWindow.mark(12)
-#h:: markWindow.toggle(12)
+
+
 #+;:: markWindow.mark(13)
 #;:: markWindow.toggle(13)
-CapsLock & alt:: return
 >!p:: wintoggleTop()
 >!+p:: winSetOffTop()
 #m:: WinToggleMaximize()
 #n:: WinMinimize("A")
 #c:: winCenter()
-#j:: runOrActivate([win_chrome, "画中画"], 'b', 'a', "chrome.exe")
+#j:: runOrActivate([win_chrome, "画中画"], 'b', 'a', "E:\桌面2\Chrome.lnk")
 ; #k:: runOrActivate(win_vscode, 'b', 'a', "code")
 #k:: {
     WinGetList(win_vscode).Length > 1 ?
@@ -191,6 +200,9 @@ CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 ; :?*x:]t:: SendInput Format("{}:{}:{}", A_Hour, A_Min, A_Sec) ;在vscodeVim中有bug,估计是input太快的原因
 ; :?*x:]d:: SendInput Format("{}-{}-{}", A_YYYY, A_MM, A_DD)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
+
+:?*cx:]r:: sendInputVimFix(Format("{}", Random(0, 1000)))
+
 :?*cx:]t:: sendInputVimFix(Format("{}:{}:{}", A_Hour, A_Min, A_Sec))
 :?*cx:]T:: sendInputVimFix(Format("{}-{}-{} {}:{}:{}", A_YYYY, A_MM, A_DD, A_Hour, A_Min, A_Sec))
 :*?zc:gacp::git add . & git commit -m "stupid" & git push

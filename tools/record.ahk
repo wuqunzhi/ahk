@@ -1,5 +1,4 @@
 #SingleInstance force
-#Include ..\Lib\funcs.ahk
 ; !todo
 global recording := 0
 global recordstring := ""
@@ -7,10 +6,10 @@ CapsLock & f11:: {
     Global recording := !recording
     global recordstring
     if (recording) {
-        tip.LB("开始录制", 600000)
+        ToolTip("开始录制")
     } else {
         filepath := A_ScriptDir "\rec_" A_Hour A_MM A_Sec ".ahk"
-        tip.LB("结束录制:保存到 " filepath, 5000)
+        ToolTip("结束录制:保存到 " filepath)
         f := FileOpen(filepath, "a")
         head := "
         (
@@ -110,3 +109,4 @@ Click, 1264, 462 Left, Up
 
 
 
+*/

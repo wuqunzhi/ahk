@@ -6,7 +6,7 @@ class ClipRecorder {
     static hookEnable := 1
     static clear() => (ClipRecorder.history := [], this)
     static record() {
-        if (A_Clipboard == "clipclr") { ;清楚记录
+        if (A_Clipboard == "clipclr" || A_Clipboard == "cclr") { ;清楚记录
             this.clear()
             return
         }

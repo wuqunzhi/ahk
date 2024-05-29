@@ -121,22 +121,6 @@ class zvim {
         }
         zvim.go("g_n")
     }
-    static GW_oppend(key) {
-        zvim.go("tmpi")
-        ih := InputHook("T3 L1")
-        ih.Start()
-        ih.Wait()
-        res := ih.Input
-        switch key . res, true {
-            case "v2": DWM.setMN(2, 1).fill(recentWins(2))
-            case "vv": DWM.setMN(2, 1).fill(recentWins(2))
-            case "vV": DWM.setMN(1, 2).fill(recentWins(2))
-            case "vo": DWM.setMN(0).fill(getWinO("A"))
-            case "vt": DWM.transpose().reload()
-            case "v4": DWM.setMN(2, 2)
-        }
-        zvim.go("g_w")
-    }
 
     static EN_oppend(key) {
         zvim.go("e_o")
@@ -273,8 +257,6 @@ r:: WinRestore("A")
 ; -------------------- 模式切换
 t:: zvim.go("g_n")
 i:: zvim.go("i")
-; -------------------- !!!
-; v:: zvim.GW_oppend('v')
 
 #HotIf
 

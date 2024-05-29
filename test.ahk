@@ -19,29 +19,24 @@ f7:: Suspend
 SetTitleMatchMode("regex")
 DetectHiddenWindows(1)
 SetMouseDelay(-1)
-;---------------------------------
-; 定义一个名为 MyFunction 的函数
-DefProp := {}.GetMethod("DefineProp")
-DefProp("".base, "MyFunction", {
-    Call: (this) => (tip.p("asd"))
-}
-)
 
-; 调用新定义的函数
-; "".MyFunction()
-7:: {
-    s := "asasdasdd"
-    s[2] := '3'
-    tip.p(s)
+7:: WinSetStyle("+0xC00000", "A")
+&:: WinSetStyle("-0xC00000", "A")
+8:: WinSetStyle("+0x40000", "A")
+*:: WinSetStyle("-0x40000", "A")
+resize(hwnd, x, y, w, h) {
+    DllCall("SetWindowPos", "UInt", hwnd, "UInt", 0, "Int", x, "Int", y, "Int", w, "Int", h, "UInt", 0x400)
+}
+9:: {
+    hwnd := WinGetID("A")
+    WinGetPos(&x, &y, &w, &h, hwnd)
+    resize(hwnd, x, y, w + 20, h + 20)
 }
 
-; CoordMode("Mouse", "Screen")
-global i := 1
-
+6:: WinRedraw("A")
 
 w := WinExist(win_git) ? win_git : win_cmd
 
-6:: DWM.fillO()
 
 wintoggle0x20(hwnd) {
     static u := 0
