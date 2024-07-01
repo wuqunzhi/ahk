@@ -1,3 +1,13 @@
+class MouseSpeed {
+    static get() => (speed := 0, DllCall("SystemParametersInfo", "UInt", 0x70, "UInt", 0, "Ptr*", &speed, "UInt", 0), speed)
+    static set(speed) => (DllCall("SystemParametersInfo", "UInt", 0x71, "UInt", 0, "Ptr", speed, "UInt", 0))
+    static change(dif) {
+        oldSpeed := MouseSpeed.get()
+        newSpeed := Min(20, Max(0, oldSpeed + dif))
+        (newSpeed != oldSpeed) && MouseSpeed.set(newSpeed)
+        return newSpeed
+    }
+}
 mouseMoveFix(x, y) {
     ; 多显示器下 mousemove , click 等有bug
     ; https://www.autohotkey.com/boards/viewtopic.php?t=61242

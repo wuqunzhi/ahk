@@ -1,3 +1,6 @@
+; run
+; Run(A_ComSpec " /C " command, , "Hide")
+
 /* 多显示器相关 目前仅考虑了左右两个显示器的情况 */
 class MultiMonitor {
     ; 鼠标移动到下个屏幕中间
@@ -52,6 +55,11 @@ class VimController {
     }
 }
 
+
+editEnv() {
+    run("sysdm.cpl"), WinWaitActive("系统属性")
+    send("{ctrl Down}{Tab 2}{ctrl Up}!n")
+}
 ; restore and move center
 ; winReset(0,0) 窗口还原最小尺寸并移动到中间
 winReset(w := unset, h := unset) {
@@ -246,13 +254,14 @@ winSetOffTop(hwnd := "A") {
 }
 
 
+; 获取同类窗口
 getWinO(hwnd := "A") {
     ahkexe := WinGetProcessName(WinGetID(hwnd))
     ahkclass := WinGetClass(hwnd)
     return WinGetList("ahk_exe " ahkexe " ahk_class " ahkclass)
 }
 
-;关闭同类窗口
+; 关闭同类窗口
 winO(Hwnd := "A") {
     curId := WinGetID(Hwnd)
     idlist := getWinO(Hwnd)
@@ -263,6 +272,7 @@ winO(Hwnd := "A") {
 }
 
 ; auto switch
+; ifnoexist : 'funcName' or [func,[args...]]
 runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
     winTitle := unset
     excludeTitle := unset
@@ -278,7 +288,9 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
                 case "c": WinClose()
                 case "h": WinHide()
                 case "b": WinActivateBottom(winTitle, , excludeTitle?)
+                case "be": WinActivate(winTitle, , WinGetTitle("A"))
                 case "at": AltTab()
+                case "nop": nop()
                 default: ; r: do nothing (remain)
             }
             return
@@ -289,6 +301,7 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             switch ifexist {
                 case "a": WinActivate()
                 case "sa": WinShow(), WinActivate()
+                case "nop": nop()
             }
             return
         }
@@ -297,13 +310,18 @@ runOrActivate(winTE := "A", ifactive := "r", ifexist := "a", ifnoexist := "") {
             ; ti.pp("!e")
             if (!ifnoexist)
                 return
-            func := type(ifnoexist) == "String" ? "run" : ifnoexist[1]
-            args := type(ifnoexist) == "String" ? ifnoexist : ifnoexist[2]
+            if isString(ifnoexist) {
+                run(ifnoexist)
+                tip.LB("run " ifnoexist)
+                return
+            }
+            func := ifnoexist[1]
+            args := ifnoexist[2]
             switch func {
-                case "run":
+                case run:
                     ; RunWait(args) 阻塞
-                    run(args)
-                    tip.LB("run " args)
+                    run(args*)
+                    tip.LB("run " args.ToString())
                     ; if (WinWait(winTitle, , 5, excludeTitle?))
                     ; WinActivate()
                 default:
@@ -328,7 +346,6 @@ class markWindow {
             ahkexe := WinGetProcessName("A")
             this.winTitle[idx] := Format("{} ahk_class {} ahk_exe {}", title, ahkclass, ahkexe)
             tip.RB(Format("mark {}: {}", idx, this.winTitle[idx]))
-
         } catch Error as e {
             logM(e)
         }
@@ -357,7 +374,6 @@ class markWindow {
         WinActive("ahk_id " winid) ? AltTab() : WinActivate("ahk_id " winid)
     }
     static maymark() {
-
         ih := InputHook("T3 L1")
         ; SetTimer countdown.Bind(3), -20
         ih.Start()
@@ -461,11 +477,11 @@ processManager() {
     }
     IB := InputBox(str, , "w600 h240") ;"w640 h480"
     res := Trim(IB.Value)
-    mytaskkill(res)
+    kill(res)
 }
 
-; 杀死进程
-mytaskkill(PIDOrName) {
+; 杀死进程 PIDOrName
+kill(PIDOrName) {
     PIDOrName := abbrName.Get(PIDOrName, PIDOrName)
     str := ProcessClose(PIDOrName) ? "" : "failed"
     tip.LB(Format("taskkill {} {}", PIDOrName, str))

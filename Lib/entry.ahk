@@ -7,9 +7,8 @@
 #Include file_utils.ahk
 #Include click_utils.ahk
 #Include ime_utils.ahk
-#Include steal\JsRT.ahk
-#Include steal\ActiveScript.ahk
-#Include steal\Brightess.ahk
-#Include steal\VisualDesktop.ahk
-#Include steal\Monitor.ahk
-#Include ../private.ahk
+#Include external/JsRT.ahk
+#Include external/ActiveScript.ahk
+#Include external/Brightess.ahk
+#Include external/VisualDesktop.ahk
+#Include external/Monitor.ahk

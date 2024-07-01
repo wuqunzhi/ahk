@@ -3,6 +3,7 @@ OnClipboardChange ClipRecorder.ClipChanged.Bind(ClipRecorder)
 class ClipRecorder {
     static history := []
     static maxCount := 99
+    static timeStep := 5 * 60
     static hookEnable := 1
     static clear() => (ClipRecorder.history := [], this)
     static record() {
@@ -12,19 +13,20 @@ class ClipRecorder {
         }
         if (this.history.Length >= this.maxCount)
             this.history.RemoveAt(1)
-        this.history.Push(A_Clipboard)
+        this.history.Push({ time: 123, content: A_Clipboard })
     }
 
     static show(filePath := A_userPath . "\ClipboardHistory.txt", append := '`n') {
         ; 自定义函数，用于将剪贴板内容添加到历史记录中
         f := FileOpen(filePath, "w", "utf-8")
         for index, value in ClipRecorder.history {
-            if StrLen(value) > 500
-                value := strdot('+', 80) . '`n' . value . '`n' . strdot('-', 80) . '`n'
-            f.Write(value . append)
+            content := value.content
+            if StrLen(content) > 500
+                content := strdot('+', 80) . '`n' . content . '`n' . strdot('-', 80) . '`n'
+            f.Write(content . append)
         }
         f.Close()
-        run("code " filePath)
+        code(filePath)
     }
 
     static ClipChanged(clip_type) {
@@ -42,7 +44,7 @@ class ClipRecorder {
         len := ClipRecorder.history.Length
         last := Min(len, last)
         loop last {
-            res .= ClipRecorder.history[len - (last - A_Index)] . append
+            res .= ClipRecorder.history[len - (last - A_Index)].content . append
         }
         tip.RM(res)
         A_Clipboard := res

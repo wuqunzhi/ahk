@@ -106,6 +106,10 @@ CapsLock & alt:: {
         runOrActivate([win_vscode, "Note - "], 'b', 'a', "code.exe") :
             runOrActivate(win_vscode, 'b', 'a', "code.exe")
 }
+#`:: runOrActivate(win_cmd, 'c', 'a', [run, [A_ComSpec, vspDir]])
+#+k:: {
+    runOrActivate(win_vscode, 'at', 'nop', "")
+}
 ; >!k:: runOrActivate(win_vscode, 'b', 'a', "code")
 ; >!k:: runOrActivate([win_vscode, "- Note - "], 'b', 'a', "code.exe")
 #o:: runOrActivate(win_vscodeNote, 'at', 'a', "code D:\vscodeProjects\Note")
@@ -201,7 +205,7 @@ CapsLock & LButton:: tip.RB(debugInfo('w'), 10000)
 ; :?*x:]d:: SendInput Format("{}-{}-{}", A_YYYY, A_MM, A_DD)
 :?*cx:]d:: sendInputVimFix(Format("{}-{}-{}", A_YYYY, A_MM, A_DD))
 
-:?*cx:]r:: sendInputVimFix(Format("{}", Random(0, 1000)))
+:?*cx:]r:: sendInputVimFix(Format("{}", Random(100, 999)))
 
 :?*cx:]t:: sendInputVimFix(Format("{}:{}:{}", A_Hour, A_Min, A_Sec))
 :?*cx:]T:: sendInputVimFix(Format("{}-{}-{} {}:{}:{}", A_YYYY, A_MM, A_DD, A_Hour, A_Min, A_Sec))

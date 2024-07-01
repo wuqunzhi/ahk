@@ -9,10 +9,12 @@ DefProp("".base, "__Item", {
     get: (var, index) =>
         (index := index < 0 ? StrLen(var) + index + 1 : index, SubStr(var, index, 1)),
 })
-
+; 为数组的原型添加 toString 方法
+DefProp(Array().base, "toString", {
+    call: (arr, seq := ", ") => "[" . StrJoin(arr, seq) . "]"
+})
 ; DelProp := {}.GetMethod("DeleteProp")
 ; %DelProp%("".base, "__Item")
-
 ; 自带的StrSplit会带空字符: StrSplit("a  b",' ') => ["a","","b"]
 StrSplitFix(str, Delimiters, omitChars?, maxparts := -1) {
     tmpres := StrSplit(str, Delimiters, omitChars?, maxparts)

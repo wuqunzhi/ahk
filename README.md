@@ -7,7 +7,7 @@
 
 ## 全局设置
 > global.ahk
-- 锁定`CapsLock`状态,需要按住右`Alt`键+`Capslock`切换大小写状态
+- `锁定CapsLock状态`,需要按住右`Alt`键+`Capslock`切换大小写状态
 - 锁定`NumLock`状态,双击`NumLock``切换状态`
 - 将`CapsLock`映射为`esc` (松开时触发)
 - 定义一系列快捷键
@@ -142,3 +142,4 @@
    - `dw` `dd` `dj` `dk` `dH` `dL`
    - `cw` `cc` `cj` `ck` `cH` `cL`
   - `esc` 回到Edit_Normal模式
+

@@ -1,5 +1,7 @@
 ; XButton1::^Insert ;复制
 ; XButton2::+Insert ;粘贴
+#HotIf ingame and WinActive("SYSTEM PURGE ahk_exe SYSTEM_PURGE.exe ahk_class YYGameMakerYY")
+k::space
 #HotIf ingame and WinActive("TEN ahk_exe TEN.exe ahk_class YYGameMakerYY")
 k::w
 a::left
@@ -27,10 +29,6 @@ tab::v
 XButton1::^Insert ;复制
 XButton2::+Insert ;粘贴
 
-#HotIf 0
-RButton::2
-XButton1::2
-
 #HotIf 0 and ingame and WinActive("ahk_group games")
 Space::LButton
 
@@ -43,9 +41,9 @@ WheelDown::Volume_Down
 WheelUp::Volume_Up
 NumpadDot::Volume_Down
 NumpadEnter::Volume_Up
-Left::Volume_Down
+Left::^!,
+Right::^!.
 Down::Volume_Down
-Right::Volume_Up
 Up::Volume_Up
 
 #HotIf

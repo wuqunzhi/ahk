@@ -11,7 +11,7 @@
 #Warn Unreachable, off
 #Include config.ahk
 #Include private.ahk
-#Include Utils\entry.ahk
+#Include Lib/entry.ahk
 #SuspendExempt true
 f7:: Suspend
 #SuspendExempt false
@@ -20,23 +20,28 @@ SetTitleMatchMode("regex")
 DetectHiddenWindows(1)
 SetMouseDelay(-1)
 
-7:: WinSetStyle("+0xC00000", "A")
-&:: WinSetStyle("-0xC00000", "A")
-8:: WinSetStyle("+0x40000", "A")
-*:: WinSetStyle("-0x40000", "A")
 resize(hwnd, x, y, w, h) {
     DllCall("SetWindowPos", "UInt", hwnd, "UInt", 0, "Int", x, "Int", y, "Int", w, "Int", h, "UInt", 0x400)
 }
-9:: {
-    hwnd := WinGetID("A")
-    WinGetPos(&x, &y, &w, &h, hwnd)
-    resize(hwnd, x, y, w + 20, h + 20)
+
+
+win_ocr := "Umi-OCR v2.1.2 ahk_exe Umi-OCR.exe ahk_class Qt5152QWindowOwnDCIcon"
+w := WinExist(win_git) ? win_git : win_cmd
+6:: test()
+test() {
+    WinRestore(win_ocr)
+    ; a := Run("control.exe bthprops.cpl")
+    ; a.call()
+    ; tip.p(['1', '2', '3', '4', '5'].ToString())
 }
 
-6:: WinRedraw("A")
+; Windows 键+ Home – 最小化除活动窗口之外的所有窗口。
+; MakeWindowDraggable()
+; winSetCaption(-1)
 
-w := WinExist(win_git) ? win_git : win_cmd
-
+t := {
+    f5: tip.p.Bind(, 3)
+}
 
 wintoggle0x20(hwnd) {
     static u := 0
@@ -61,11 +66,6 @@ wintoggle0x20(hwnd) {
 ; todo
 ; offpin all
 ;
-test() {
-    ; Windows 键+ Home – 最小化除活动窗口之外的所有窗口。
-    MakeWindowDraggable()
-    winSetCaption(-1)
-}
 sendRequset() {
     oHttp := ComObject("WinHttp.Winhttprequest.5.1")
     ; oHttp.open("GET", "https://api.live.bilibili.com/xlive/web-ucenter/v1/xfetter/GetWebList?page=1")

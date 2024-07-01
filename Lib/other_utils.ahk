@@ -1,3 +1,12 @@
+isFunc(val) {
+    return Type(val) == 'Func' or Type(val) == 'BoundFunc'
+}
+isString(val) {
+    return Type(val) == 'String'
+}
+isArray(val) {
+    return Type(val) == 'Array'
+}
 ; 是否处于双烤线到另一台机器
 inNeighbor() {
     return WinActive(win_taskbar) && msx() == 960 && msy() == 540 && mcy() == -490 && mcx() == 960
@@ -65,18 +74,13 @@ police() {
     if done
         return
     DetectHiddenWindows(1)
+    return
     if (WinExist("Internet Download Manager ahk_exe IDMan.exe ahk_class #32770")) {
         ProcessClose(WinGetPID())
         tip.p('kill idm')
         done := true
         DetectHiddenWindows(0)
         return
-    }
-    return
-    if (WinExist("Windows 安全中心警报 ahk_exe rundll32.exe ahk_class #32770")) {
-        WinActivate()
-        WinWaitActive()
-        Send("{blink}{enter}")
     }
 }
 
@@ -219,44 +223,21 @@ showIntxt(str) {
     run("code.exe showintxt.txt")
 }
 
-nextkey(time := 0.5, opt := "C V") {
-    ih := InputHook(Format("{} T{} L1", opt, time))
-    ih.Start(), ih.Wait()
+; 返回指定时间内下一个按键
+nextkey(time := 0.5) {
+    ; https://wyagd001.github.io/v2/docs/lib/InputHook.htm#Wait
+    ; V 收集而不是拦截
+    ih := InputHook(Format("V T{} L1", time))
+    ih.Start()
+    ih.Wait(time)
     return ih.Input
+}
+nextKeyIs(key, time := 0.5) {
+    return nextkey(time) == key
 }
 
 preIs(key, time := 1) {
     return (A_PriorKey == key and A_TimeSincePriorHotkey < time * 1000)
-}
-
-press(keys, time := 0.5, opt := "C") {
-    ;https://wyagd001.github.io/v2/docs/commands/InputHook.htm
-    ; M: 将修饰键击对应于真正的 ASCII 字符, 识别并转录修饰键击(如 Ctrl+A 到 Ctrl+Z). 参考这个例子, 它识别 Ctrl+C:
-    if (keys is string) {
-        loop parse keys
-            if (nextkey(time, opt) !== A_LoopField)
-                return false
-        return true
-    }
-    for key in keys
-        if (nextkey(time, opt) !== key)
-            return false
-    return true
-}
-
-;keys: "jkl" or ['j'','k','l']
-press2(keys, time := 0.5) {
-    ; !problem: jkal also return true
-    if (keys is string) {
-        loop parse keys
-            if (!KeyWait(A_LoopField, "D T" time))
-                return false
-        return true
-    }
-    for key in keys
-        if (!KeyWait(key, "D T" time))
-            return false
-    return true
 }
 
 

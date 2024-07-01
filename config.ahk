@@ -17,6 +17,7 @@ global win_vim := "ahk_exe vim.exe"                                             
 global win_desktop := "ahk_exe explorer.exe ahk_class WorkerW"                         ; 桌面
 global win_taskbar := "ahk_exe explorer.exe ahk_class Shell_TrayWnd"                   ; 任务栏
 global win_explorer := "ahk_exe explorer.exe ahk_class CabinetWClass"                  ; 资源管理器
+global win_ahk := "ahk_exe AutoHotkey64.exe"                                           ; ahk
 
 global win_taskManager := "ahk_exe Taskmgr.exe ahk_class TaskManagerWindow"            ; 任务管理器
 global win_cloudmusic := "ahk_exe cloudmusic.exe ahk_class OrpheusBrowserHost"         ; 网易云

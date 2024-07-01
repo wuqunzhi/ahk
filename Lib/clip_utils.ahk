@@ -39,7 +39,7 @@ copyandshow(str, time := 2000, x := unset, y := unset) {
     if (InStr(str, '`n'))
         str := '`n' . str
     if (isSet(x) && isSet(y))
-        tip.pp("已复制: " str, time, x?, y?)
+        tip.show("已复制: " str, time, x?, y?)
     else
         tip.RB("已复制: " str, time)
 }
@@ -47,7 +47,7 @@ copyandshow(str, time := 2000, x := unset, y := unset) {
 appendCopyAndShow(str, append := '`n', time := 2000, x := unset, y := unset) {
     A_Clipboard .= (append . str)
     if (isSet(x) && isSet(y))
-        tip.pp("附加到剪贴板: " str, time, x?, y?)
+        tip.show("附加到剪贴板: " str, time, x?, y?)
     else
         tip.RB("附加到剪贴板: " str, time)
 }

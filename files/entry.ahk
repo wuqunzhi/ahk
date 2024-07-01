@@ -1,0 +1,13 @@
+#Include vscode.ahk
+#Include chrome.ahk
+#Include edge.ahk
+#Include explorer.ahk
+#Include desktop.ahk
+#Include wechat.ahk
+#Include taskbar.ahk
+#Include cmd.ahk
+#Include obsidian.ahk
+#Include ideal.ahk
+#Include clash.ahk
+#Include wyy.ahk
+#Include qqmusic.ahk
